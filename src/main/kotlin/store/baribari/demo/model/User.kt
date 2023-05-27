@@ -25,17 +25,20 @@ class User(
     @Column(name = "role")
     var role: Role = Role.ROLE_CUSTOMER,
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "provider_type")
-    var providerType: ProviderType,
-
     @Column(name = "provider_id")
     var providerId: String? = null,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider_type")
+    var providerType: ProviderType = ProviderType.LOCAL,
 
     // 프로필 이미지
     var profileImageUrl: String? = null,
 
-    ) : BaseEntity() {
+    // 상점 목록
+    @OneToMany(mappedBy = "owner")
+    val storeList: MutableList<Store> = mutableListOf(),
+) : BaseEntity() {
     fun encodePassword(encodedPassword: String) {
         password = encodedPassword
     }

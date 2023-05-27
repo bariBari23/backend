@@ -61,7 +61,7 @@ tasks.register("copyYml", Copy::class){
 tasks.register("copyYmlTest", Copy::class){
     from("./backend-config/")
     include("*.yml")
-    into("src/test/kotlin/store/baribari/demo")
+    into("src/test/resources")
 }
 
 
@@ -94,6 +94,6 @@ tasks {
 
 tasks.build{
     dependsOn(tasks.getByName("copyYml"))
-    dependsOn(tasks.getByPath("copyYmlTest"))
+    dependsOn(tasks.getByName("copyYmlTest"))
     dependsOn(tasks.getByName("copyDocument"))
 }

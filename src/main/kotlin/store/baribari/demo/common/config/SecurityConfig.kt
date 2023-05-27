@@ -75,6 +75,8 @@ class SpringSecurityConfig(
             .antMatchers("/api/v1/**").permitAll()
             .antMatchers("/api/v2/**").permitAll()
             .antMatchers("/actuator/**").permitAll()
+            // TODO: 이거 나중에 켜 놔야함
+            //.antMatchers("/api/store/**").hasAnyAuthority(Role.ROLE_STORE.code, Role.ROLE_ADMIN.code)
             .antMatchers("/api/admin/**").hasAuthority(Role.ROLE_ADMIN.code)
             .anyRequest().authenticated()
             .and()

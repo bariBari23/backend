@@ -13,3 +13,4 @@ class ShoppingApplication
 fun main(args: Array<String>) {
     runApplication<ShoppingApplication>(*args)
 }
+

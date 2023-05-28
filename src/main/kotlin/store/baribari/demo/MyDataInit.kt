@@ -1,20 +1,30 @@
 package store.baribari.demo
 
+import org.springframework.context.annotation.Profile
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 import store.baribari.demo.common.enums.Role
 import store.baribari.demo.model.Store
 import store.baribari.demo.model.User
+import store.baribari.demo.model.cart.Cart
 import store.baribari.demo.model.embed.Day
+import store.baribari.demo.model.menu.Dosirak
 import store.baribari.demo.repository.StoreRepository
 import store.baribari.demo.repository.UserRepository
+import store.baribari.demo.repository.cart.CartRepository
+import store.baribari.demo.repository.menu.DosirakRepository
 import java.time.DayOfWeek
 import java.time.LocalTime
 import javax.annotation.PostConstruct
 
+@Profile("local")
 @Component
 class MyDataInit(
     private val userRepository: UserRepository,
-    private val storeRepository: StoreRepository
+    private val storeRepository: StoreRepository,
+    private val cartRepository: CartRepository,
+    private val dosirakRepository: DosirakRepository,
+    private val passwordEncoder: BCryptPasswordEncoder,
 ) {
 
     @PostConstruct
@@ -38,6 +48,8 @@ class MyDataInit(
             dayList = dayList,
         )
         storeRepository.saveAndFlush(store)
+        val dosirakList = dosirakListMaker(store)
+
 
     }
 
@@ -71,18 +83,39 @@ class MyDataInit(
 
     private fun userCreate(): List<User> {
         val customer = User(
-            email = "customer@test.com",
-            password = "customer",
-            role = Role.ROLE_CUSTOMER,
+            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart()
         )
+        val encodedPassword1 = passwordEncoder.encode(customer.password)
+        customer.encodePassword(encodedPassword1)
+
         val storeOwner = User(
-            email = "store@test.com",
-            password = "store",
-            role = Role.ROLE_STORE,
+            email = "store@test.com", password = "customer", role = Role.ROLE_STORE, userCart = Cart()
         )
+        val encodedPassword2 = passwordEncoder.encode(storeOwner.password)
+        storeOwner.encodePassword(encodedPassword2)
+
         userRepository.saveAll(listOf(customer, storeOwner))
         userRepository.flush()
 
         return listOf(customer, storeOwner)
+    }
+
+    private fun dosirakListMaker(store: Store): List<Dosirak> {
+        val tempList = mutableListOf<Dosirak>()
+
+        for (i in 1..10) {
+            val temp = Dosirak(
+                name = "테스트 도시락 $i",
+                description = "테스트 도시락입니다. $i",
+                store = store,
+            )
+            temp.changeStock(100)
+
+            tempList.add(temp)
+        }
+
+        dosirakRepository.saveAll(tempList)
+        dosirakRepository.flush()
+        return tempList.toList()
     }
 }

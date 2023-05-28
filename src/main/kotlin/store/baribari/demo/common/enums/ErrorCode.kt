@@ -20,4 +20,5 @@ enum class ErrorCode(
     EMAIL_DUPLICATED(409, "이메일이 중복되었습니다."),
     PROVIDER_MISS_MATCH(409, "올바르지 않은 provider입니다."),
     SERVER_ERROR(500, "서버에서 오류가 발생했습니다."),
+    NOT_ENOUGH_STOCK(500, "재고가 부족합니다."),
 }

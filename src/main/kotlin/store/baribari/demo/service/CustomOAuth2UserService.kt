@@ -13,6 +13,7 @@ import store.baribari.demo.common.enums.ErrorCode
 import store.baribari.demo.common.exception.InternalServiceException
 import store.baribari.demo.common.exception.OAuthProviderMissMatchException
 import store.baribari.demo.model.User
+import store.baribari.demo.model.cart.Cart
 import store.baribari.demo.repository.UserRepository
 import java.util.*
 
@@ -62,6 +63,7 @@ class CustomOAuth2UserService(
             email = userInfo.getEmail(),
             providerId = userInfo.getId(),
             profileImageUrl = userInfo.getImageUrl(),
+            userCart = Cart()
         )
         println("user : $user")
         println("user info: " + userInfo.getId())

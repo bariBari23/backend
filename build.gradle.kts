@@ -26,6 +26,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("mysql:mysql-connector-java")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("com.amazonaws:aws-java-sdk-s3:1.12.13")
@@ -33,6 +34,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
@@ -52,13 +55,13 @@ tasks.register("copyDocument", Copy::class) {
     into("src/main/resources/static/docs")
 }
 
-tasks.register("copyYml", Copy::class){
+tasks.register("copyYml", Copy::class) {
     from("./backend-config")
     include("*.yml")
     into("src/main/resources")
 }
 
-tasks.register("copyYmlTest", Copy::class){
+tasks.register("copyYmlTest", Copy::class) {
     from("./backend-config/")
     include("*.yml")
     into("src/test/resources")
@@ -72,7 +75,7 @@ tasks {
 
     withType<KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
+            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xemit-jvm-type-annotations")
             jvmTarget = "17"
         }
     }
@@ -92,7 +95,7 @@ tasks {
 }
 
 
-tasks.build{
+tasks.build {
     dependsOn(tasks.getByName("copyYml"))
     dependsOn(tasks.getByName("copyYmlTest"))
     dependsOn(tasks.getByName("copyDocument"))

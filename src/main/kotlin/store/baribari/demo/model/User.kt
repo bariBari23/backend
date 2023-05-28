@@ -4,6 +4,7 @@ package store.baribari.demo.model
 import org.hibernate.annotations.GenericGenerator
 import store.baribari.demo.auth.ProviderType
 import store.baribari.demo.common.enums.Role
+import store.baribari.demo.model.cart.Cart
 import java.util.*
 import javax.persistence.*
 
@@ -31,6 +32,10 @@ class User(
     @Enumerated(EnumType.STRING)
     @Column(name = "provider_type")
     var providerType: ProviderType = ProviderType.LOCAL,
+
+    // 장바구니
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+    var userCart: Cart,
 
     // 프로필 이미지
     var profileImageUrl: String? = null,

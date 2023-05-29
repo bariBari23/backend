@@ -8,6 +8,7 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
+    kotlin("plugin.allopen") version "1.5.10"
 }
 
 group = "io.baribari"
@@ -99,4 +100,10 @@ tasks.build {
     dependsOn(tasks.getByName("copyYml"))
     dependsOn(tasks.getByName("copyYmlTest"))
     dependsOn(tasks.getByName("copyDocument"))
+}
+
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.Embeddable")
+    annotation("javax.persistence.MappedSuperclass")
 }

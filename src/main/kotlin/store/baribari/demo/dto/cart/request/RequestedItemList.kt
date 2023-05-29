@@ -2,7 +2,7 @@ package store.baribari.demo.dto.cart.request
 
 import javax.validation.constraints.Positive
 
-data class ItemList(
+data class RequestedItemList(
     @field:Positive
     val dosirakId: Long,
 

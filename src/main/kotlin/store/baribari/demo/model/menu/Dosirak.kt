@@ -10,7 +10,7 @@ import javax.persistence.*
 class Dosirak(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "banchan_id")
+    @Column(name = "dosirak_id")
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,7 +22,7 @@ class Dosirak(
     // 반찬 리스트
     // 수정하는 케이스는 지금 고려하지 말자
     @OneToMany(mappedBy = "dosirak")
-    var dosirakBanchanList: List<BanchanDosirak> = emptyList(),
+    var dosirakBanchanList: MutableList<BanchanDosirak> = mutableListOf(),
 
     // 메인 이미지
     var mainImage: String? = null,

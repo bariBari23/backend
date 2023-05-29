@@ -1,5 +1,8 @@
 package store.baribari.demo.dto.cart.request
 
+import javax.validation.Valid
+
 data class AddItemRequestDto(
-    val items: List<ItemList>,
+    @field: Valid
+    val items: List<RequestedItemList>,
 )

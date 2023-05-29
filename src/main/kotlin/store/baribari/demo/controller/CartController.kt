@@ -12,6 +12,7 @@ import store.baribari.demo.dto.cart.response.CartInfoResponseDto
 import store.baribari.demo.dto.cart.response.UpdateItemQuantityResponseDto
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.service.CartService
+import javax.validation.Valid
 import javax.validation.constraints.Positive
 
 @Validated
@@ -50,7 +51,7 @@ class CartController(
     @PostMapping("")
     fun addItem(
         @LoginUser loginUser: User,
-        @RequestBody addItemRequestDto: AddItemRequestDto
+        @RequestBody @Valid addItemRequestDto: AddItemRequestDto
     ): ApiResponse<AddCartItemResponseDto> {
         // 여러개가 들어오는 경우도 가정을 하자...
         val data = cartService.addItem(loginUser.username, addItemRequestDto)
@@ -86,7 +87,7 @@ class CartController(
     @DeleteMapping("")
     fun emptyCart(
         @LoginUser loginUser: User
-    ) : ApiResponse<ClearCartResponseDto>{
+    ): ApiResponse<ClearCartResponseDto> {
         // 카트를 비운다.
         val data = cartService.clearCart(loginUser.username)
 

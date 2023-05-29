@@ -5,10 +5,8 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import store.baribari.demo.common.annotation.Timer
 import store.baribari.demo.common.exception.EntityNotFoundException
-import store.baribari.demo.common.util.log
 import store.baribari.demo.dto.cart.request.AddItemRequestDto
 import store.baribari.demo.dto.cart.response.*
-import store.baribari.demo.model.User
 import store.baribari.demo.model.cart.Cart
 import store.baribari.demo.model.cart.CartItem
 import store.baribari.demo.repository.UserRepository
@@ -26,11 +24,14 @@ class CartServiceImpl(
 
     @Transactional(readOnly = true)
     override fun getCart(username: String): CartInfoResponseDto {
-        // TODO: 쿼리 이상하게 나감 fetch join으로 해결해야함
+        // TODO: 쿼리 이상하게 나감 entity graph로 해결해야함
         // ban
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
-
+        // itemlist를 조회할 때 fetch join으로 내부에 있는 dosiraklist의 정보를 가져온다.
+        // querydsl의 시간인가?
+        // 아니면 entity graph를 사용해야하나? -> 이게 답인거 같다.
+        // 일단 itemlist를 가져오면서
         val itemList = user.userCart.cartItemList
 
         return CartInfoResponseDto(
@@ -45,60 +46,55 @@ class CartServiceImpl(
         username: String,
         request: AddItemRequestDto
     ): AddCartItemResponseDto {
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
-
         val itemMap = request.items.associate { it.dosirakId to it.amount }
 
-        log.info(itemMap.toString())
-        // 0으로 초기화
-        initializeItemZero(itemMap, user)
+        val user = userRepository.findByEmailFetchCart(username)
+            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
+        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+            ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
+
+        // 0으로 초기화
+        initializeItemZero(itemMap, userCart)
         // 기존에 있던 아이템에 더하기
-        plusItemAmount(itemMap, user.userCart)
+        plusItemAmount(itemMap, userCart.cartItemList)
 
         return AddCartItemResponseDto(
-            itemKindAmount = user.userCart.cartItemList.size
+            itemKindAmount = userCart.cartItemList.size
         )
     }
 
-    @Timer
+
     private fun initializeItemZero(
-        itemMap: Map<Long, Int>,
-        user: User,
-    ) {
-        val cart = user.userCart
-        val dosirakIdSet = cart.cartItemList.map { it.dosirak.id!! }.toSet() // 도시락 id의 목록을 나타냄
-
-        for (item in itemMap) {
-            if (item.key !in dosirakIdSet) {
-                val dosirak = dosirakRepository.findByIdOrNull(item.key)
-                    ?: throw EntityNotFoundException("도시락이 존재하지 않습니다.")
-
-                val newCartItem = CartItem(
-                    dosirak = dosirak,
-                    cart = user.userCart,
-                    count = 0
-                )
-                cartItemRepository.save(newCartItem)
-                cart.cartItemList.add(newCartItem)
-            }
-        }
-    }
-
-    @Timer
-    private fun plusItemAmount(
         itemMap: Map<Long, Int>,
         cart: Cart,
     ) {
-        for (item in cart.cartItemList)
-            if (item.dosirak.id!! in itemMap.keys) {
+        val cartItems = cart.cartItemList
+        val dosirakIdSet = cartItems.map { it.dosirak.id!! }.toSet() // 도시락 id의 목록을 나타냄
+        val itemListToAdd = mutableListOf<CartItem>()
 
-                if (itemMap[item.dosirak.id!!]!! <= 0)
-                    throw IllegalArgumentException("양수만 가능합니다.")
-
-                item.count += itemMap[item.dosirak.id!!]!!
+        itemMap
+            .filterNot { it.key in dosirakIdSet }
+            .mapNotNull { filteredMap ->
+                dosirakRepository.findByIdOrNull(filteredMap.key)?.let { dosirak ->
+                    itemListToAdd.add(
+                        CartItem(dosirak = dosirak, cart = cart, count = 0)
+                    )
+                } ?: throw EntityNotFoundException("${filteredMap.key}라는 도시락이 존재하지 않습니다.")
             }
+
+        cartItemRepository.saveAll(itemListToAdd)
+        cartItems.addAll(itemListToAdd)
+
+    }
+
+
+    private fun plusItemAmount(
+        itemMap: Map<Long, Int>,
+        cartItems: MutableList<CartItem>,
+    ) {
+        cartItems.filter { it.dosirak.id in itemMap.keys }
+            .forEach { it.count += itemMap[it.dosirak.id!!]!! }
     }
 
     @Transactional
@@ -108,11 +104,13 @@ class CartServiceImpl(
         quantity: Int
     ): UpdateItemQuantityResponseDto {
 
-        val user = userRepository.findByEmail(username)
+        val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val cart = user.userCart
-        val targetCartItem = cart.cartItemList.find { it.dosirak.id == itemId }
+        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+            ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
+
+        val targetCartItem = userCart.cartItemList.find { it.dosirak.id == itemId }
             ?: throw EntityNotFoundException("해당 아이템이 존재하지 않습니다.")
 
         targetCartItem.count = quantity
@@ -128,14 +126,18 @@ class CartServiceImpl(
         username: String,
         itemId: Long
     ): DeleteCartItemResponseDto {
-        val user = userRepository.findByEmail(username)
+        val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val cart = user.userCart
-        val targetCartItem = cart.cartItemList.find { it.dosirak.id == itemId }
+        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+            ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
+
+        val cartItems = userCart.cartItemList
+
+        val targetCartItem = cartItems.find { it.dosirak.id == itemId }
             ?: throw EntityNotFoundException("해당 아이템이 존재하지 않습니다.")
 
-        cart.cartItemList.remove(targetCartItem)
+        cartItems.remove(targetCartItem)
         cartItemRepository.delete(targetCartItem)
 
         return DeleteCartItemResponseDto(
@@ -147,19 +149,14 @@ class CartServiceImpl(
     override fun clearCart(
         username: String
     ): ClearCartResponseDto {
-        val user = userRepository.findByEmail(username)
+        val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        log.info("호호")
-        val cart = user.userCart
-        log.info("호호")
+        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+            ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
-        log.info("호호2")
-        for (item in cart.cartItemList)
-            cartItemRepository.delete(item)
-        log.info("호호2")
-
-        cart.cartItemList.clear()
+        cartItemRepository.deleteAll(userCart.cartItemList)
+        userCart.cartItemList.clear()
 
         return ClearCartResponseDto(
             user.userCart.id!!

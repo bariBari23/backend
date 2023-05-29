@@ -44,5 +44,5 @@ class Store(
     var clean: String? = null,
 
     @ElementCollection
-    var dayList: List<Day> = emptyList(),
+    var dayList: MutableList<Day> = mutableListOf(),
 ) : BaseEntity()

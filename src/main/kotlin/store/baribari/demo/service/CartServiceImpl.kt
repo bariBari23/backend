@@ -3,6 +3,7 @@ package store.baribari.demo.service
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import store.baribari.demo.common.annotation.Timer
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.common.util.log
 import store.baribari.demo.dto.ClearCartResponseDto
@@ -27,17 +28,20 @@ class CartServiceImpl(
 
     @Transactional(readOnly = true)
     override fun getCart(username: String): CartInfoResponseDto {
+        // TODO: 쿼리 이상하게 나감 fetch join으로 해결해야함
+        // ban
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val itmeList = user.userCart.cartItemList
+        val itemList = user.userCart.cartItemList
 
         return CartInfoResponseDto(
             cartId = user.userCart.id!!,
-            items = itmeList.map { CartItemResponseDto.fromCartItem(it) }
+            items = itemList.map { CartItemResponseDto.fromCartItem(it) }
         )
     }
 
+    @Timer
     @Transactional
     override fun addItem(
         username: String,
@@ -60,6 +64,7 @@ class CartServiceImpl(
         )
     }
 
+    @Timer
     private fun initializeItemZero(
         itemMap: Map<Long, @Positive Int>,
         user: User,
@@ -83,6 +88,7 @@ class CartServiceImpl(
         }
     }
 
+    @Timer
     private fun plusItemAmount(
         itemMap: Map<Long, Int>,
         cart: Cart,
@@ -95,7 +101,6 @@ class CartServiceImpl(
 
                 item.count += itemMap[item.dosirak.id!!]!!
             }
-
     }
 
     @Transactional
@@ -147,10 +152,14 @@ class CartServiceImpl(
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
+        log.info("호호")
         val cart = user.userCart
+        log.info("호호")
 
+        log.info("호호2")
         for (item in cart.cartItemList)
             cartItemRepository.delete(item)
+        log.info("호호2")
 
         cart.cartItemList.clear()
 

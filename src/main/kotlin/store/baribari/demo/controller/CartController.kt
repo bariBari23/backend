@@ -14,8 +14,8 @@ import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.service.CartService
 import javax.validation.constraints.Positive
 
-@RestController
 @Validated
+@RestController
 @RequestMapping("/api/v1/cart")
 class CartController(
     private val cartService: CartService,

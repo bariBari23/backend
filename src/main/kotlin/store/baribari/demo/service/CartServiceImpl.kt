@@ -6,9 +6,8 @@ import org.springframework.transaction.annotation.Transactional
 import store.baribari.demo.common.annotation.Timer
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.common.util.log
-import store.baribari.demo.dto.ClearCartResponseDto
-import store.baribari.demo.dto.DeleteItemResPonseDto
-import store.baribari.demo.dto.cart.*
+import store.baribari.demo.dto.cart.request.AddItemRequestDto
+import store.baribari.demo.dto.cart.response.*
 import store.baribari.demo.model.User
 import store.baribari.demo.model.cart.Cart
 import store.baribari.demo.model.cart.CartItem
@@ -16,7 +15,6 @@ import store.baribari.demo.repository.UserRepository
 import store.baribari.demo.repository.cart.CartItemRepository
 import store.baribari.demo.repository.cart.CartRepository
 import store.baribari.demo.repository.menu.DosirakRepository
-import javax.validation.constraints.Positive
 
 @Service
 class CartServiceImpl(
@@ -50,14 +48,14 @@ class CartServiceImpl(
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        log.info("itemMap: ${request.itemMap}")
+        val itemMap = request.items.associate { it.dosirakId to it.amount }
 
+        log.info(itemMap.toString())
         // 0으로 초기화
-        initializeItemZero(request.itemMap, user)
+        initializeItemZero(itemMap, user)
 
         // 기존에 있던 아이템에 더하기
-        plusItemAmount(request.itemMap, user.userCart)
-
+        plusItemAmount(itemMap, user.userCart)
 
         return AddCartItemResponseDto(
             itemKindAmount = user.userCart.cartItemList.size
@@ -66,7 +64,7 @@ class CartServiceImpl(
 
     @Timer
     private fun initializeItemZero(
-        itemMap: Map<Long, @Positive Int>,
+        itemMap: Map<Long, Int>,
         user: User,
     ) {
         val cart = user.userCart
@@ -129,7 +127,7 @@ class CartServiceImpl(
     override fun deleteItem(
         username: String,
         itemId: Long
-    ): DeleteItemResPonseDto {
+    ): DeleteCartItemResponseDto {
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
@@ -140,7 +138,7 @@ class CartServiceImpl(
         cart.cartItemList.remove(targetCartItem)
         cartItemRepository.delete(targetCartItem)
 
-        return DeleteItemResPonseDto(
+        return DeleteCartItemResponseDto(
             itemId = itemId,
         )
     }

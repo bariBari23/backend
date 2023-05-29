@@ -4,12 +4,12 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import store.baribari.demo.auth.LoginUser
-import store.baribari.demo.dto.ClearCartResponseDto
-import store.baribari.demo.dto.DeleteItemResPonseDto
-import store.baribari.demo.dto.cart.AddCartItemResponseDto
-import store.baribari.demo.dto.cart.AddItemRequestDto
-import store.baribari.demo.dto.cart.CartInfoResponseDto
-import store.baribari.demo.dto.cart.UpdateItemQuantityResponseDto
+import store.baribari.demo.dto.cart.response.ClearCartResponseDto
+import store.baribari.demo.dto.cart.response.DeleteCartItemResponseDto
+import store.baribari.demo.dto.cart.response.AddCartItemResponseDto
+import store.baribari.demo.dto.cart.request.AddItemRequestDto
+import store.baribari.demo.dto.cart.response.CartInfoResponseDto
+import store.baribari.demo.dto.cart.response.UpdateItemQuantityResponseDto
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.service.CartService
 import javax.validation.constraints.Positive
@@ -74,7 +74,7 @@ class CartController(
     fun deleteItem(
         @LoginUser loginUser: User,
         @PathVariable itemId: Long
-    ): ApiResponse<DeleteItemResPonseDto> {
+    ): ApiResponse<DeleteCartItemResponseDto> {
         // 단일 아이템으로 가정
         val data = cartService.deleteItem(loginUser.username, itemId)
 

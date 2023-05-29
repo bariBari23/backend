@@ -1,4 +1,4 @@
-package store.baribari.demo.dto.cart
+package store.baribari.demo.dto.cart.response
 
 import store.baribari.demo.model.cart.CartItem
 

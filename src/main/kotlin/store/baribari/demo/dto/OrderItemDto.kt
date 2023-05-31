@@ -10,6 +10,7 @@ data class OrderItemDto(
     val count: Int,
     val total: Int,
     val status: OrderStatus,
+    // 추후 상점 id도 넣어줘야하나?
 ) {
     companion object {
         fun fromOrderItem(orderItem: OrderItem): OrderItemDto {

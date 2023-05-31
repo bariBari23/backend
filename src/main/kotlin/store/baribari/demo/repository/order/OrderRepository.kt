@@ -2,6 +2,7 @@ package store.baribari.demo.repository.order
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import store.baribari.demo.model.User
 import store.baribari.demo.model.order.Order
 
 interface OrderRepository : JpaRepository<Order, Long> {
@@ -16,4 +17,14 @@ interface OrderRepository : JpaRepository<Order, Long> {
         """
     )
     fun findByIdFetchUserAndOrderItem(orderId: Long): Order?
+
+    @Query(
+        """
+        SELECT DISTINCT o
+        FROM Order o
+        LEFT JOIN FETCH o.orderItemList orderItem
+        WHERE o.user = :user
+        """
+    )
+    fun findByUserFetchOrderItem(user: User): List<Order>
 }

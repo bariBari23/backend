@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import store.baribari.demo.auth.LoginUser
+import store.baribari.demo.dto.CancelOrderItemResponseDto
 import store.baribari.demo.dto.CreateOrderRequestDto
 import store.baribari.demo.dto.FindAllOrderResponseDto
 import store.baribari.demo.dto.FindOneOrderResponseDto
@@ -25,8 +26,6 @@ class OrderController(
     fun getAllOrderList(
         @LoginUser loginUser: User,
     ): ApiResponse<FindAllOrderResponseDto> {
-
-        // 리스트 뽑기
         val data = orderService.findAllOrder(loginUser.username)
 
         return ApiResponse.success(data)
@@ -37,7 +36,6 @@ class OrderController(
         @LoginUser loginUser: User,
         @PathVariable @Positive orderId: Long,
     ): ApiResponse<FindOneOrderResponseDto> {
-        // order 1개 찍히기
         val data = orderService.findOneOrder(loginUser.username, orderId)
 
         return ApiResponse.success(data)
@@ -59,7 +57,7 @@ class OrderController(
         @LoginUser loginUser: User,
         @PathVariable @Positive orderId: Long,
         @PathVariable @Positive orderItemId: Long,
-    ): ApiResponse<Long> {
+    ): ApiResponse<CancelOrderItemResponseDto> {
         // orderItem 취소하기
         val data = orderService.cancelOrderItem(loginUser.username, orderId, orderItemId)
 

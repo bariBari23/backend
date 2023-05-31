@@ -2,14 +2,8 @@ package store.baribari.demo.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import store.baribari.demo.common.enums.ErrorCode
-import store.baribari.demo.common.enums.OrderStatus
-import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.common.exception.EntityNotFoundException
-import store.baribari.demo.dto.CreateOrderRequestDto
-import store.baribari.demo.dto.FindAllOrderResponseDto
-import store.baribari.demo.dto.FindOneOrderResponseDto
-import store.baribari.demo.dto.OrderItemDto
+import store.baribari.demo.dto.*
 import store.baribari.demo.model.order.Order
 import store.baribari.demo.model.order.OrderItem.Companion.createOrderItem
 import store.baribari.demo.repository.UserRepository
@@ -29,7 +23,16 @@ class OrderServiceImpl(
     override fun findAllOrder(
         username: String
     ): FindAllOrderResponseDto {
-        TODO("Not yet implemented")
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
+
+        val orders = orderRepository.findByUserFetchOrderItem(user)
+
+        // TODO: 일단 취소한 orderItem도 표시하는거로 설정
+        return FindAllOrderResponseDto(
+            orderCount = orders.size.toLong(),
+            orderList = orders.map { FindOneOrderResponseDto.fromOrder(it) },
+        )
     }
 
     @Transactional(readOnly = true)
@@ -47,6 +50,7 @@ class OrderServiceImpl(
         if (user.id != order.user!!.id)
             throw EntityNotFoundException("해당 주문의 주인이 아닙니다.")
 
+        // TODO: 일단 취소한 orderItem도 표시하는거로 설정
         return FindOneOrderResponseDto(
             orderId = order.id!!,
             orderItemList = order.orderItemList.map { OrderItemDto.fromOrderItem(it) },
@@ -99,7 +103,7 @@ class OrderServiceImpl(
         username: String,
         orderId: Long,
         orderItemId: Long,
-    ): Long {
+    ): CancelOrderItemResponseDto {
         // TODO: 여기도 도시락 쿼리 하나 더 줄이는게 가능하긴함 나중에 해보자!
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
@@ -120,7 +124,10 @@ class OrderServiceImpl(
         orderItem.cancel() // 취소 처리
 
 
-        return orderItem.id!!
+        return CancelOrderItemResponseDto(
+            orderItemId = orderItem.id!!,
+            price = orderItem.price,
+        )
     }
 
     @Transactional

@@ -1,4 +1,4 @@
-package store.baribari.demo.dto
+package store.baribari.demo.dto.order.request
 
 import store.baribari.demo.common.enums.PayMethod
 import javax.validation.constraints.NotNull

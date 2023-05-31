@@ -1,4 +1,4 @@
-package store.baribari.demo.dto
+package store.baribari.demo.dto.order.response
 
 data class FindAllOrderResponseDto(
     val orderCount: Long,

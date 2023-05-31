@@ -1,4 +1,4 @@
-package store.baribari.demo.dto
+package store.baribari.demo.dto.order.request
 
 data class CancelOrderItemResponseDto(
     val orderItemId: Long,

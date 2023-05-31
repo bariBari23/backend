@@ -1,4 +1,4 @@
-package store.baribari.demo.dto
+package store.baribari.demo.dto.order.response
 
 import store.baribari.demo.common.enums.OrderStatus
 import store.baribari.demo.model.order.Order

@@ -1,9 +1,9 @@
 package store.baribari.demo.service
 
-import store.baribari.demo.dto.CancelOrderItemResponseDto
-import store.baribari.demo.dto.CreateOrderRequestDto
-import store.baribari.demo.dto.FindAllOrderResponseDto
-import store.baribari.demo.dto.FindOneOrderResponseDto
+import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
+import store.baribari.demo.dto.order.request.CreateOrderRequestDto
+import store.baribari.demo.dto.order.response.FindAllOrderResponseDto
+import store.baribari.demo.dto.order.response.FindOneOrderResponseDto
 
 interface OrderService {
 

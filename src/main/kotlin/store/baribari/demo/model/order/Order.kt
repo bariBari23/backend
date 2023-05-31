@@ -73,7 +73,7 @@ class Order(
 
     //==비즈니스 로직==//
     fun cancel() {
-        when (this.status) {
+         when (this.status) {
             OrderStatus.COMPLETED, OrderStatus.CANCELED, OrderStatus.PICKED_UP -> {
                 throw ConditionConflictException(
                     ErrorCode.CANCELED_IMPOSSIBLE,
@@ -82,7 +82,7 @@ class Order(
             }
 
             else -> {
-                orderItemList.forEach { it.cancel() }
+                orderItemList.filterNot { it.status == OrderStatus.CANCELED }.forEach { it.cancel() }
             }
         }
     }

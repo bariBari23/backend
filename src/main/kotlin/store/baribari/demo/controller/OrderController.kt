@@ -1,6 +1,7 @@
 package store.baribari.demo.controller
 
 import org.springframework.security.core.userdetails.User
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import store.baribari.demo.auth.LoginUser
 import store.baribari.demo.dto.CreateOrderRequestDto
@@ -12,6 +13,7 @@ import javax.validation.Valid
 import javax.validation.constraints.Positive
 
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/order")
 class OrderController(

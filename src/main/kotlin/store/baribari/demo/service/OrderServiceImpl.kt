@@ -25,7 +25,7 @@ class OrderServiceImpl(
     private val orderItemRepository: OrderItemRepository,
 ) : OrderService {
 
-
+    @Transactional(readOnly = true)
     override fun findAllOrder(
         username: String
     ): FindAllOrderResponseDto {
@@ -123,10 +123,24 @@ class OrderServiceImpl(
         return orderItem.id!!
     }
 
+    @Transactional
     override fun cancelOrder(
         username: String,
         orderId: Long
     ): Long {
-        TODO("Not yet implemented")
+        val user = userRepository.findByEmail(username)
+            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
+
+        // orderId가 유저의 order인지 확인 또한 취소 상태 아닌지 확인 user를 같이 가져온다. -> fetch 써야하나?
+        // fetch로 orderItem 가져온다. -> 거기에서 찾자
+        val order = orderRepository.findByIdFetchUserAndOrderItem(orderId)
+            ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
+
+        if (user.id != order.user!!.id)
+            throw EntityNotFoundException("해당 주문의 주인이 아닙니다.")
+
+        order.cancel()
+
+        return order.id!!
     }
 }

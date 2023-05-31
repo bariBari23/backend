@@ -1,7 +1,9 @@
 package store.baribari.demo.model.order
 
+import store.baribari.demo.common.enums.ErrorCode
 import store.baribari.demo.common.enums.OrderStatus
 import store.baribari.demo.common.enums.PayMethod
+import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.menu.Dosirak
 import javax.persistence.*
@@ -28,8 +30,19 @@ class OrderItem(
 ) : BaseEntity() {
 
     fun cancel() {
-        this.status = OrderStatus.CANCELED
-        dosirak.addStock(count)
+        when (this.status) {
+            OrderStatus.COMPLETED, OrderStatus.CANCELED, OrderStatus.PICKED_UP -> {
+                throw ConditionConflictException(
+                    ErrorCode.CANCELED_IMPOSSIBLE,
+                    "이미 준비완료, 픽업완료, 취소된 항목은 취소가 불가능합니다."
+                )
+            }
+
+            else -> {
+                this.status = OrderStatus.CANCELED
+                dosirak.addStock(count)
+            }
+        }
     }
 
     fun review() {

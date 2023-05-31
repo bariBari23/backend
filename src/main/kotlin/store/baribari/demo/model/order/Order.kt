@@ -1,7 +1,9 @@
 package store.baribari.demo.model.order
 
+import store.baribari.demo.common.enums.ErrorCode
 import store.baribari.demo.common.enums.OrderStatus
 import store.baribari.demo.common.enums.PayMethod
+import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.User
 import javax.persistence.*
@@ -32,7 +34,7 @@ class Order(
 
     ) : BaseEntity() {
 
-    private val status: OrderStatus //주문 상태 [ORDER, CANCEL]
+    val status: OrderStatus //주문 상태 [ORDER, CANCEL]
         get() : OrderStatus {
             return when {
                 orderItemList.isEmpty() -> OrderStatus.CANCELED
@@ -52,14 +54,11 @@ class Order(
             }
         }
 
-    private val price: Int
-        get() {
-            var price = 0
-            orderItemList
-                .filterNot { it.status == OrderStatus.CANCELED }
-                .forEach { price += it.price }
-            return price
-        }
+    val price: Int
+        get() = orderItemList
+            .filterNot { it.status == OrderStatus.CANCELED }
+            .sumOf { it.price }
+
 
     //==연관관계 메서드==//
     fun setCustomer(user: User) {
@@ -74,9 +73,18 @@ class Order(
 
     //==비즈니스 로직==//
     fun cancel() {
-        require(this.status == OrderStatus.ORDERED) { "이미 픽업이 완료된 주문은 취소가 불가능합니다." }
+        when (this.status) {
+            OrderStatus.COMPLETED, OrderStatus.CANCELED, OrderStatus.PICKED_UP -> {
+                throw ConditionConflictException(
+                    ErrorCode.CANCELED_IMPOSSIBLE,
+                    "이미 준비완료, 픽업완료, 취소된 항목은 취소가 불가능합니다."
+                )
+            }
 
-        orderItemList.forEach { it.cancel() }
+            else -> {
+                orderItemList.forEach { it.cancel() }
+            }
+        }
     }
 //    companion object {
 //        //==생성 메서드==//

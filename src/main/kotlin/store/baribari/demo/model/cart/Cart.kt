@@ -14,11 +14,5 @@ class Cart(
     val cartItemList: MutableList<CartItem> = mutableListOf(),
 ) : BaseEntity() {
     private val price: Int
-        get() {
-            var price = 0
-            cartItemList.forEach {
-                price += it.dosirak.price * it.count
-            }
-            return price
-        }
+        get() = cartItemList.sumOf { it.dosirak.price * it.count }
 }

@@ -127,17 +127,15 @@ class MyDataInit(
     }
 
     private fun userCreate(): List<User> {
-        var cart1 = cartRepository.saveAndFlush(Cart())
-        var cart2 = cartRepository.saveAndFlush(Cart())
 
         val customer = User(
-            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = cart1
+            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart()
         )
         val encodedPassword1 = passwordEncoder.encode(customer.password)
         customer.encodePassword(encodedPassword1)
 
         val storeOwner = User(
-            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = cart2
+            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = Cart()
         )
         val encodedPassword2 = passwordEncoder.encode(storeOwner.password)
         storeOwner.encodePassword(encodedPassword2)

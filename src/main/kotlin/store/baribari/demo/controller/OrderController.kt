@@ -1,11 +1,11 @@
 package store.baribari.demo.controller
 
 import org.springframework.security.core.userdetails.User
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import store.baribari.demo.auth.LoginUser
-import store.baribari.demo.common.util.log
 import store.baribari.demo.dto.CreateOrderRequestDto
+import store.baribari.demo.dto.FindAllOrderResponseDto
+import store.baribari.demo.dto.FindOneOrderResponseDto
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.service.OrderService
 import javax.validation.Valid
@@ -18,18 +18,27 @@ class OrderController(
     private val orderService: OrderService,
 ) {
 
+    // 내 주문 리스트 -> 현재 과거 전부 취소 된거 까지도
     @GetMapping("")
-    fun getOrderList(
+    fun getAllOrderList(
         @LoginUser loginUser: User,
-    ) {
+    ): ApiResponse<FindAllOrderResponseDto> {
+
         // 리스트 뽑기
+        val data = orderService.findAllOrder(loginUser.username)
+
+        return ApiResponse.success(data)
     }
 
     @GetMapping("/{orderId}")
-    fun getOneOrder(
+    fun findOneOrder(
         @LoginUser loginUser: User,
-    ) {
+        @PathVariable @Positive orderId: Long,
+    ): ApiResponse<FindOneOrderResponseDto> {
         // order 1개 찍히기
+        val data = orderService.findOneOrder(loginUser.username, orderId)
+
+        return ApiResponse.success(data)
     }
 
     @PostMapping("")
@@ -42,11 +51,6 @@ class OrderController(
 
         return ApiResponse.success(data)
     }
-
-    // update OrderInfo-> 개별 아이템의 수량을 바꾼다.
-    // delete OrderInfo-> 개별 아이템을 삭제한다.
-
-    // cancel Order -> order를 취소로 전환 -> 이 때 모두 출발 상태가 아니여야 한다.
 
     @DeleteMapping("/{orderId}/{orderItemId}")
     fun cancelOrderItem(
@@ -63,8 +67,12 @@ class OrderController(
     @DeleteMapping("/{orderId}")
     fun cancelOrder(
         @LoginUser loginUser: User,
-    ) {
+        @PathVariable @Positive orderId: Long,
+    ): ApiResponse<Long> {
         // orderItem 취소하기
+        val data = orderService.cancelOrder(loginUser.username, orderId)    // order 취소하기
+
+        return ApiResponse.success(data)
     }
 
 }

@@ -40,7 +40,8 @@ class User(
     var position: Position = Position(0.0, 0.0),
 
 // 장바구니
-    var userCart: Cart? = null,
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], optional = false)
+    var userCart: Cart,
 
 // 프로필 이미지
     var profileImageUrl: String? = null,

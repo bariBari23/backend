@@ -52,8 +52,7 @@ class MyDataInit(
             businessName = "테스트 가게",
             businessNumber = "123-45-67890",
             description = "테스트 가게입니다.",
-            mainImage = null,
-            dayList = dayList,
+            //dayList = dayList,
         )
         storeRepository.saveAndFlush(store)
         val banchanList = banchanListMaker(store)
@@ -90,7 +89,6 @@ class MyDataInit(
                 Banchan(
                     name = "테스트 반찬 $i",
                     description = "테스트 반찬입니다. $i",
-                    price = (1..10).random() * 100,
                     gram = 100,
                     owner = store,
                 )
@@ -129,14 +127,17 @@ class MyDataInit(
     }
 
     private fun userCreate(): List<User> {
+        var cart1 = cartRepository.saveAndFlush(Cart())
+        var cart2 = cartRepository.saveAndFlush(Cart())
+
         val customer = User(
-            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart()
+            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = cart1
         )
         val encodedPassword1 = passwordEncoder.encode(customer.password)
         customer.encodePassword(encodedPassword1)
 
         val storeOwner = User(
-            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = Cart()
+            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = cart2
         )
         val encodedPassword2 = passwordEncoder.encode(storeOwner.password)
         storeOwner.encodePassword(encodedPassword2)
@@ -155,6 +156,8 @@ class MyDataInit(
                 name = "테스트 도시락 $i",
                 description = "테스트 도시락입니다. $i",
                 store = store,
+                price = (1..10).random() * 100,
+                mealTimes = (1..3).random(),
             )
             temp.changeStock(100)
 

@@ -32,10 +32,10 @@ class CartServiceImpl(
         // querydsl의 시간인가?
         // 아니면 entity graph를 사용해야하나? -> 이게 답인거 같다.
         // 일단 itemlist를 가져오면서
-        val itemList = user.userCart.cartItemList
+        val itemList = user.userCart!!.cartItemList
 
         return CartInfoResponseDto(
-            cartId = user.userCart.id!!,
+            cartId = user.userCart!!.id!!,
             items = itemList.map { CartItemResponseDto.fromCartItem(it) }
         )
     }
@@ -51,7 +51,7 @@ class CartServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+        val userCart = cartRepository.fetchItemListFindById(user.userCart!!.id!!)
             ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
         // 0으로 초기화
@@ -107,7 +107,7 @@ class CartServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+        val userCart = cartRepository.fetchItemListFindById(user.userCart!!.id!!)
             ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
         val targetCartItem = userCart.cartItemList.find { it.dosirak.id == itemId }
@@ -129,7 +129,7 @@ class CartServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+        val userCart = cartRepository.fetchItemListFindById(user.userCart!!.id!!)
             ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
         val cartItems = userCart.cartItemList
@@ -152,14 +152,14 @@ class CartServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+        val userCart = cartRepository.fetchItemListFindById(user.userCart!!.id!!)
             ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
         cartItemRepository.deleteAll(userCart.cartItemList)
         userCart.cartItemList.clear()
 
         return ClearCartResponseDto(
-            user.userCart.id!!
+            user.userCart!!.id!!
         )
     }
 }

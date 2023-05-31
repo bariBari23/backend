@@ -25,30 +25,30 @@ class Dosirak(
     var dosirakBanchanList: MutableList<BanchanDosirak> = mutableListOf(),
 
     // 메인 이미지
-    var mainImage: String? = null,
+    var mainImage: String = "",
 
     // 이미지 리스트
+
     @ElementCollection
     var dosirakImageList: List<String> = emptyList(),
 
-    var description: String? = null,
+    var description: String = "",
+
+    var fromWhere: String = "",
+
+    var mealTimes: Int,
+
+    val price: Int,
 ) : BaseEntity() {
+
+    private val gram: Int
+        get() = dosirakBanchanList.sumOf { it.banchan.gram }
 
     private var stock: Int = 0
 
-    val price: Int
-        get() = getTotalPrice()
+    private val soldOut: Boolean
+        get() = stock <= 0
 
-    private fun getTotalPrice(): Int {
-        var totalPrice = 0
-        // 쿼리 한번 따져보자 가격 계산은 자주 일어나는데 할 때마다 쿼리를 소환하는게 말이 안된다고 생각함
-        // 심지어 한번 설정된 가격은 잘 바뀌지 아니한다.
-        // 차라리 배열이 고쳐질 때 set으로 가격을 최신화하고 이외에는 get으로 값 자체를 부르는 것이 좋다고 생각
-        for (dosirakBanchan in dosirakBanchanList) {
-            totalPrice += dosirakBanchan.banchan.price
-        }
-        return totalPrice
-    }
 
     // 재고를 매일 변경
     fun changeStock(count: Int) {

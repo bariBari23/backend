@@ -1,6 +1,6 @@
 package store.baribari.demo.model
 
-import store.baribari.demo.model.embed.Day
+import store.baribari.demo.model.embed.Position
 import javax.persistence.*
 
 @Entity
@@ -19,6 +19,7 @@ class Store(
     var phoneNumber: String,
 
     // 지도 좌표
+    var position: Position = Position(0.0, 0.0),
 
     var businessName: String,
 
@@ -29,20 +30,21 @@ class Store(
     var address: String,
 
     // 메인 이미지
-    var mainImage: String? = null,
+    var mainImage: String = "",
 
     // 이미지 리스트
     @ElementCollection
     var storeImageList: List<String> = emptyList(),
 
-    var soldOut: Boolean = false,
-
     // 가게 소개
-    var description: String?,
+    var description: String = "",
 
     // 가게 위생 정보
-    var clean: String? = null,
+    var clean: String = "",
 
-    @ElementCollection
-    var dayList: MutableList<Day> = mutableListOf(),
+    //    @ElementCollection
+    //    var dayList: MutableList<Day> = mutableListOf(),
+    var dayList: String = "",
+
+    var offDay: String = "",
 ) : BaseEntity()

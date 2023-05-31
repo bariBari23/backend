@@ -13,5 +13,5 @@ interface CartRepository : JpaRepository<Cart, Long> {
         WHERE c.id = :id
         """
     )
-    fun fetchFindById(id: Long): Cart?
+    fun fetchItemListFindById(id: Long): Cart?
 }

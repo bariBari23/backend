@@ -17,22 +17,14 @@ class Banchan(
 
     var name: String,
 
-    var price: Int,
-
     var gram: Int,
 
     // 메인 이미지
-    var mainImage: String? = null,
+    var mainImage: String = "",
 
     // 이미지 리스트
     @ElementCollection
     var banchanImageList: List<String> = emptyList(),
 
-    var description: String? = null,
-
-    // 원산지
-) : BaseEntity() {
-    // 버림 하겠습니다~
-    val pricePerHundred: Int
-        get() = price / gram * 100
-}
+    var description: String = "",
+) : BaseEntity()

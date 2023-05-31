@@ -12,4 +12,7 @@ class Cart(
 
     @OneToMany(mappedBy = "cart")
     val cartItemList: MutableList<CartItem> = mutableListOf(),
-) : BaseEntity()
+) : BaseEntity() {
+    private val price: Int
+        get() = cartItemList.sumOf { it.dosirak.price * it.count }
+}

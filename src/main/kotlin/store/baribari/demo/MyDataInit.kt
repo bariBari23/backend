@@ -52,8 +52,7 @@ class MyDataInit(
             businessName = "테스트 가게",
             businessNumber = "123-45-67890",
             description = "테스트 가게입니다.",
-            mainImage = null,
-            dayList = dayList,
+            //dayList = dayList,
         )
         storeRepository.saveAndFlush(store)
         val banchanList = banchanListMaker(store)
@@ -90,7 +89,6 @@ class MyDataInit(
                 Banchan(
                     name = "테스트 반찬 $i",
                     description = "테스트 반찬입니다. $i",
-                    price = (1..10).random() * 100,
                     gram = 100,
                     owner = store,
                 )
@@ -129,6 +127,7 @@ class MyDataInit(
     }
 
     private fun userCreate(): List<User> {
+
         val customer = User(
             email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart()
         )
@@ -155,6 +154,8 @@ class MyDataInit(
                 name = "테스트 도시락 $i",
                 description = "테스트 도시락입니다. $i",
                 store = store,
+                price = (1..10).random() * 100,
+                mealTimes = (1..3).random(),
             )
             temp.changeStock(100)
 

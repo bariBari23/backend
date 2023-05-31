@@ -2,6 +2,8 @@ package store.baribari.demo.model.cart
 
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.menu.Dosirak
+import store.baribari.demo.model.order.Order
+import store.baribari.demo.model.order.OrderItem
 import javax.persistence.*
 
 @Entity

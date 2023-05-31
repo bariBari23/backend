@@ -1,5 +1,9 @@
 package store.baribari.demo.model.order
 
+import store.baribari.demo.common.enums.ErrorCode
+import store.baribari.demo.common.enums.OrderStatus
+import store.baribari.demo.common.enums.PayMethod
+import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.menu.Dosirak
 import javax.persistence.*
@@ -17,30 +21,54 @@ class OrderItem(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    val order: Order,
+    var order: Order,
+
+    @Enumerated(EnumType.STRING)
+    var status: OrderStatus, //주문상태 [ORDERED, CANCEL, COMPLETE, PICKUP]
 
     var count: Int,
 ) : BaseEntity() {
 
     fun cancel() {
-        dosirak.addStock(count)
+        when (this.status) {
+            OrderStatus.COMPLETED, OrderStatus.CANCELED, OrderStatus.PICKED_UP -> {
+                throw ConditionConflictException(
+                    ErrorCode.CANCELED_IMPOSSIBLE,
+                    "이미 준비완료, 픽업완료, 취소된 항목은 취소가 불가능합니다."
+                )
+            }
+
+            else -> {
+                this.status = OrderStatus.CANCELED
+                dosirak.addStock(count)
+            }
+        }
+    }
+
+    fun review() {
+        if (this.isReviewed || this.status != OrderStatus.PICKED_UP)
+            throw IllegalStateException("리뷰를 작성할 수 없습니다.")
+        this.isReviewed = true
     }
 
     val price: Int
         get() = dosirak.price * count
 
+    private var isReviewed: Boolean = false
+
     companion object {
         fun createOrderItem(
             dosirak: Dosirak,
             order: Order,
-            count: Int
+            count: Int,
+            payMethod: PayMethod,
         ): OrderItem {
             // TODO: 재고 관리 주문이 들어가면 단일서버는 상관 없지만 다중 서버면 처리를 반드시 해야한다. 나중에 구현
-            dosirak.removeStock(count)
             return OrderItem(
                 dosirak = dosirak,
                 order = order,
                 count = count,
+                status = if (payMethod == PayMethod.CASH) OrderStatus.READY else OrderStatus.ORDERED
             )
         }
     }

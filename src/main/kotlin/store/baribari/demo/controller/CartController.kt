@@ -63,7 +63,7 @@ class CartController(
     @PutMapping("/{itemId}/{quantity}")
     fun updateItemQuantity(
         @LoginUser loginUser: User,
-        @PathVariable itemId: Long,
+        @PathVariable @Positive itemId: Long,
         @PathVariable @Positive quantity: Int
     ): ApiResponse<UpdateItemQuantityResponseDto> {
         val data = cartService.updateItemQuantity(loginUser.username, itemId, quantity)
@@ -74,7 +74,7 @@ class CartController(
     @DeleteMapping("/{itemId}")
     fun deleteItem(
         @LoginUser loginUser: User,
-        @PathVariable itemId: Long
+        @PathVariable @Positive itemId: Long
     ): ApiResponse<DeleteCartItemResponseDto> {
         // 단일 아이템으로 가정
         val data = cartService.deleteItem(loginUser.username, itemId)

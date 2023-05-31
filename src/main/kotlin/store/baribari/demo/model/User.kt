@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator
 import store.baribari.demo.auth.ProviderType
 import store.baribari.demo.common.enums.Role
 import store.baribari.demo.model.cart.Cart
+import store.baribari.demo.model.embed.Position
+import store.baribari.demo.model.order.Order
 import java.util.*
 import javax.persistence.*
 
@@ -33,16 +35,23 @@ class User(
     @Column(name = "provider_type")
     var providerType: ProviderType = ProviderType.LOCAL,
 
-    // 장바구니
-    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+    //위치
+    @Embedded
+    var position: Position = Position(0.0, 0.0),
+
+// 장바구니
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], optional = false)
     var userCart: Cart,
 
-    // 프로필 이미지
+// 프로필 이미지
     var profileImageUrl: String? = null,
 
-    // 상점 목록
+// 상점 목록
     @OneToMany(mappedBy = "owner")
     val storeList: MutableList<Store> = mutableListOf(),
+
+    @OneToMany(mappedBy = "user")
+    val orderList: MutableList<Order> = mutableListOf(),
 ) : BaseEntity() {
     fun encodePassword(encodedPassword: String) {
         password = encodedPassword

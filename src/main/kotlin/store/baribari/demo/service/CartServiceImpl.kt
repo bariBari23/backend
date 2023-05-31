@@ -36,7 +36,8 @@ class CartServiceImpl(
 
         return CartInfoResponseDto(
             cartId = user.userCart.id!!,
-            items = itemList.map { CartItemResponseDto.fromCartItem(it) }
+            items = itemList.map { CartItemResponseDto.fromCartItem(it) },
+            price = itemList.sumOf { it.dosirak.price * it.count },
         )
     }
 
@@ -51,7 +52,7 @@ class CartServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+        val userCart = cartRepository.fetchItemListFindById(user.userCart.id!!)
             ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
         // 0으로 초기화
@@ -107,7 +108,7 @@ class CartServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+        val userCart = cartRepository.fetchItemListFindById(user.userCart.id!!)
             ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
         val targetCartItem = userCart.cartItemList.find { it.dosirak.id == itemId }
@@ -129,7 +130,7 @@ class CartServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+        val userCart = cartRepository.fetchItemListFindById(user.userCart.id!!)
             ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
         val cartItems = userCart.cartItemList
@@ -152,7 +153,7 @@ class CartServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchFindById(user.userCart.id!!)
+        val userCart = cartRepository.fetchItemListFindById(user.userCart.id!!)
             ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
 
         cartItemRepository.deleteAll(userCart.cartItemList)

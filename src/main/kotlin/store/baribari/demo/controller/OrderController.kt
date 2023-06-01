@@ -1,9 +1,11 @@
 package store.baribari.demo.controller
 
+import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import store.baribari.demo.auth.LoginUser
+import store.baribari.demo.common.util.log
 import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
 import store.baribari.demo.dto.order.request.CreateOrderRequestDto
 import store.baribari.demo.dto.order.response.FindAllOrderResponseDto
@@ -25,8 +27,9 @@ class OrderController(
     @GetMapping("")
     fun getAllOrderList(
         @LoginUser loginUser: User,
+        pageable: Pageable,
     ): ApiResponse<FindAllOrderResponseDto> {
-        val data = orderService.findAllOrder(loginUser.username)
+        val data = orderService.findAllOrder(loginUser.username, pageable)
 
         return ApiResponse.success(data)
     }

@@ -1,12 +1,13 @@
 package store.baribari.demo.service
 
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
 import store.baribari.demo.dto.order.request.CreateOrderRequestDto
-import store.baribari.demo.dto.order.response.FindOneOrderResponseDto
 import store.baribari.demo.dto.order.response.FindAllOrderResponseDto
+import store.baribari.demo.dto.order.response.FindOneOrderResponseDto
 import store.baribari.demo.dto.order.response.OrderItemDto
 import store.baribari.demo.model.order.Order
 import store.baribari.demo.model.order.OrderItem.Companion.createOrderItem
@@ -25,17 +26,18 @@ class OrderServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findAllOrder(
-        username: String
+        username: String,
+        pageable: Pageable,
     ): FindAllOrderResponseDto {
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val orders = orderRepository.findByUserFetchOrderItem(user)
+        val orders = orderRepository.findByUserFetchOrderItem(user, pageable)
 
         // TODO: 일단 취소한 orderItem도 표시하는거로 설정
         return FindAllOrderResponseDto(
-            orderCount = orders.size.toLong(),
-            orderList = orders.map { FindOneOrderResponseDto.fromOrder(it) },
+            orderList = orders.toList().map { FindOneOrderResponseDto.fromOrder(it) },
+            pageable = pageable,
         )
     }
 

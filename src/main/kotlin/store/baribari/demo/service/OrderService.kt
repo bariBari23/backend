@@ -1,5 +1,6 @@
 package store.baribari.demo.service
 
+import org.springframework.data.domain.Pageable
 import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
 import store.baribari.demo.dto.order.request.CreateOrderRequestDto
 import store.baribari.demo.dto.order.response.FindAllOrderResponseDto
@@ -8,7 +9,8 @@ import store.baribari.demo.dto.order.response.FindOneOrderResponseDto
 interface OrderService {
 
     fun findAllOrder(
-        username: String
+        username: String,
+        pageable: Pageable
     ): FindAllOrderResponseDto
 
     fun findOneOrder(

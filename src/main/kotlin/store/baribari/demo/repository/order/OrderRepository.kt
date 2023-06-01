@@ -1,5 +1,7 @@
 package store.baribari.demo.repository.order
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import store.baribari.demo.model.User
@@ -24,7 +26,12 @@ interface OrderRepository : JpaRepository<Order, Long> {
         FROM Order o
         LEFT JOIN FETCH o.orderItemList orderItem
         WHERE o.user = :user
+        """,
+        countQuery = """
+        SELECT COUNT(DISTINCT o)
+        FROM Order o
+        WHERE o.user = :user
         """
     )
-    fun findByUserFetchOrderItem(user: User): List<Order>
+    fun findByUserFetchOrderItem(user: User, pageable: Pageable): Page<Order>
 }

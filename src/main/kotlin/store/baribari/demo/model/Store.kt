@@ -1,7 +1,16 @@
 package store.baribari.demo.model
 
 import store.baribari.demo.model.embed.Position
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.ElementCollection
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 
 @Entity
 class Store(
@@ -47,4 +56,15 @@ class Store(
     var dayList: String = "",
 
     var offDay: String = "",
-) : BaseEntity()
+
+    @OneToMany(mappedBy = "store")
+    val likeStoreList: MutableList<LikeStore> = mutableListOf(),
+) : BaseEntity() {
+    fun likeStore(likeStore: LikeStore) {
+        this.likeStoreList.add(likeStore)
+    }
+
+    fun cancelLikeStore(likeStore: LikeStore) {
+        this.likeStoreList.remove(likeStore)
+    }
+}

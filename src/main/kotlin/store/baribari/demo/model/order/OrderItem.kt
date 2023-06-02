@@ -23,7 +23,7 @@ class OrderItem(
     @JoinColumn(name = "order_id")
     var order: Order,
 
-    // TODO: 여기도 pickup 시간 넣어야 할 듯  
+    // TODO: 여기도 pickup 시간 넣어야 할 듯 ?
 
     @Enumerated(EnumType.STRING)
     var status: OrderStatus, //주문상태 [ORDERED, CANCEL, COMPLETE, PICKUP]

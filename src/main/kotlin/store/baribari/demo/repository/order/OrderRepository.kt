@@ -15,10 +15,11 @@ interface OrderRepository : JpaRepository<Order, Long> {
         FROM Order o
         LEFT JOIN FETCH o.user user
         LEFT JOIN FETCH o.orderItemList orderItem
+        LEFT JOIN FETCH orderItem.dosirak dosirak
         WHERE o.id = :orderId
         """
     )
-    fun findByIdFetchUserAndOrderItem(orderId: Long): Order?
+    fun findByIdFetchUserAndOrderItemAndDosirak(orderId: Long): Order?
 
     @Query(
         """

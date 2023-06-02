@@ -24,7 +24,7 @@ interface UserRepository : JpaRepository<User, UUID> {
         """
         SELECT u
         FROM User u
-        LEFT JOIN FETCH u.likeStoreList
+        LEFT JOIN FETCH u.storeList
         WHERE u.email = :email
         """
     )

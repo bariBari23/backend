@@ -57,14 +57,16 @@ class Store(
 
     var offDay: String = "",
 
+    var walkingDistance: String = "",
+
     @OneToMany(mappedBy = "store")
-    val likeStoreList: MutableList<LikeStore> = mutableListOf(),
+    val likeUserList: MutableList<LikeStore> = mutableListOf(),
 ) : BaseEntity() {
     fun likeStore(likeStore: LikeStore) {
-        this.likeStoreList.add(likeStore)
+        this.likeUserList.add(likeStore)
     }
 
     fun cancelLikeStore(likeStore: LikeStore) {
-        this.likeStoreList.remove(likeStore)
+        this.likeUserList.remove(likeStore)
     }
 }

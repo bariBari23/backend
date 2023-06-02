@@ -20,7 +20,6 @@ import store.baribari.demo.repository.menu.DosirakRepository
 import java.time.DayOfWeek
 import java.time.LocalTime
 import javax.annotation.PostConstruct
-import kotlin.math.nextUp
 
 @Profile("local")
 @Component
@@ -54,7 +53,19 @@ class MyDataInit(
             description = "테스트 가게입니다.",
             //dayList = dayList,
         )
-        storeRepository.saveAndFlush(store)
+
+        val store2 = Store(
+            owner = userList[1],
+            name = "test store2",
+            phoneNumber = "010-1234-5678222",
+            address = "서울시 강남구 테헤란로 427",
+            businessName = "테스트 가게 2",
+            businessNumber = "123-45-67890",
+            description = "테스트 가게입니다.",
+            //dayList = dayList,
+        )
+
+        storeRepository.saveAllAndFlush(listOf(store, store2))
         val banchanList = banchanListMaker(store)
         val dosirakList = dosirakListMaker(store)
         banchanDosirakMatchMaker(banchanList, dosirakList)

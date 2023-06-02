@@ -34,20 +34,22 @@ class StoreController(
         return ApiResponse.success(data)
     }
 
-    @PostMapping("/{storeId}/like")
+    @PostMapping("/like/{storeId}")
     fun storeLike(
         @LoginUser loginUser: User,
+        @PathVariable @Positive storeId: Long,
     ): ApiResponse<Long> {
-        val data = storeService.storeLike(loginUser.username, 1L)
+        val data = storeService.storeLike(loginUser.username, storeId)
 
         return ApiResponse.success(data)
     }
 
-    @DeleteMapping("/{storeId}/like")
+    @DeleteMapping("/like/{storeId}")
     fun storeLikeCancel(
         @LoginUser loginUser: User,
+        @PathVariable @Positive storeId: Long,
     ): ApiResponse<Long> {
-        val data = storeService.storeLikeCancel(loginUser.username, 1L)
+        val data = storeService.storeLikeCancel(loginUser.username, storeId)
 
         return ApiResponse.success(data)
     }

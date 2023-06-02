@@ -46,11 +46,10 @@ class OrderServiceImpl(
         username: String,
         orderId: Long,
     ): FindOneOrderResponseDto {
-        // TODO: 도시락 찾는 쿼리 하나더 줄일 수 있긴함... graph 나중에 써보자 
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val order = orderRepository.findByIdFetchUserAndOrderItem(orderId)
+        val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
             ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
 
         if (user.id != order.user!!.id)
@@ -73,7 +72,7 @@ class OrderServiceImpl(
         val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        val userCart = cartRepository.fetchItemListFindById(user.userCart.id!!)
+        val userCart = cartRepository.findByIdFetchItemListAndDosirak(user.userCart.id!!)
             ?: throw EntityNotFoundException("해당 유저의 카트가 존재하지 않습니다.")
 
         val order = Order(
@@ -83,6 +82,8 @@ class OrderServiceImpl(
             pickUpTime = createOrderRequestDto.pickUpTime,
             payMethod = createOrderRequestDto.payMethod,
         )
+
+        require(userCart.cartItemList.isNotEmpty()) { "해당 유저의 카트에 아무것도 없습니다." }
 
         // orderItem 만들기
         val orderItems = userCart.cartItemList.map {
@@ -110,13 +111,12 @@ class OrderServiceImpl(
         orderId: Long,
         orderItemId: Long,
     ): CancelOrderItemResponseDto {
-        // TODO: 여기도 도시락 쿼리 하나 더 줄이는게 가능하긴함 나중에 해보자!
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
         // orderId가 유저의 order인지 확인 또한 취소 상태 아닌지 확인 user를 같이 가져온다. -> fetch 써야하나?
         // fetch로 orderItem 가져온다. -> 거기에서 찾자
-        val order = orderRepository.findByIdFetchUserAndOrderItem(orderId)
+        val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
             ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
 
         val orderItem = order.orderItemList.find { it.id == orderItemId }
@@ -144,9 +144,7 @@ class OrderServiceImpl(
         val user = userRepository.findByEmail(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
 
-        // orderId가 유저의 order인지 확인 또한 취소 상태 아닌지 확인 user를 같이 가져온다. -> fetch 써야하나?
-        // fetch로 orderItem 가져온다. -> 거기에서 찾자
-        val order = orderRepository.findByIdFetchUserAndOrderItem(orderId)
+        val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
             ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
 
         if (user.id != order.user!!.id)

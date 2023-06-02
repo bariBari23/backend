@@ -1,4 +1,40 @@
 package store.baribari.demo.model
 
-class `Review'` {
-}
+import store.baribari.demo.common.enums.ReviewCategory
+import store.baribari.demo.model.order.OrderItem
+import javax.persistence.Column
+import javax.persistence.ElementCollection
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.OneToOne
+
+@Entity
+class Review(
+    @Id
+    @Column(name = "review_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    val writer: User,
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_item_id")
+    val orderItem: OrderItem,
+
+    val star: Int,
+
+    val content: String,
+
+    @ElementCollection
+    val tags: MutableList<ReviewCategory>,
+
+    @ElementCollection
+    val photoList: MutableList<String> = mutableListOf(),
+)

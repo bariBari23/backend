@@ -48,7 +48,7 @@ class User(
 
 // 상점 목록
     @OneToMany(mappedBy = "owner")
-    val storeList: MutableList<Store> = mutableListOf(),
+    val likeStoreList: MutableList<Store> = mutableListOf(),
 
     @OneToMany(mappedBy = "user")
     val orderList: MutableList<Order> = mutableListOf(),

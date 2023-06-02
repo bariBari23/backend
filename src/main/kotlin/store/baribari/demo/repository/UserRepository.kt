@@ -2,7 +2,6 @@ package store.baribari.demo.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import org.springframework.stereotype.Repository
 import store.baribari.demo.model.User
 import java.util.*
 
@@ -20,4 +19,14 @@ interface UserRepository : JpaRepository<User, UUID> {
         """
     )
     fun findByEmailFetchCart(email: String): User?
+
+    @Query(
+        """
+        SELECT u
+        FROM User u
+        LEFT JOIN FETCH u.likeStoreList
+        WHERE u.email = :email
+        """
+    )
+    fun findByEmailFetchstoreLikeList(email: String): User?
 }

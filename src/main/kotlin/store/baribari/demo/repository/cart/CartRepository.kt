@@ -9,9 +9,10 @@ interface CartRepository : JpaRepository<Cart, Long> {
         """
         SELECT c
         FROM Cart c 
-        LEFT JOIN FETCH c.cartItemList
+        LEFT JOIN FETCH c.cartItemList ci
+        left join fetch ci.dosirak d
         WHERE c.id = :id
         """
     )
-    fun fetchItemListFindById(id: Long): Cart?
+    fun findByIdFetchItemListAndDosirak(id: Long): Cart?
 }

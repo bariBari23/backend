@@ -2,12 +2,20 @@ package store.baribari.demo.controller
 
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import store.baribari.demo.auth.LoginUser
-import store.baribari.demo.dto.CreateReviewResponseDto
 import store.baribari.demo.dto.common.ApiResponse
+import store.baribari.demo.dto.review.request.CreateReviewRequestDto
+import store.baribari.demo.dto.review.response.CreateReviewResponseDto
+import store.baribari.demo.dto.review.response.ReadOneReviewResponseDto
 import store.baribari.demo.service.ReviewService
+import java.security.Principal
+import javax.validation.Valid
 import javax.validation.constraints.Positive
 
 @Validated
@@ -26,12 +34,16 @@ class ReviewController(
      * 후에 review에 댓글 생성 가능할 수도?
      * 현재 까지는 review는 수정이 불가능하다.
      */
+    @PostMapping("")
     fun createReview(
         @LoginUser loginUser: User,
-        @Positive orderItemId: Long,
+        @RequestBody @Valid createReviewResponseDto: CreateReviewRequestDto
     ): ApiResponse<CreateReviewResponseDto> {
 
-        val data = reviewService.createReview(username = loginUser.username, orderItemId = orderItemId)
+        val data = reviewService.createReview(
+            username = loginUser.username,
+            createReviewRequestDto = createReviewResponseDto
+        )
 
         return ApiResponse.success(data)
     }
@@ -42,16 +54,31 @@ class ReviewController(
      * 또한
      */
     // r
-    fun readAllReview() {
-
+    // 어떻게 구분하지?
+    @GetMapping("store/{storeId}")
+    fun readReviewByStore(
+        principal: Principal?,
+        @PathVariable @Positive storeId: Long
+    ) {
+        // 상점에 있는 리뷰를 읽는다.
     }
 
-    fun readOneReview() {
+    // 상품에 따라서 리뷰를 읽는 기능도 나중에 프론트가 요구하면 넣는거로
 
+    // r
+    @GetMapping("/{reviewId}")
+    fun readOneReview(
+        principal: Principal?,
+        @PathVariable @Positive reviewId: Long
+    ): ApiResponse<ReadOneReviewResponseDto> {
+        val data = reviewService.readOneReview(principal?.name ,reviewId)
+
+        return ApiResponse.success(data)
     }
 
 
     // d
+    // 현재 주요 기능은 아닌거 같음
     fun deleteReview() {
 
     }

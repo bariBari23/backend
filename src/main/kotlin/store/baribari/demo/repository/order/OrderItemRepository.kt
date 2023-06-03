@@ -16,5 +16,5 @@ interface OrderItemRepository : JpaRepository<OrderItem, Long> {
         WHERE o.id = :orderItemId
         """
     )
-    fun findByIdFetchOrderAndUser(orderItemId: Long): List<OrderItem>
+    fun findByIdFetchOrderAndUser(orderItemId: Long): OrderItem?
 }

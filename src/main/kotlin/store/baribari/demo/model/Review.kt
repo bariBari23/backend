@@ -28,7 +28,7 @@ class Review(
     @JoinColumn(name = "order_item_id")
     val orderItem: OrderItem,
 
-    val star: Int,
+    val rating: Int,
 
     val content: String,
 
@@ -37,4 +37,4 @@ class Review(
 
     @ElementCollection
     val photoList: MutableList<String> = mutableListOf(),
-)
+) : BaseEntity()

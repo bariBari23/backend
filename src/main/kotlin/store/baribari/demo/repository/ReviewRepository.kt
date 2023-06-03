@@ -9,7 +9,7 @@ interface ReviewRepository : JpaRepository<Review, Long> {
         """
         SELECT r 
         FROM Review r 
-        JOIN FETCH r.orderItem oi 
+        JOIN FETCH r.orderItem oi
         JOIN FETCH r.writer 
         WHERE r.id = :reviewId
         """

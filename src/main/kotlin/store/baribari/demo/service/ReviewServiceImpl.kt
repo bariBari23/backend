@@ -1,6 +1,7 @@
 package store.baribari.demo.service
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.dto.review.request.CreateReviewRequestDto
 import store.baribari.demo.dto.review.response.CreateReviewResponseDto
@@ -18,6 +19,7 @@ class ReviewServiceImpl(
 ) : ReviewService {
 
     //c
+    @Transactional
     override fun createReview(
         username: String,
         createReviewRequestDto: CreateReviewRequestDto
@@ -35,7 +37,9 @@ class ReviewServiceImpl(
         require(orderItem.order.user!!.id == user.id) { "해당 주문의 유저와 리뷰를 생성하는 유저가 일치하지 않습니다." }
 
         // orderItem에 review가 있는지 확인한다.
-        orderItem.review()
+        // TODO: 테스트 용도로만 작동시킨다 실제 서비스에서는 주석해제해야함.
+        // orderItem.review()
+
         val review = Review(
             content = createReviewRequestDto.content,
             rating = createReviewRequestDto.rating,
@@ -48,7 +52,7 @@ class ReviewServiceImpl(
         return CreateReviewResponseDto.fromReview(review)
     }
 
-
+    @Transactional(readOnly = true)
     override fun readOneReview(
         username: String?,
         reviewId: Long
@@ -58,6 +62,7 @@ class ReviewServiceImpl(
                 ?: throw EntityNotFoundException("$username 에 해당하는 유저가 없습니다.")
         }
 
+        // TODO: photoList와 tags를 동시에 가져올 수 있는 방법에 대해서 강구해야한다. 
         val review = reviewRepository.findByIdFetchOrderItemAndWriter(reviewId)
             ?: throw EntityNotFoundException("$reviewId 에 해당하는 리뷰가 없습니다.")
 
@@ -66,9 +71,6 @@ class ReviewServiceImpl(
             isOwner = (review.writer == user)
         )
     }
-
-
-
 
 
 }

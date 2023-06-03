@@ -53,6 +53,24 @@ class OrderItem(
         this.isReviewed = true
     }
 
+    fun ordered() {
+        require(this.status == OrderStatus.READY) { "준비완료된 항목만 주문상태로 전환 가능 수 있습니다." }
+
+        this.status = OrderStatus.ORDERED
+    }
+
+    fun complete() {
+        require(this.status == OrderStatus.ORDERED) { "주문된 항목만 준비완료 상태로 전환 가능 수 있습니다." }
+
+        this.status = OrderStatus.COMPLETED
+    }
+
+    fun pickup() {
+        require(this.status == OrderStatus.COMPLETED) { "준비완료된 항목만 픽업할 수 있습니다." }
+
+        this.status = OrderStatus.PICKED_UP
+    }
+
     val price: Int
         get() = dosirak.price * count
 

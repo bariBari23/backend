@@ -6,7 +6,16 @@ import store.baribari.demo.common.enums.PayMethod
 import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.User
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "orders")
@@ -43,12 +52,13 @@ class Order(
 
                 orderItemList.filterNot { it.status == OrderStatus.CANCELED }
                     .all { it.status == OrderStatus.READY } -> OrderStatus.READY
-
+                // 모두 pickup이면 pickup으로
+                orderItemList.filterNot { it.status == OrderStatus.CANCELED }
+                    .all { it.status == OrderStatus.PICKED_UP } -> OrderStatus.PICKED_UP
+                //pickup 상태 completed 섞여있다면 completed로
                 orderItemList.filterNot { it.status == OrderStatus.CANCELED }
                     .all { it.status == OrderStatus.PICKED_UP || it.status == OrderStatus.COMPLETED } -> OrderStatus.COMPLETED
 
-                orderItemList.filterNot { it.status == OrderStatus.CANCELED }
-                    .all { it.status == OrderStatus.PICKED_UP } -> OrderStatus.PICKED_UP
 
                 else -> OrderStatus.ORDERED
             }
@@ -73,7 +83,7 @@ class Order(
 
     //==비즈니스 로직==//
     fun cancel() {
-         when (this.status) {
+        when (this.status) {
             OrderStatus.COMPLETED, OrderStatus.CANCELED, OrderStatus.PICKED_UP -> {
                 throw ConditionConflictException(
                     ErrorCode.CANCELED_IMPOSSIBLE,
@@ -86,8 +96,23 @@ class Order(
             }
         }
     }
-//    companion object {
-//        //==생성 메서드==//
-//
-//    }
+
+
+    // 테스트용 함수
+    // TODO: 실제 서비스 구현시에는 사용하지 않는다.
+    fun forcePickUp() {
+        // 주문 상태가 cancel이 아니면 orderItem을 PICKUP으로 바꾼다.
+        if (this.status != OrderStatus.CANCELED) {
+            orderItemList.filterNot { it.status == OrderStatus.CANCELED }.forEach { it.status = OrderStatus.PICKED_UP }
+        }
+    }
+
+    fun ordered() {
+        orderItemList.filterNot { it.status == OrderStatus.CANCELED }.forEach { it.ordered() }
+    }
+
+    fun complete() {
+        orderItemList.filterNot { it.status == OrderStatus.CANCELED }.forEach { it.complete() }
+    }
+
 }

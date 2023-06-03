@@ -10,6 +10,7 @@ import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
 import store.baribari.demo.dto.order.request.CreateOrderRequestDto
 import store.baribari.demo.dto.order.response.FindAllOrderResponseDto
 import store.baribari.demo.dto.order.response.FindOneOrderResponseDto
+import store.baribari.demo.dto.order.response.OrderItemDto
 import store.baribari.demo.service.OrderService
 import javax.validation.Valid
 import javax.validation.constraints.Positive
@@ -21,7 +22,7 @@ import javax.validation.constraints.Positive
 class OrderController(
     private val orderService: OrderService,
 ) {
-
+    // TODO: 주문 상태 변경하는 api는 api 네이밍 이상함
     // 내 주문 리스트 -> 현재 과거 전부 취소 된거 까지도
     @GetMapping("")
     fun getAllOrderList(
@@ -78,6 +79,70 @@ class OrderController(
         return ApiResponse.success(data)
     }
 
-    // TODO: 주문 완료처리 API
-    
+    // 관리자용 함수
+
+    @PutMapping("ordered/order/{orderId}")
+    fun orderedOrder(
+        @PathVariable @Positive orderId: Long,
+    ): ApiResponse<FindOneOrderResponseDto> {
+        // orderItem complete로 변환
+        val data = orderService.orderedOrder(orderId)    // order 취소하기
+
+        return ApiResponse.success(data)
+    }
+
+    @PutMapping("ordered/orderitem/{orderId}")
+    fun orderedOrderItem(
+        @PathVariable @Positive orderId: Long,
+    ): ApiResponse<OrderItemDto> {
+        // orderItem complete로 변환
+        val data = orderService.orderedOrderItem(orderId)    // order 취소하기
+
+        return ApiResponse.success(data)
+    }
+
+
+
+    @PutMapping("complete/order/{orderId}")
+    fun forceCompleteOrder(
+        @PathVariable @Positive orderId: Long,
+    ): ApiResponse<FindOneOrderResponseDto> {
+        // orderItem complete로 변환
+        val data = orderService.completeOrder(orderId)    // order 취소하기
+
+        return ApiResponse.success(data)
+    }
+
+    @PutMapping("complete/orderitem/{orderItemId}")
+    fun forceCompleteOrderItem(
+        @PathVariable @Positive orderItemId: Long,
+    ): ApiResponse<OrderItemDto> {
+        // orderItem complete로 변환
+        val data = orderService.completeOrderItem(orderItemId)    // order 취소하기
+
+        return ApiResponse.success(data)
+    }
+
+    // 강제로 pickup 상태로 만들어주는 함수
+
+    @PutMapping("pickup/order/{orderId}")
+    fun forcePickupOrder(
+        @PathVariable @Positive orderId: Long,
+    ): ApiResponse<Long> {
+        // orderItem 취소하기
+        val data = orderService.forcePickupOrder(orderId)    // order 취소하기
+
+        return ApiResponse.success(data)
+    }
+
+    @PutMapping("pickup/orderitem/{orderItemId}")
+    fun forcePickupOrderItem(
+        @PathVariable @Positive orderItemId: Long,
+    ): ApiResponse<Long> {
+        // orderItem 취소하기
+        val data = orderService.forcePickUpOrderItem(orderItemId)    // order 취소하기
+
+        return ApiResponse.success(data)
+    }
+
 }

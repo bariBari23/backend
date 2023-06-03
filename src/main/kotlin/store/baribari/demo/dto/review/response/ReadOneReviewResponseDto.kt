@@ -1,6 +1,7 @@
 package store.baribari.demo.dto.review.response
 
 import store.baribari.demo.model.Review
+import store.baribari.demo.model.User
 
 data class ReadOneReviewResponseDto(
     val reviewId: Long,
@@ -9,12 +10,11 @@ data class ReadOneReviewResponseDto(
     val rating: Int,
     val photoList: List<String> = listOf(),
     val tags: List<String> = listOf(),
-    val writer: String,
     val createdAt: String,
-    val isOwner: Boolean = false,
+    val isWriter: Boolean = false,
 ) {
     companion object {
-        fun fromReview(review: Review, isOwner: Boolean): ReadOneReviewResponseDto {
+        fun fromReview(review: Review, user: User?): ReadOneReviewResponseDto {
             return ReadOneReviewResponseDto(
                 reviewId = review.id!!,
                 orderItemId = review.orderItem.id!!,
@@ -22,9 +22,8 @@ data class ReadOneReviewResponseDto(
                 rating = review.rating,
                 photoList = review.photoList,
                 tags = review.tags.map { it.name },
-                writer = review.writer.email,
                 createdAt = review.createdAt.toString(),
-                isOwner = isOwner
+                isWriter = (user == review.writer)
             )
         }
     }

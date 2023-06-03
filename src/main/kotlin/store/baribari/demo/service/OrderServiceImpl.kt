@@ -1,8 +1,10 @@
 package store.baribari.demo.service
 
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import store.baribari.demo.common.enums.OrderStatus
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
 import store.baribari.demo.dto.order.request.CreateOrderRequestDto
@@ -153,5 +155,80 @@ class OrderServiceImpl(
         order.cancel()
 
         return order.id!!
+    }
+
+    @Transactional
+    override fun orderedOrder(
+        orderId: Long
+    ): FindOneOrderResponseDto {
+        val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
+            ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
+
+        require(order.status == OrderStatus.READY) { "주문 상태가 준비중이 아닙니다." }
+
+        order.ordered()
+
+        return FindOneOrderResponseDto.fromOrder(order)
+    }
+
+    override fun orderedOrderItem(
+        orderItemId: Long
+    ): OrderItemDto {
+        val orderItem = orderItemRepository.findByIdOrNull(orderItemId)
+            ?: throw EntityNotFoundException("해당 주문 아이템이 존재하지 않습니다.")
+
+        orderItem.ordered()
+
+        return OrderItemDto.fromOrderItem(orderItem)
+    }
+
+    @Transactional
+    override fun completeOrder(
+        orderId: Long
+    ): FindOneOrderResponseDto {
+        val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
+            ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
+
+        require(order.status == OrderStatus.ORDERED) { "주문된 항목만 준비완료 상태로 전환 가능 수 있습니다." }
+
+        order.complete()
+
+        return FindOneOrderResponseDto.fromOrder(order)
+    }
+
+    @Transactional
+    override fun completeOrderItem(
+        orderItem: Long
+    ): OrderItemDto {
+        val orderItem = orderItemRepository.findByIdOrNull(orderItem)
+            ?: throw EntityNotFoundException("해당 주문 아이템이 존재하지 않습니다.")
+
+        orderItem.complete()
+
+        return OrderItemDto.fromOrderItem(orderItem)
+    }
+
+    @Transactional
+    override fun forcePickupOrder(
+        orderId: Long
+    ): Long {
+        val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
+            ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
+
+        order.forcePickUp()
+
+        return order.id!!
+    }
+
+    @Transactional
+    override fun forcePickUpOrderItem(
+        orderItemId: Long
+    ): Long {
+        val orderItem = orderItemRepository.findByIdOrNull(orderItemId)
+            ?: throw EntityNotFoundException("해당 주문 아이템이 존재하지 않습니다.")
+
+        orderItem.pickup()
+
+        return orderItem.id!!
     }
 }

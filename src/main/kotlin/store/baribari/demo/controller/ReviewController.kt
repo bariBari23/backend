@@ -13,6 +13,7 @@ import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.dto.review.request.CreateReviewRequestDto
 import store.baribari.demo.dto.review.response.CreateReviewResponseDto
 import store.baribari.demo.dto.review.response.ReadOneReviewResponseDto
+import store.baribari.demo.dto.review.response.ReadReviewByStoreResponseDto
 import store.baribari.demo.service.ReviewService
 import java.security.Principal
 import javax.validation.Valid
@@ -54,28 +55,38 @@ class ReviewController(
      * 또한
      */
     // r
-    // 어떻게 구분하지?
-    @GetMapping("store/{storeId}")
-    fun readReviewByStore(
-        principal: Principal?,
-        @PathVariable @Positive storeId: Long
-    ) {
-        // 상점에 있는 리뷰를 읽는다.
-    }
-
-    // 상품에 따라서 리뷰를 읽는 기능도 나중에 프론트가 요구하면 넣는거로
-
-    // r
     @GetMapping("/{reviewId}")
     fun readOneReview(
         principal: Principal?,
         @PathVariable @Positive reviewId: Long
     ): ApiResponse<ReadOneReviewResponseDto> {
-        val data = reviewService.readOneReview(principal?.name ,reviewId)
+        val data = reviewService.readOneReview(principal?.name, reviewId)
 
         return ApiResponse.success(data)
     }
 
+    // 어떻게 구분하지?
+    @GetMapping("store/{storeId}")
+    fun readReviewByStore(
+        principal: Principal?,
+        @PathVariable @Positive storeId: Long
+    ): ApiResponse<ReadReviewByStoreResponseDto> {
+        // 상점에 있는 리뷰를 읽는다.
+        // 해당 상점의 리뷰를 읽는다.
+        val data = reviewService.readReviewByStore(principal?.name, storeId)
+
+        return ApiResponse.success(data)
+    }
+
+    @GetMapping("dosirak/{storeId}")
+    fun readReviewByDosirak(
+        principal: Principal?,
+        @PathVariable @Positive dosirakId: Long
+    ) {
+        // 상품에 따라서 리뷰를 읽는 기능
+        // 나중에 프론트가 요구하면 넣는거로
+        TODO("Not yet implemented")
+    }
 
     // d
     // 현재 주요 기능은 아닌거 같음

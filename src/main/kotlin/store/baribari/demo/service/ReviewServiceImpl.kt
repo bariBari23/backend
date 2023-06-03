@@ -6,8 +6,10 @@ import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.dto.review.request.CreateReviewRequestDto
 import store.baribari.demo.dto.review.response.CreateReviewResponseDto
 import store.baribari.demo.dto.review.response.ReadOneReviewResponseDto
+import store.baribari.demo.dto.review.response.ReadReviewByStoreResponseDto
 import store.baribari.demo.model.Review
 import store.baribari.demo.repository.ReviewRepository
+import store.baribari.demo.repository.StoreRepository
 import store.baribari.demo.repository.UserRepository
 import store.baribari.demo.repository.order.OrderItemRepository
 
@@ -16,6 +18,7 @@ class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository,
     private val userRepository: UserRepository,
     private val orderItemRepository: OrderItemRepository,
+    private val storeRepository: StoreRepository,
 ) : ReviewService {
 
     //c
@@ -38,7 +41,7 @@ class ReviewServiceImpl(
 
         // orderItem에 review가 있는지 확인한다.
         // TODO: 테스트 용도로만 작동시킨다 실제 서비스에서는 주석해제해야함.
-        // orderItem.review()
+        orderItem.review()
 
         val review = Review(
             content = createReviewRequestDto.content,
@@ -68,9 +71,24 @@ class ReviewServiceImpl(
 
         return ReadOneReviewResponseDto.fromReview(
             review = review,
-            isOwner = (review.writer == user)
+            user = user,
         )
     }
 
+    @Transactional(readOnly = true)
+    override fun readReviewByStore(username: String?, storeId: Long): ReadReviewByStoreResponseDto {
 
+        val user = username?.let {
+            userRepository.findByEmail(username)
+                ?: throw EntityNotFoundException("$username 에 해당하는 유저가 없습니다.")
+        }
+
+        val reviewList = reviewRepository.findByStoreFetchOrderItemAndDosirak(storeId)?.sortedBy { it.id }
+            ?: emptyList()
+
+        return ReadReviewByStoreResponseDto.fromReviewList(
+            reviewList = reviewList,
+            user = user,
+        )
+    }
 }

@@ -28,5 +28,15 @@ interface UserRepository : JpaRepository<User, UUID> {
         WHERE u.email = :email
         """
     )
-    fun findByEmailFetchstoreLikeList(email: String): User?
+    fun findByEmailFetchStoreLikeList(email: String): User?
+
+    @Query(
+        """
+        SELECT u
+        FROM User u
+        LEFT JOIN FETCH u.position
+        WHERE u.email = :username
+        """
+    )
+    fun findByEmailFetchPosition(username: String): User?
 }

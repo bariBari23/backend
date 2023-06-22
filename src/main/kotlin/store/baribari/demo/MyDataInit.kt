@@ -8,6 +8,7 @@ import store.baribari.demo.model.Store
 import store.baribari.demo.model.User
 import store.baribari.demo.model.cart.Cart
 import store.baribari.demo.model.embed.Day
+import store.baribari.demo.model.embed.Position
 import store.baribari.demo.model.menu.Banchan
 import store.baribari.demo.model.menu.BanchanDosirak
 import store.baribari.demo.model.menu.Dosirak
@@ -51,8 +52,13 @@ class MyDataInit(
             businessName = "테스트 가게",
             businessNumber = "123-45-67890",
             description = "테스트 가게입니다.",
+            position = Position(
+                latitude = 37.4912411,
+                longitude = 127.065716,
+            ),
             //dayList = dayList,
         )
+        //37.4912411,127.065716/37.4927015,127.0615472
 
         val store2 = Store(
             owner = userList[1],
@@ -138,9 +144,13 @@ class MyDataInit(
     }
 
     private fun userCreate(): List<User> {
-
+        //37.4927015,127.0615472 400미터 예상
         val customer = User(
-            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart()
+            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart(),
+            position = Position(
+                latitude = 37.4927015,
+                longitude = 127.0615472,
+            )
         )
         val encodedPassword1 = passwordEncoder.encode(customer.password)
         customer.encodePassword(encodedPassword1)

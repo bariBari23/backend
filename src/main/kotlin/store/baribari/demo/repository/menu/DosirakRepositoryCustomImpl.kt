@@ -21,7 +21,7 @@ import store.baribari.demo.model.menu.QDosirak.dosirak
 class DosirakRepositoryCustomImpl(
     private val queryFactory: JPAQueryFactory
 ) : DosirakRepositoryCustom {
-    override fun findDosirakByQuery(
+    override fun customFindDosirakByQuery(
         filterLiked: Boolean,
         keyword: String?,
         user: User?,
@@ -65,6 +65,7 @@ class DosirakRepositoryCustomImpl(
             dosirakIds.size.toLong()
         )
     }
+
 
     private fun returnLikestoreIds(filterLiked: Boolean, user: User?): List<Long> =
         if (filterLiked) {

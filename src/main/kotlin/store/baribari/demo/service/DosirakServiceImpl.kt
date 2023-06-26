@@ -3,7 +3,7 @@ package store.baribari.demo.service
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import store.baribari.demo.common.util.log
+import store.baribari.demo.dto.FindDosirakByIdResponseDto
 import store.baribari.demo.dto.FindDosirakByQueryResponseDto
 import store.baribari.demo.repository.UserRepository
 import store.baribari.demo.repository.menu.DosirakRepository
@@ -25,9 +25,9 @@ class DosirakServiceImpl(
         // 2.
         val user = userEmail?.let { userRepository.findByEmail(it) }
 
-        log.info("keyword is: $keyword")
+        //log.info("keyword is: $keyword")
 
-        val dosirakPage = dosirakRepository.findDosirakByQuery(
+        val dosirakPage = dosirakRepository.customFindDosirakByQuery(
             filterLiked,
             keyword,
             user,
@@ -35,5 +35,20 @@ class DosirakServiceImpl(
         )
 
         return FindDosirakByQueryResponseDto.fromDosirakPageToDto(dosirakPage)
+    }
+
+    override fun findDosirakById(
+        userEmail: String?,
+        dosirakId: Long
+    ): FindDosirakByIdResponseDto {
+        val user = userEmail?.let { userRepository.findByEmailFetchStoreLikeList(it) }
+
+        // 1. dosirak을 가져온다. banchaList store와 함께
+        // 2. dosirak을 photoList를 가져온다.
+
+        val dosirak = dosirakRepository.findByIdFetchStoreAndBanchanList(dosirakId)
+
+
+        return FindDosirakByIdResponseDto.fromDosirakToDto(dosirak, user)
     }
 }

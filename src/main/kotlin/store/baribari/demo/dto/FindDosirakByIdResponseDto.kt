@@ -1,10 +1,9 @@
 package store.baribari.demo.dto
 
-import com.querydsl.core.annotations.QueryProjection
 import store.baribari.demo.model.User
 import store.baribari.demo.model.menu.Dosirak
 
-data class FindDosirakByIdResponseDto @QueryProjection constructor(
+data class FindDosirakByIdResponseDto(
     val id: Long,
     val name: String,
     val price: Int,
@@ -12,9 +11,9 @@ data class FindDosirakByIdResponseDto @QueryProjection constructor(
     val mainImageUrl: String = "",
     val banchanList: List<String> = listOf(),
     val photoList: List<String> = listOf(),
-    val storeName: String,
     val storeId: Long,
-    val liked: Boolean,
+    val storeName: String,
+    val likedStore: Boolean,
     val fromWhere: String,
     val mealTimes: Int,
 ) {
@@ -28,9 +27,9 @@ data class FindDosirakByIdResponseDto @QueryProjection constructor(
                 mainImageUrl = dosirak.mainImage,
                 photoList = dosirak.dosirakImageList,
                 banchanList = dosirak.dosirakBanchanList.map { it.banchan.name },
-                storeName = dosirak.store.name,
                 storeId = dosirak.store.id!!,
-                liked = user?.likeStoreList?.map { it.store }?.contains(dosirak.store) ?: false,
+                storeName = dosirak.store.name,
+                likedStore = user?.likeStoreList?.map { it.store }?.contains(dosirak.store) ?: false,
                 fromWhere = dosirak.fromWhere,
                 mealTimes = dosirak.mealTimes,
             )

@@ -7,17 +7,17 @@ import store.baribari.demo.dto.review.response.ReadReviewByStoreResponseDto
 
 interface ReviewService {
     fun createReview(
-        username: String,
+        userEmail: String,
         createReviewRequestDto: CreateReviewRequestDto
     ): CreateReviewResponseDto
 
     fun readOneReview(
-        username: String?,
+        userEmail: String?,
         reviewId: Long
     ): ReadOneReviewResponseDto
 
     fun readReviewByStore(
-        username: String?,
+        userEmail: String?,
         storeId: Long
     ): ReadReviewByStoreResponseDto
 

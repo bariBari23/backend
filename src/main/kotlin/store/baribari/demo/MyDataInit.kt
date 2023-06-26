@@ -21,6 +21,7 @@ import store.baribari.demo.repository.menu.DosirakRepository
 import java.time.DayOfWeek
 import java.time.LocalTime
 import javax.annotation.PostConstruct
+import kotlin.random.Random.Default.nextInt
 
 @Profile("local")
 @Component
@@ -101,7 +102,7 @@ class MyDataInit(
     ): List<Banchan> {
         val ret = mutableListOf<Banchan>()
 
-        for (i in 1..30) {
+        for (i in 1..10) {
             ret.add(
                 Banchan(
                     name = "테스트 반찬 $i",
@@ -111,6 +112,56 @@ class MyDataInit(
                 )
             )
         }
+
+        for (i in 11..20) {
+            ret.add(
+                Banchan(
+                    name = "유미네 반찬 $i",
+                    description = "테스트 반찬입니다. $i",
+                    gram = 100,
+                    owner = store,
+                )
+            )
+        }
+
+        for (i in 21..30) {
+            ret.add(
+                Banchan(
+                    name = "현우네 반찬 $i",
+                    description = "테스트 반찬입니다. $i",
+                    gram = 100,
+                    owner = store,
+                )
+            )
+        }
+
+        // 랜덤으로 돌려서 검색 성능 확인 중
+
+        for (i in 1..2) {
+            val idx = nextInt(29) + 1
+            ret[idx].name = "나명이네 음식 ${idx + 1}"
+        }
+
+        for (i in 1..2) {
+            val idx = nextInt(29) + 1
+            ret[idx].name = "도규네 집밥 ${idx + 1}"
+        }
+
+        for (i in 1..2) {
+            val idx = nextInt(29) + 1
+            ret[idx].name = "민주네 음식 ${idx + 1}"
+        }
+
+        for (i in 1..2) {
+            val idx = nextInt(29) + 1
+            ret[idx].name = "예린이 영양간식 ${idx + 1}"
+        }
+
+        for (i in 1..2) {
+            val idx = nextInt(29) + 1
+            ret[idx].name = "지은이네 술안주 ${idx + 1}"
+        }
+
         banchanRepository.saveAll(ret)
         return ret
     }

@@ -10,28 +10,28 @@ import store.baribari.demo.dto.order.response.OrderItemDto
 interface OrderService {
 
     fun findAllOrder(
-        username: String,
+        userEmail: String,
         pageable: Pageable
     ): FindAllOrderResponseDto
 
     fun findOneOrder(
-        username: String,
+        userEmail: String,
         orderId: Long,
     ): FindOneOrderResponseDto
 
     fun createOrder(
-        username: String,
+        userEmail: String,
         createOrderRequestDto: CreateOrderRequestDto
     ): Long
 
     fun cancelOrderItem(
-        username: String,
+        userEmail: String,
         orderId: Long,
         orderItemId: Long,
     ): CancelOrderItemResponseDto
 
     fun cancelOrder(
-        username: String,
+        userEmail: String,
         orderId: Long,
     ): Long
 

@@ -24,13 +24,13 @@ class ReviewServiceImpl(
     //c
     @Transactional
     override fun createReview(
-        username: String,
+        userEmail: String,
         createReviewRequestDto: CreateReviewRequestDto
     ): CreateReviewResponseDto {
         // user와 item을 찾는다.
 
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 에 해당하는 유저가 없습니다.")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
 
         val orderItem = orderItemRepository.findByIdFetchOrderAndUser(createReviewRequestDto.orderItemId)
             ?: throw EntityNotFoundException("${createReviewRequestDto.orderItemId} 에 해당하는 주문이 없습니다.")
@@ -57,12 +57,12 @@ class ReviewServiceImpl(
 
     @Transactional(readOnly = true)
     override fun readOneReview(
-        username: String?,
+        userEmail: String?,
         reviewId: Long
     ): ReadOneReviewResponseDto {
-        val user = username?.let {
-            userRepository.findByEmail(username)
-                ?: throw EntityNotFoundException("$username 에 해당하는 유저가 없습니다.")
+        val user = userEmail?.let {
+            userRepository.findByEmail(userEmail)
+                ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
         }
 
         // TODO: photoList와 tags를 동시에 가져올 수 있는 방법에 대해서 강구해야한다. 
@@ -76,11 +76,11 @@ class ReviewServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun readReviewByStore(username: String?, storeId: Long): ReadReviewByStoreResponseDto {
+    override fun readReviewByStore(userEmail: String?, storeId: Long): ReadReviewByStoreResponseDto {
 
-        val user = username?.let {
-            userRepository.findByEmail(username)
-                ?: throw EntityNotFoundException("$username 에 해당하는 유저가 없습니다.")
+        val user = userEmail?.let {
+            userRepository.findByEmail(userEmail)
+                ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
         }
 
         val reviewList = reviewRepository.findByStoreFetchOrderItemAndDosirak(storeId)?.sortedBy { it.id }

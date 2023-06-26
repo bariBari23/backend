@@ -42,7 +42,7 @@ class ReviewController(
     ): ApiResponse<CreateReviewResponseDto> {
 
         val data = reviewService.createReview(
-            username = loginUser.username,
+            userEmail = loginUser.username,
             createReviewRequestDto = createReviewResponseDto
         )
 

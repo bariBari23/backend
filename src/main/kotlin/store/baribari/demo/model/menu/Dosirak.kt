@@ -4,7 +4,16 @@ import store.baribari.demo.common.enums.ErrorCode
 import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.Store
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.ElementCollection
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 
 @Entity
 class Dosirak(
@@ -28,7 +37,6 @@ class Dosirak(
     var mainImage: String = "",
 
     // 이미지 리스트
-
     @ElementCollection
     var dosirakImageList: List<String> = emptyList(),
 
@@ -39,16 +47,15 @@ class Dosirak(
     var mealTimes: Int,
 
     val price: Int,
+
+    var stock: Int = 0,
 ) : BaseEntity() {
 
     private val gram: Int
         get() = dosirakBanchanList.sumOf { it.banchan.gram }
 
-    private var stock: Int = 0
-
     private val soldOut: Boolean
         get() = stock <= 0
-
 
     // 재고를 매일 변경
     fun changeStock(count: Int) {

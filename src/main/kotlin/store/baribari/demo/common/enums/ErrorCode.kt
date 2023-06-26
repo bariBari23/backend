@@ -21,5 +21,5 @@ enum class ErrorCode(
     PROVIDER_MISS_MATCH(409, "올바르지 않은 provider입니다."),
     SERVER_ERROR(500, "서버에서 오류가 발생했습니다."),
     NOT_ENOUGH_STOCK(500, "재고가 부족합니다."),
-    CANCELED_IMPOSSIBLE(500, "이미 취소된 ."),
+    CANCELED_IMPOSSIBLE(500, "이미 취소된 주문."),
 }

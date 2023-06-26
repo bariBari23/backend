@@ -28,11 +28,11 @@ class OrderServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findAllOrder(
-        username: String,
+        userEmail: String,
         pageable: Pageable,
     ): FindAllOrderResponseDto {
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 이라는 유저는 존재하지 않습니다.")
 
         val orders = orderRepository.findByUserFetchOrderItem(user, pageable)
 
@@ -45,11 +45,11 @@ class OrderServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findOneOrder(
-        username: String,
+        userEmail: String,
         orderId: Long,
     ): FindOneOrderResponseDto {
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 이라는 유저는 존재하지 않습니다.")
 
         val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
             ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
@@ -68,11 +68,11 @@ class OrderServiceImpl(
 
     @Transactional
     override fun createOrder(
-        username: String,
+        userEmail: String,
         createOrderRequestDto: CreateOrderRequestDto
     ): Long {
-        val user = userRepository.findByEmailFetchCart(username)
-            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
+        val user = userRepository.findByEmailFetchCart(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 이라는 유저는 존재하지 않습니다.")
 
         val userCart = cartRepository.findByIdFetchItemListAndDosirak(user.userCart.id!!)
             ?: throw EntityNotFoundException("해당 유저의 카트가 존재하지 않습니다.")
@@ -109,12 +109,12 @@ class OrderServiceImpl(
 
     @Transactional
     override fun cancelOrderItem(
-        username: String,
+        userEmail: String,
         orderId: Long,
         orderItemId: Long,
     ): CancelOrderItemResponseDto {
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 이라는 유저는 존재하지 않습니다.")
 
         // orderId가 유저의 order인지 확인 또한 취소 상태 아닌지 확인 user를 같이 가져온다. -> fetch 써야하나?
         // fetch로 orderItem 가져온다. -> 거기에서 찾자
@@ -140,11 +140,11 @@ class OrderServiceImpl(
 
     @Transactional
     override fun cancelOrder(
-        username: String,
+        userEmail: String,
         orderId: Long
     ): Long {
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 이라는 유저는 존재하지 않습니다.")
 
         val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
             ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
@@ -161,6 +161,8 @@ class OrderServiceImpl(
     override fun orderedOrder(
         orderId: Long
     ): FindOneOrderResponseDto {
+        // TODO: 여기 아래부터는 상점이나 관리자만 할 수 있도록
+        
         val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
             ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
 
@@ -174,6 +176,7 @@ class OrderServiceImpl(
     override fun orderedOrderItem(
         orderItemId: Long
     ): OrderItemDto {
+        // TODO: 여기 아래부터는 상점이나 관리자만 할 수 있도록
         val orderItem = orderItemRepository.findByIdOrNull(orderItemId)
             ?: throw EntityNotFoundException("해당 주문 아이템이 존재하지 않습니다.")
 
@@ -200,12 +203,12 @@ class OrderServiceImpl(
     override fun completeOrderItem(
         orderItem: Long
     ): OrderItemDto {
-        val orderItem = orderItemRepository.findByIdOrNull(orderItem)
+        val orderItems = orderItemRepository.findByIdOrNull(orderItem)
             ?: throw EntityNotFoundException("해당 주문 아이템이 존재하지 않습니다.")
 
-        orderItem.complete()
+        orderItems.complete()
 
-        return OrderItemDto.fromOrderItem(orderItem)
+        return OrderItemDto.fromOrderItem(orderItems)
     }
 
     @Transactional

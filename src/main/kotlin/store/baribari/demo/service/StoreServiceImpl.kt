@@ -19,15 +19,15 @@ class StoreServiceImpl(
     private val likeStoreRepository: LikeStoreRepository
 ) : StoreService {
     override fun storeInfo(
-        username: String?,
+        userEmail: String?,
         storeId: Long,
     ): StoreInfoResponseDto {
         val store = storeRepository.findByIdOrNull(storeId)
             ?: throw EntityNotFoundException("$storeId 번 가게는 존재하지 않습니다.")
 
-        val user = username?.let {
-            userRepository.findByEmail(username)
-                ?: throw EntityNotFoundException("$username 에 해당하는 유저는 존재하지 않습니다.")
+        val user = userEmail?.let {
+            userRepository.findByEmail(userEmail)
+                ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저는 존재하지 않습니다.")
         }
 
         val liked: Boolean = user?.let {
@@ -39,11 +39,11 @@ class StoreServiceImpl(
     }
 
     override fun storeLike(
-        username: String,
+        userEmail: String,
         storeId: Long,
     ): Long {
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 에 해당하는 유저는 존재하지 않습니다.")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저는 존재하지 않습니다.")
 
         val store = storeRepository.findByIdOrNull(storeId)
             ?: throw EntityNotFoundException("$storeId 번 가게는 존재하지 않습니다.")
@@ -60,11 +60,11 @@ class StoreServiceImpl(
     }
 
     override fun storeLikeCancel(
-        username: String,
+        userEmail: String,
         storeId: Long,
     ): Long {
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 에 해당하는 유저는 존재하지 않습니다.")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저는 존재하지 않습니다.")
 
         val store = storeRepository.findByIdOrNull(storeId)
             ?: throw EntityNotFoundException("$storeId 번 가게는 존재하지 않습니다.")
@@ -78,10 +78,10 @@ class StoreServiceImpl(
     }
 
     override fun showLike(
-        username: String,
+        userEmail: String,
     ): ShowLikeResponseDto {
-        val user = userRepository.findByEmail(username)
-            ?: throw EntityNotFoundException("$username 에 해당하는 유저는 존재하지 않습니다.")
+        val user = userRepository.findByEmail(userEmail)
+            ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저는 존재하지 않습니다.")
 
         val likeStores = likeStoreRepository.findByUserFetchStore(user)
 

@@ -30,7 +30,7 @@ class StoreController(
     ): ApiResponse<StoreInfoResponseDto> {
         // login한 유저면 like 여부도 같이 보내준다.
         // 자기 상점인지 확인하는 로직도 나중에 넣어준다.
-        val data = storeService.storeInfo(username = principal?.name, storeId = storeId)
+        val data = storeService.storeInfo(userEmail = principal?.name, storeId = storeId)
 
         return ApiResponse.success(data)
     }
@@ -40,7 +40,7 @@ class StoreController(
         @LoginUser loginUser: User,
         @PathVariable @Positive storeId: Long,
     ): ApiResponse<Long> {
-        val data = storeService.storeLike(username = loginUser.username, storeId = storeId)
+        val data = storeService.storeLike(userEmail = loginUser.username, storeId = storeId)
 
         return ApiResponse.success(data)
     }
@@ -50,7 +50,7 @@ class StoreController(
         @LoginUser loginUser: User,
         @PathVariable @Positive storeId: Long,
     ): ApiResponse<Long> {
-        val data = storeService.storeLikeCancel(username = loginUser.username, storeId = storeId)
+        val data = storeService.storeLikeCancel(userEmail = loginUser.username, storeId = storeId)
 
         return ApiResponse.success(data)
     }

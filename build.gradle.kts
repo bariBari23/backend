@@ -9,6 +9,8 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
     kotlin("plugin.allopen") version "1.5.10"
+    kotlin("kapt") version "1.3.61" // QueryDsl
+    idea
 }
 
 group = "io.baribari"
@@ -20,6 +22,7 @@ repositories {
 }
 
 val snippetsDir by extra { "build/generated-snippets" }
+val querydslVersion = "5.0.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -46,6 +49,10 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     runtimeOnly("com.h2database:h2")
+
+    // QueryDsl
+    implementation("com.querydsl:querydsl-jpa:$querydslVersion")
+    kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }

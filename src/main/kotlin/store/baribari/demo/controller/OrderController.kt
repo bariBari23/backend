@@ -28,8 +28,7 @@ class OrderController(
     fun getAllOrderList(
         @LoginUser loginUser: User,
         pageable: Pageable,
-
-        ): ApiResponse<FindAllOrderResponseDto> {
+    ): ApiResponse<FindAllOrderResponseDto> {
         val data = orderService.findAllOrder(loginUser.username, pageable)
 
         return ApiResponse.success(data)
@@ -100,7 +99,6 @@ class OrderController(
 
         return ApiResponse.success(data)
     }
-
 
 
     @PutMapping("complete/order/{orderId}")

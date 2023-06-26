@@ -5,21 +5,21 @@ import store.baribari.demo.dto.StoreInfoResponseDto
 
 interface StoreService {
     fun storeInfo(
-        username: String?,
+        userEmail: String?,
         storeId: Long,
     ) : StoreInfoResponseDto
 
     fun storeLike(
-        username: String,
+        userEmail: String,
         storeId: Long,
     ): Long
 
     fun storeLikeCancel(
-        username: String,
+        userEmail: String,
         storeId: Long,
     ): Long
 
     fun showLike(
-        username: String,
+        userEmail: String,
     ): ShowLikeResponseDto
 }

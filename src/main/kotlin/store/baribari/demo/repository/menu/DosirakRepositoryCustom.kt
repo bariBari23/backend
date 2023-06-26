@@ -6,10 +6,11 @@ import store.baribari.demo.model.User
 import store.baribari.demo.model.menu.Dosirak
 
 interface DosirakRepositoryCustom {
-     fun findDosirakByQuery(
-         filterLiked: Boolean,
-         keyword: String?,
-         user: User?,
-         pageable: Pageable,
-     ): Page<Dosirak>
+    fun customFindDosirakByQuery(
+        filterLiked: Boolean,
+        keyword: String?,
+        user: User?,
+        pageable: Pageable,
+    ): Page<Dosirak>
+
 }

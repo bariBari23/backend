@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page
 import store.baribari.demo.model.menu.Dosirak
 
 data class FindDosirakByQueryResponseDto(
-    val dosirakList: List<DosirakDto>,
+    val dosirakList: List<FindDosirakByQueryResponseElementDto>,
     val currentPage: Int,
     val totalPages: Int,
     val totalElements: Long,
@@ -15,7 +15,7 @@ data class FindDosirakByQueryResponseDto(
             pageData: Page<Dosirak>,
         ): FindDosirakByQueryResponseDto {
             val content = pageData.content.map {
-                DosirakDto.createDtoFromEntity(it)
+                FindDosirakByQueryResponseElementDto.createDtoFromEntity(it)
             }
             return FindDosirakByQueryResponseDto(
                 dosirakList = content,

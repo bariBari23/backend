@@ -3,10 +3,14 @@ package store.baribari.demo.service
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import store.baribari.demo.common.annotation.Timer
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.dto.cart.request.AddItemRequestDto
-import store.baribari.demo.dto.cart.response.*
+import store.baribari.demo.dto.cart.response.AddCartItemResponseDto
+import store.baribari.demo.dto.cart.response.CartInfoResponseDto
+import store.baribari.demo.dto.cart.response.CartItemResponseDto
+import store.baribari.demo.dto.cart.response.ClearCartResponseDto
+import store.baribari.demo.dto.cart.response.DeleteCartItemResponseDto
+import store.baribari.demo.dto.cart.response.UpdateItemQuantityResponseDto
 import store.baribari.demo.model.cart.Cart
 import store.baribari.demo.model.cart.CartItem
 import store.baribari.demo.repository.UserRepository
@@ -41,7 +45,6 @@ class CartServiceImpl(
         )
     }
 
-    @Timer
     @Transactional
     override fun addItem(
         username: String,

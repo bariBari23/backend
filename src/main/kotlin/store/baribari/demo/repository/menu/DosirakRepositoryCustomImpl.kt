@@ -1,8 +1,6 @@
 package store.baribari.demo.repository.menu
 
 import com.querydsl.core.types.OrderSpecifier
-import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.Expressions.asBoolean
 import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -27,7 +25,7 @@ class DosirakRepositoryCustomImpl(
         user: User?,
         pageable: Pageable
     ): Page<Dosirak> {
-        val likeStoreIds = returnLikestoreIds(filterLiked, user)
+        val likeStoreIds = returnLikStoreIds(filterLiked, user)
         val querySpecifiers: List<OrderSpecifier<*>> = sortQualifier(pageable.sort)
 
         // 선택된 받은 도시락
@@ -67,7 +65,7 @@ class DosirakRepositoryCustomImpl(
     }
 
 
-    private fun returnLikestoreIds(filterLiked: Boolean, user: User?): List<Long> =
+    private fun returnLikStoreIds(filterLiked: Boolean, user: User?): List<Long> =
         if (filterLiked) {
             user?.let { likeStoreIds(user) } ?: emptyList()
         } else {
@@ -89,14 +87,14 @@ class DosirakRepositoryCustomImpl(
 
     private fun idInStoreIds(storeId: NumberPath<Long>, storeIds: List<Long>, filterLiked: Boolean) =
         if (!filterLiked) {
-            asBoolean(true).isTrue
+            null
         } else {
             storeId.`in`(storeIds)
         }
 
-    private fun keywordInBanchan(keyword: String?, banchanName: StringPath): BooleanExpression =
+    private fun keywordInBanchan(keyword: String?, banchanName: StringPath) =
         if (keyword.isNullOrEmpty()) {
-            asBoolean(true).isTrue
+            null
         } else {
             banchanName.contains(keyword)
         }

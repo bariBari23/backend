@@ -9,7 +9,7 @@ import store.baribari.demo.dto.order.response.OrderItemDto
 
 interface OrderService {
 
-    fun findAllOrder(
+    fun findMyOrder(
         userEmail: String,
         pageable: Pageable
     ): FindAllOrderResponseDto

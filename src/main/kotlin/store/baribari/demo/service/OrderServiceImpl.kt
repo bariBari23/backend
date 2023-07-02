@@ -27,7 +27,7 @@ class OrderServiceImpl(
 ) : OrderService {
 
     @Transactional(readOnly = true)
-    override fun findAllOrder(
+    override fun findMyOrder(
         userEmail: String,
         pageable: Pageable,
     ): FindAllOrderResponseDto {

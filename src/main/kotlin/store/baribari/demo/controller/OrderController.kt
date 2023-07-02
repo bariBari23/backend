@@ -24,7 +24,7 @@ class OrderController(
 ) {
     // TODO: 주문 상태 변경하는 api는 api 네이밍 이상함
     // 내 주문 리스트 -> 현재 과거 전부 취소 된거 까지도
-    // TODO: 쿼리 다듬기 
+    // TODO: 쿼리 다듬기
     @GetMapping("")
     fun getMyOrder(
         @LoginUser loginUser: User,

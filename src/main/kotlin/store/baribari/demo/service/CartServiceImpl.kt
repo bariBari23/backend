@@ -3,6 +3,8 @@ package store.baribari.demo.service
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import store.baribari.demo.common.enums.ErrorCode
+import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.dto.cart.request.AddItemRequestDto
 import store.baribari.demo.dto.cart.response.AddCartItemResponseDto
@@ -18,6 +20,8 @@ import store.baribari.demo.repository.cart.CartItemRepository
 import store.baribari.demo.repository.cart.CartRepository
 import store.baribari.demo.repository.menu.DosirakRepository
 
+const val MAX_CART_ITEM_AMOUNT = 3
+
 @Service
 class CartServiceImpl(
     private val cartRepository: CartRepository,
@@ -25,6 +29,7 @@ class CartServiceImpl(
     private val userRepository: UserRepository,
     private val dosirakRepository: DosirakRepository,
 ) : CartService {
+
 
     @Transactional(readOnly = true)
     override fun getCart(username: String): CartInfoResponseDto {
@@ -62,10 +67,18 @@ class CartServiceImpl(
         initializeItemZero(itemMap, userCart)
         // 기존에 있던 아이템에 더하기
         plusItemAmount(itemMap, userCart.cartItemList)
+        // 3개 넘는지 점검
+        checkAmountLimit(userCart.cartItemList)
 
         return AddCartItemResponseDto(
             itemKindAmount = userCart.cartItemList.size
         )
+    }
+
+    private fun checkAmountLimit(cartItemList: MutableList<CartItem>) {
+        require(cartItemList.all { it.count <= MAX_CART_ITEM_AMOUNT }) {
+            throw ConditionConflictException(ErrorCode.CONDITION_NOT_FULFILLED, "카트에 담긴 도시락의 개수는 한 품목당 3개를 넘을 수 없습니다.")
+        }
     }
 
 

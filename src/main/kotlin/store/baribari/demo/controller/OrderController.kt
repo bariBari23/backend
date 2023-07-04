@@ -8,8 +8,8 @@ import store.baribari.demo.auth.LoginUser
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
 import store.baribari.demo.dto.order.request.CreateOrderRequestDto
-import store.baribari.demo.dto.order.response.FindAllOrderResponseDto
 import store.baribari.demo.dto.order.response.FindOneOrderResponseDto
+import store.baribari.demo.dto.order.response.MyOrderResponseDto
 import store.baribari.demo.dto.order.response.OrderItemDto
 import store.baribari.demo.service.OrderService
 import javax.validation.Valid
@@ -29,7 +29,7 @@ class OrderController(
     fun getMyOrder(
         @LoginUser loginUser: User,
         pageable: Pageable,
-    ): ApiResponse<FindAllOrderResponseDto> {
+    ): ApiResponse<MyOrderResponseDto> {
         val data = orderService.findMyOrder(loginUser.username, pageable)
 
         return ApiResponse.success(data)

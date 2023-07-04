@@ -88,11 +88,6 @@ tasks {
         }
     }
 
-    test {
-        useJUnitPlatform()
-        outputs.dir(snippetsDir)
-    }
-
     asciidoctor {
         doFirst {
             delete("src/main/resources/static/docs")
@@ -100,14 +95,15 @@ tasks {
         inputs.dir(snippetsDir)
         dependsOn(test)
     }
+
+    build {
+        dependsOn(getByName("copyYml"))
+        dependsOn(getByName("copyYmlTest"))
+        dependsOn(getByName("copyHTML"))
+    }
+
 }
 
-
-tasks.build {
-    dependsOn(tasks.getByName("copyYml"))
-    dependsOn(tasks.getByName("copyYmlTest"))
-    dependsOn(tasks.getByName("copyDocument"))
-}
 
 allOpen {
     annotation("javax.persistence.Entity")

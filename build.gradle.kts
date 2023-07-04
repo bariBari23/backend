@@ -58,13 +58,15 @@ dependencies {
 }
 
 tasks.register("copyYml", Copy::class) {
-    from("./backend-config")
-    include("*.yml")
-    into("src/main/resources")
+    copy {
+        from("./backend-config")
+        include("*.yml", "*.xml")
+        into("src/main/resources")
+    }
 }
 
 tasks.register("copyYmlTest", Copy::class) {
-    from("./backend-config/")
+    from("./backend-config")
     include("*.yml")
     into("src/test/resources")
 }
@@ -77,22 +79,8 @@ tasks {
 
     withType<KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xemit-jvm-type-annotations")
+            freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = "17"
-        }
-    }
-
-    test{
-        dependsOn(getByName("copyYmlTest"))
-    }
-
-    asciidoctor {
-        dependsOn(getByName("copyYml"))
-        dependsOn(getByName("copyYmlTest"))
-        inputs.dir(snippetsDir)
-        dependsOn(test)
-        doFirst {
-            delete("src/main/resources/static/docs")
         }
     }
 
@@ -102,7 +90,6 @@ tasks {
     }
 
 }
-
 
 allOpen {
     annotation("javax.persistence.Entity")

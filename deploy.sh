@@ -3,6 +3,8 @@
 # 빌드
 cd /home/ubuntu/backend
 
+./gradlew --stop
+
 ./gradlew clean build
 
 ## 이미 실행중인 서버 종료

@@ -62,6 +62,10 @@ class OrderServiceImpl(
             orderId = order.id!!,
             orderItemList = order.orderItemList.map { OrderItemDto.fromOrderItem(it) },
             price = order.price,
+            orderDemand = order.orderDemand,
+            orderPhoneNumber = order.orderPhoneNumber,
+            pickUpTime = order.pickUpTime,
+            payMethod = order.payMethod,
             status = order.status,
         )
     }
@@ -162,7 +166,7 @@ class OrderServiceImpl(
         orderId: Long
     ): FindOneOrderResponseDto {
         // TODO: 여기 아래부터는 상점이나 관리자만 할 수 있도록
-        
+
         val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
             ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
 

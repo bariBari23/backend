@@ -99,7 +99,7 @@ tasks {
     build {
         dependsOn(getByName("copyYml"))
         dependsOn(getByName("copyYmlTest"))
-        dependsOn(getByName("copyHTML"))
+        dependsOn(getByName("copyDocuemtn"))
     }
 
 }

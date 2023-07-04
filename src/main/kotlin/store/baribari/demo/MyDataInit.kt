@@ -108,7 +108,7 @@ class MyDataInit(
                     name = "테스트 반찬 $i",
                     description = "테스트 반찬입니다. $i",
                     gram = 100,
-                    owner = store,
+                    store = store,
                 )
             )
         }
@@ -119,7 +119,7 @@ class MyDataInit(
                     name = "유미네 반찬 $i",
                     description = "테스트 반찬입니다. $i",
                     gram = 100,
-                    owner = store,
+                    store = store,
                 )
             )
         }
@@ -130,7 +130,7 @@ class MyDataInit(
                     name = "현우네 반찬 $i",
                     description = "테스트 반찬입니다. $i",
                     gram = 100,
-                    owner = store,
+                    store = store,
                 )
             )
         }

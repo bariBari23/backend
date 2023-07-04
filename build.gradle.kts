@@ -109,6 +109,13 @@ tasks.build {
     dependsOn(tasks.getByName("copyDocument"))
 }
 
+tasks.bootJar { // 5
+    dependsOn(tasks.asciidoctor)
+    from(tasks.asciidoctor.get().outputDir) {
+        into("BOOT-INF/classes/static/docs")
+    }
+}
+
 allOpen {
     annotation("javax.persistence.Entity")
     annotation("javax.persistence.Embeddable")

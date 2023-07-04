@@ -57,12 +57,6 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }
 
-tasks.register("copyDocument", Copy::class) {
-    dependsOn(tasks.asciidoctor)
-    from("build/asciidoc/html5")
-    into("src/main/resources/static/docs")
-}
-
 tasks.register("copyYml", Copy::class) {
     from("./backend-config")
     include("*.yml")
@@ -88,18 +82,23 @@ tasks {
         }
     }
 
+    test{
+        dependsOn(getByName("copyYmlTest"))
+    }
+
     asciidoctor {
+        dependsOn(getByName("copyYml"))
+        dependsOn(getByName("copyYmlTest"))
+        inputs.dir(snippetsDir)
+        dependsOn(test)
         doFirst {
             delete("src/main/resources/static/docs")
         }
-        inputs.dir(snippetsDir)
-        dependsOn(test)
     }
 
     build {
         dependsOn(getByName("copyYml"))
         dependsOn(getByName("copyYmlTest"))
-        dependsOn(getByName("copyDocument"))
     }
 
 }
@@ -110,3 +109,7 @@ allOpen {
     annotation("javax.persistence.Embeddable")
     annotation("javax.persistence.MappedSuperclass")
 }
+
+val jar: Jar by tasks
+
+jar.enabled = false

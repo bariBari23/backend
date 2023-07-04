@@ -10,4 +10,4 @@ a=$(ps -ef | grep 'java -jar -Dspring.profiles.active' | grep -v grep | awk '{pr
 kill -9 $a
 
 # 실행
-nohup java -jar -Dspring.profiles.active=dev ~/backend/build/libs/BoardProject-0.0.1-SNAPSHOT.jar > nohup.out 2> nohup.err < /dev/null &
+nohup java -jar -Dspring.profiles.active=dev ~/backend/build/libs/shopping-0.0.1-SNAPSHOT.jar > nohup.out 2> nohup.err < /dev/null &

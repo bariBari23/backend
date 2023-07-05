@@ -13,6 +13,7 @@ import store.baribari.demo.dto.cart.response.UpdateItemQuantityResponseDto
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.service.CartService
 import javax.validation.Valid
+import javax.validation.constraints.Max
 import javax.validation.constraints.Positive
 
 @Validated
@@ -64,7 +65,7 @@ class CartController(
     fun updateItemQuantity(
         @LoginUser loginUser: User,
         @PathVariable @Positive itemId: Long,
-        @PathVariable @Positive quantity: Int
+        @PathVariable @Positive @Max(3) quantity: Int
     ): ApiResponse<UpdateItemQuantityResponseDto> {
         val data = cartService.updateItemQuantity(loginUser.username, itemId, quantity)
         // validated 어노테이션 붙여야 작동한다.

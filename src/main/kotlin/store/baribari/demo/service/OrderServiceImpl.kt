@@ -8,8 +8,8 @@ import store.baribari.demo.common.enums.OrderStatus
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
 import store.baribari.demo.dto.order.request.CreateOrderRequestDto
-import store.baribari.demo.dto.order.response.FindAllOrderResponseDto
 import store.baribari.demo.dto.order.response.FindOneOrderResponseDto
+import store.baribari.demo.dto.order.response.MyOrderResponseDto
 import store.baribari.demo.dto.order.response.OrderItemDto
 import store.baribari.demo.model.order.Order
 import store.baribari.demo.model.order.OrderItem.Companion.createOrderItem
@@ -30,14 +30,14 @@ class OrderServiceImpl(
     override fun findMyOrder(
         userEmail: String,
         pageable: Pageable,
-    ): FindAllOrderResponseDto {
+    ): MyOrderResponseDto {
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 이라는 유저는 존재하지 않습니다.")
 
         val orders = orderRepository.findByUserFetchOrderItem(user, pageable)
 
         // TODO: 일단 취소한 orderItem도 표시하는거로 설정
-        return FindAllOrderResponseDto(
+        return MyOrderResponseDto(
             orderList = orders.toList().map { FindOneOrderResponseDto.fromOrder(it) },
             pageable = pageable,
         )
@@ -62,6 +62,10 @@ class OrderServiceImpl(
             orderId = order.id!!,
             orderItemList = order.orderItemList.map { OrderItemDto.fromOrderItem(it) },
             price = order.price,
+            orderDemand = order.orderDemand,
+            orderPhoneNumber = order.orderPhoneNumber,
+            pickUpTime = order.pickUpTime,
+            payMethod = order.payMethod,
             status = order.status,
         )
     }
@@ -162,7 +166,7 @@ class OrderServiceImpl(
         orderId: Long
     ): FindOneOrderResponseDto {
         // TODO: 여기 아래부터는 상점이나 관리자만 할 수 있도록
-        
+
         val order = orderRepository.findByIdFetchUserAndOrderItemAndDosirak(orderId)
             ?: throw EntityNotFoundException("해당 주문이 존재하지 않습니다.")
 

@@ -8,8 +8,8 @@ import store.baribari.demo.auth.LoginUser
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.dto.order.request.CancelOrderItemResponseDto
 import store.baribari.demo.dto.order.request.CreateOrderRequestDto
-import store.baribari.demo.dto.order.response.FindAllOrderResponseDto
 import store.baribari.demo.dto.order.response.FindOneOrderResponseDto
+import store.baribari.demo.dto.order.response.MyOrderResponseDto
 import store.baribari.demo.dto.order.response.OrderItemDto
 import store.baribari.demo.service.OrderService
 import javax.validation.Valid
@@ -26,10 +26,10 @@ class OrderController(
     // 내 주문 리스트 -> 현재 과거 전부 취소 된거 까지도
     // TODO: 쿼리 다듬기
     @GetMapping("")
-    fun getMyOrder(
+    fun findMyOrder(
         @LoginUser loginUser: User,
         pageable: Pageable,
-    ): ApiResponse<FindAllOrderResponseDto> {
+    ): ApiResponse<MyOrderResponseDto> {
         val data = orderService.findMyOrder(loginUser.username, pageable)
 
         return ApiResponse.success(data)

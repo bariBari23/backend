@@ -26,7 +26,7 @@ class OrderController(
     // 내 주문 리스트 -> 현재 과거 전부 취소 된거 까지도
     // TODO: 쿼리 다듬기
     @GetMapping("")
-    fun getMyOrder(
+    fun findMyOrder(
         @LoginUser loginUser: User,
         pageable: Pageable,
     ): ApiResponse<MyOrderResponseDto> {

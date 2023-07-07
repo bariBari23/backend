@@ -12,6 +12,8 @@ import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
+import javax.persistence.Enumerated
+import javax.persistence.EnumType
 
 @Entity
 class Review(
@@ -33,6 +35,7 @@ class Review(
     val content: String,
 
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     val tags: MutableList<ReviewCategory>,
 
     @ElementCollection

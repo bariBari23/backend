@@ -1,5 +1,6 @@
 package store.baribari.demo.service
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import store.baribari.demo.common.exception.EntityNotFoundException
@@ -78,9 +79,13 @@ class ReviewServiceImpl(
     @Transactional(readOnly = true)
     override fun readReviewByStore(userEmail: String?, storeId: Long): ReadReviewByStoreResponseDto {
 
+        val store = storeRepository.findByIdOrNull(storeId)
+                ?: throw EntityNotFoundException("$storeId 번 가게는 존재하지 않습니다.")
+
         val user = userEmail?.let {
             userRepository.findByEmail(userEmail)
                 ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
+
         }
 
         val reviewList = reviewRepository.findByStoreFetchOrderItemAndDosirak(storeId)?.sortedBy { it.id }

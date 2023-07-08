@@ -3,6 +3,7 @@ package store.baribari.demo.repository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import store.baribari.demo.model.Review
+import store.baribari.demo.model.Store
 
 interface ReviewRepository : JpaRepository<Review, Long> {
     @Query(
@@ -16,6 +17,6 @@ interface ReviewRepository : JpaRepository<Review, Long> {
     )
     fun findByIdFetchOrderItemAndWriter(reviewId: Long): Review?
 
-    @Query(value = "SELECT s FROM Store s ORDER BY s.id")
-    fun findByStoreFetchOrderItemAndDosirak(storeId: Long): List<Review>?
+    @Query(value = "SELECT r FROM Review r JOIN FETCH r.orderItem oi JOIN FETCH oi.order o ORDER BY r.id")
+    fun findByStoreFetchOrderItemAndDosirak(store: Store): List<Review>?
 }

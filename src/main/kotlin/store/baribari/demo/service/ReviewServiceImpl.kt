@@ -88,7 +88,7 @@ class ReviewServiceImpl(
 
         }
 
-        val reviewList = reviewRepository.findByStoreFetchOrderItemAndDosirak(storeId)?.sortedBy { it.id }
+        val reviewList = reviewRepository.findByStoreFetchOrderItemAndDosirak(storeId)
             ?: emptyList()
 
         return ReadReviewByStoreResponseDto.fromReviewList(

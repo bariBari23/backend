@@ -197,7 +197,7 @@ class MyDataInit(
     private fun userCreate(): List<User> {
         //37.4927015,127.0615472 400미터 예상
         val customer = User(
-            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart(),
+            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart(), phoneNumber = "010-1234-5678",
             position = Position(
                 latitude = 37.4927015,
                 longitude = 127.0615472,
@@ -207,7 +207,7 @@ class MyDataInit(
         customer.encodePassword(encodedPassword1)
 
         val storeOwner = User(
-            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = Cart()
+            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = Cart(), phoneNumber = "010-1234-5678",
         )
         val encodedPassword2 = passwordEncoder.encode(storeOwner.password)
         storeOwner.encodePassword(encodedPassword2)

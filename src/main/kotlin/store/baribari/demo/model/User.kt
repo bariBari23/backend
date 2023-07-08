@@ -24,6 +24,9 @@ class User(
     @Column(name = "password", columnDefinition = "VARCHAR(100)")
     var password: String = "NO_PASSWORD",
 
+    @Column(name = "phoneNumber", columnDefinition = "VARCHAR(16)") //전화번호 추가
+    var phoneNumber: String,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     var role: Role = Role.ROLE_CUSTOMER,

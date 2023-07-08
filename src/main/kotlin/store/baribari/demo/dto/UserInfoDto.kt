@@ -8,6 +8,8 @@ data class UserInfoDto(
     val id: UUID,
     val email: String,
     val role: Role,
+    val phoneNumber: String,
+//    val username: String,
     val accessToken: String?,
     val refreshToken: String?,
 ) {
@@ -15,6 +17,8 @@ data class UserInfoDto(
         user.id!!,
         user.email,
         user.role,
+        user.phoneNumber,
+//        user.username,
         accessToken,
         refreshToken,
     )

@@ -7,12 +7,14 @@ data class UserSignUpDto(
     val email: String,
     val username: String,
     val password: String,
+    val phoneNumber: String,
 ) {
     fun toUser(): User {
         return User(
             email = email,
             password = password,
             userCart = Cart(),
+            phoneNumber = phoneNumber,
         )
     }
 }

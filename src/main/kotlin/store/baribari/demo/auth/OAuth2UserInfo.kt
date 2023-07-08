@@ -10,4 +10,6 @@ abstract class OAuth2UserInfo(
     abstract fun getEmail(): String
 
     abstract fun getImageUrl(): String
+
+    abstract fun getphoneNumber(): String
 }

@@ -17,6 +17,6 @@ interface ReviewRepository : JpaRepository<Review, Long> {
     )
     fun findByIdFetchOrderItemAndWriter(reviewId: Long): Review?
 
-    @Query(value = "SELECT r FROM Review r JOIN FETCH r.orderItem oi JOIN FETCH oi.order o ORDER BY r.id")
+    @Query(value = "SELECT r FROM Review r JOIN FETCH r.orderItem oi JOIN FETCH oi.order o ORDER BY r.id DESC")
     fun findByStoreFetchOrderItemAndDosirak(store: Store): List<Review>?
 }

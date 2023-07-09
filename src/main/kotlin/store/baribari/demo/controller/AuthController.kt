@@ -2,6 +2,7 @@ package store.baribari.demo.controller
 
 
 import org.springframework.security.core.userdetails.User
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import store.baribari.demo.auth.LoginUser
 import store.baribari.demo.common.config.properties.AppProperties
@@ -26,7 +27,7 @@ class AuthController(
 ) {
 
     @PostMapping("/signup")
-    fun signUp(@RequestBody userSignUpDto: UserSignUpDto): UUID {
+    fun signUp(@RequestBody @Validated userSignUpDto: UserSignUpDto): UUID {
         return authService.saveUser(userSignUpDto)
     }
 

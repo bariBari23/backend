@@ -207,7 +207,7 @@ class MyDataInit(
         customer.encodePassword(encodedPassword1)
 
         val storeOwner = User(
-            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = Cart(), phoneNumber = "010-1234-5678", nickname = "testuser2",
+            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = Cart(), phoneNumber = "010-9876-5432", nickname = "testuser2",
         )
         val encodedPassword2 = passwordEncoder.encode(storeOwner.password)
         storeOwner.encodePassword(encodedPassword2)

@@ -48,7 +48,7 @@ class OAuth2AuthenticationSuccessHandler(
             logger.debug("Response has already been committed. Unable to redirect to $targetUrl")
             return
         }
-
+        log.info("OAuth2AuthenticationSuccessHandler.onAuthenticationSuccess: $targetUrl")
         clearAuthenticationAttributes(request, response)
         redirectStrategy.sendRedirect(request, response, targetUrl)
     }
@@ -88,9 +88,9 @@ class OAuth2AuthenticationSuccessHandler(
         val user = authentication.principal as OidcUser
         val userInfo = OAuth2UserInfoFactory.getOauth2UserInfo(providerType, user.attributes)
 
-        return userRepository.findByEmailOrProviderId(userInfo.getEmail(), userInfo.getId())
+        return userRepository.findByEmailOrProviderId(userInfo.email, userInfo.id)
             ?: throw EntityNotFoundException(
-                "유저를 찾을 수 없습니다. email = [${userInfo.getEmail()}], providerId = [${userInfo.getId()}] )",
+                "유저를 찾을 수 없습니다. email = [${userInfo.email}], providerId = [${userInfo.id}] )",
             )
     }
 
@@ -119,7 +119,6 @@ class OAuth2AuthenticationSuccessHandler(
             findUser.email,
             Date(now.time + refreshTokenExpiry),
         )
-        // TODO: redis 추가하기
         redisRepository.setRefreshTokenByEmail(findUser.email, refreshToken.token)
 
         return accessToken to refreshToken
@@ -136,7 +135,7 @@ class OAuth2AuthenticationSuccessHandler(
             .any {
                 val authorizedURI = URI.create(it)
                 authorizedURI.host.equals(clientRedirectUri.host, ignoreCase = true) &&
-                    authorizedURI.port == clientRedirectUri.port
+                        authorizedURI.port == clientRedirectUri.port
             }
     }
 }

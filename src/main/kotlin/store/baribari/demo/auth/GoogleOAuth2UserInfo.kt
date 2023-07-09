@@ -20,7 +20,7 @@ class GoogleOAuth2UserInfo(
         return attributes["picture"] as String
     }
 
-    override fun getphoneNumber(): String {
-        return attributes["phoneNumber"] as String
+    override fun getphoneNumber(): String? {
+        return attributes["phoneNumber"] as String?
     }
 }

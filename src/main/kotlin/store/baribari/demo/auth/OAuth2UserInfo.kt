@@ -11,5 +11,5 @@ abstract class OAuth2UserInfo(
 
     abstract fun getImageUrl(): String
 
-    abstract fun getphoneNumber(): String
+    abstract fun getphoneNumber(): String? //Nullable String
 }

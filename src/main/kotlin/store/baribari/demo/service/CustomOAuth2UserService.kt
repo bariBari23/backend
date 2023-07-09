@@ -65,12 +65,12 @@ class CustomOAuth2UserService(
             profileImageUrl = userInfo.getImageUrl(),
             userCart = Cart(),
             phoneNumber = userInfo.getphoneNumber(),
+            username = userInfo.getName(),
         )
         println("user : $user")
         println("user info: " + userInfo.getId())
         println("provider type: $providerType")
         println("user email: " + userInfo.getEmail())
-        println("user phoneNumber: " + userInfo.getphoneNumber())
 
         return userRepository.saveAndFlush(user)
     }

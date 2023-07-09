@@ -8,11 +8,15 @@ import java.util.*
 data class UserInfoResponseDto(
     val id: UUID,
     val email: String,
+    val phoneNumber: String?,
+    val username: String,
     val accessToken: String?,
 ) {
     constructor(userInfoDto: UserInfoDto) : this(
         userInfoDto.id,
         userInfoDto.email,
+        userInfoDto.phoneNumber,
+        userInfoDto.username,
         userInfoDto.accessToken,
     )
 }

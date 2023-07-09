@@ -19,4 +19,8 @@ class GoogleOAuth2UserInfo(
     override fun getImageUrl(): String {
         return attributes["picture"] as String
     }
+
+    override fun getphoneNumber(): String? {
+        return attributes["phoneNumber"] as String?
+    }
 }

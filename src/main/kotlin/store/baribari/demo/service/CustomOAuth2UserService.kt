@@ -63,7 +63,9 @@ class CustomOAuth2UserService(
             email = userInfo.getEmail(),
             providerId = userInfo.getId(),
             profileImageUrl = userInfo.getImageUrl(),
-            userCart = Cart()
+            userCart = Cart(),
+            phoneNumber = userInfo.getphoneNumber(),
+            username = userInfo.getName(),
         )
         println("user : $user")
         println("user info: " + userInfo.getId())

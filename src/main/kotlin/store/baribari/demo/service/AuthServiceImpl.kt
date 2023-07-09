@@ -35,7 +35,7 @@ class AuthServiceImpl(
     private val redisRepository: RedisRepository,
 ) : AuthService {
     override fun saveUser(signUpDto: UserSignUpDto): UUID {
-        checkEmailAndUserName(signUpDto.email, signUpDto.username)
+        checkEmailAndUserName(signUpDto.email, signUpDto.nickname)
         val user = signUpDto.toUser()
         val encodedPassword = passwordEncoder.encode(user.password)
         user.encodePassword(encodedPassword)

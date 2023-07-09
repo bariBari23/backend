@@ -9,7 +9,6 @@ import store.baribari.demo.model.embed.Position
 import store.baribari.demo.model.order.Order
 import java.util.*
 import javax.persistence.*
-import javax.validation.constraints.Email
 
 @Entity
 class User(
@@ -22,13 +21,13 @@ class User(
     @Column(name = "email", unique = true, columnDefinition = "VARCHAR(30)")
     var email: String, // username 과 동의어
 
-    @Column(name = "username", unique = true, columnDefinition = "VARCHAR(30)")
-    var username: String, // username 추가
+    @Column(name = "nickname", columnDefinition = "VARCHAR(30)")
+    var nickname: String, // username 추가
 
     @Column(name = "password", columnDefinition = "VARCHAR(100)")
     var password: String = "NO_PASSWORD",
 
-    @Column(name = "phoneNumber", columnDefinition = "VARCHAR(16)") //전화번호 추가
+    @Column(name = "phoneNumber", unique = true, columnDefinition = "VARCHAR(16)") //전화번호 추가
     var phoneNumber: String?,
 
     @Enumerated(EnumType.STRING)

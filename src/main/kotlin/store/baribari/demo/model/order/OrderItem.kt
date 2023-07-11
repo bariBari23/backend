@@ -6,6 +6,7 @@ import store.baribari.demo.common.enums.PayMethod
 import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.menu.Dosirak
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -15,7 +16,7 @@ class OrderItem(
     @Column(name = "order_item_id")
     var id: Long? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dosirak_id")
     val dosirak: Dosirak,
 
@@ -23,12 +24,14 @@ class OrderItem(
     @JoinColumn(name = "order_id")
     var order: Order,
 
+    var pickup_time: LocalDateTime? = null,
+
     // TODO: 여기도 pickup 시간 넣어야 할 듯 ?
 
-    @Enumerated(EnumType.STRING)
+        @Enumerated(EnumType.STRING)
     var status: OrderStatus, //주문상태 [ORDERED, CANCEL, COMPLETE, PICKUP]
 
-    var count: Int,
+        var count: Int,
 ) : BaseEntity() {
 
     fun cancel() {
@@ -69,6 +72,7 @@ class OrderItem(
         require(this.status == OrderStatus.COMPLETED) { "준비완료된 항목만 픽업할 수 있습니다." }
 
         this.status = OrderStatus.PICKED_UP
+        this.pickup_time = LocalDateTime.now()
     }
 
     val price: Int

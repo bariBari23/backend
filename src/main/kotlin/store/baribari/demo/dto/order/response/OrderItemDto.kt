@@ -11,7 +11,7 @@ data class OrderItemDto(
         val count: Int,
         val total: Int,
         val status: OrderStatus,
-        val pickup_time: LocalDateTime?,
+        val pickupTime: LocalDateTime?,
     // 추후 상점 id도 넣어줘야하나?
 ) {
     companion object {
@@ -23,7 +23,7 @@ data class OrderItemDto(
                 count = orderItem.count,
                 total = orderItem.count * orderItem.dosirak.price,
                 status = orderItem.status,
-                pickup_time =  orderItem.pickup_time,
+                pickupTime =  orderItem.pickupTime,
             )
         }
     }

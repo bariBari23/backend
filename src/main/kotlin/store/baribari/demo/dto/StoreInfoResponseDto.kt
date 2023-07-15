@@ -49,7 +49,7 @@ data class StoreInfoResponseDto(
                 liked = liked,
                 position = store.position,
                 distanceMeter = calculateDistanceInMeter(user?.position, store.position),
-                reviewMean = if (reviews.isEmpty()) 0.0 else reviews.sumOf { it.rating }.toDouble() / reviews.size
+                reviewMean = reviews.map { it.rating }.average()
             )
         }
     }

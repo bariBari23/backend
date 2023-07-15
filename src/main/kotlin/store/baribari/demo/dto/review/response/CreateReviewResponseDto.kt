@@ -21,7 +21,7 @@ data class CreateReviewResponseDto(
                 rating = review.rating,
                 photoList = review.photoList,
                 tags = review.tags.map { it.name },
-                writer = review.writer.email,
+                writer = review.writer.nickname,
                 createdAt = review.createdAt.toString(),
             )
         }

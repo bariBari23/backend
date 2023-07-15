@@ -42,6 +42,8 @@ interface OrderItemRepository : JpaRepository<OrderItem, Long> {
         FROM OrderItem oi
         LEFT JOIN FETCH oi.order o
         LEFT JOIN FETCH o.user u
+        LEFT JOIN FETCH oi.dosirak d
+        LEFT JOIN FETCH d.store
         WHERE oi.id = :orderItemId
         """
     )

@@ -2,7 +2,7 @@ package store.baribari.demo.dto
 
 import store.baribari.demo.model.menu.Dosirak
 
-data class FindDosirakByQueryResponseElementDto(
+data class DosirakByQueryResponseElementDto(
     val id: Long,
     val name: String,
     val price: Int = 0,
@@ -12,8 +12,8 @@ data class FindDosirakByQueryResponseElementDto(
     val storeName: String,
 ) {
     companion object {
-        fun createDtoFromEntity(dosirak: Dosirak): FindDosirakByQueryResponseElementDto {
-            return FindDosirakByQueryResponseElementDto(
+        fun createDtoFromEntity(dosirak: Dosirak): DosirakByQueryResponseElementDto {
+            return DosirakByQueryResponseElementDto(
                 id = dosirak.id!!,
                 name = dosirak.name,
                 price = dosirak.price,

@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import store.baribari.demo.dto.FindDosirakByIdResponseDto
-import store.baribari.demo.dto.FindDosirakByQueryResponseDto
+import store.baribari.demo.dto.DosirakByQueryResponseDto
 import store.baribari.demo.repository.UserRepository
 import store.baribari.demo.repository.menu.DosirakRepository
 
@@ -20,7 +20,7 @@ class DosirakServiceImpl(
         keyword: String?,
         userEmail: String?,
         pageable: Pageable
-    ): FindDosirakByQueryResponseDto {
+    ): DosirakByQueryResponseDto {
         // 1. banchanlist와 store를 fetch join하면 된다.
         // 2.
         val user = userEmail?.let { userRepository.findByEmail(it) }
@@ -34,7 +34,7 @@ class DosirakServiceImpl(
             pageable
         )
 
-        return FindDosirakByQueryResponseDto.fromDosirakPageToDto(dosirakPage)
+        return DosirakByQueryResponseDto.fromDosirakPageToDto(dosirakPage)
     }
 
     override fun findDosirakById(

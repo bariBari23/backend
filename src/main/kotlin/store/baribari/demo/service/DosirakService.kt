@@ -2,7 +2,7 @@ package store.baribari.demo.service
 
 import org.springframework.data.domain.Pageable
 import store.baribari.demo.dto.FindDosirakByIdResponseDto
-import store.baribari.demo.dto.FindDosirakByQueryResponseDto
+import store.baribari.demo.dto.DosirakByQueryResponseDto
 
 
 interface DosirakService {
@@ -11,7 +11,7 @@ interface DosirakService {
         keyword: String?,
         userEmail: String?,
         pageable: Pageable,
-    ): FindDosirakByQueryResponseDto
+    ): DosirakByQueryResponseDto
 
     fun findDosirakById(
         userEmail: String?,

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import store.baribari.demo.dto.DosirakByQueryResponseDto
 import store.baribari.demo.dto.FindDosirakByIdResponseDto
-import store.baribari.demo.dto.FindDosirakByQueryResponseDto
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.service.DosirakService
 import java.security.Principal
@@ -22,12 +22,12 @@ class DosirakController(
 ) {
 
     @RequestMapping("/query")
-    fun getDosirakByQuery(
+    fun findDosirakByQuery(
         @RequestParam("filterLiked") filterLiked: Boolean,
         @RequestParam("keyword", required = false) keyword: String?,
         principal: Principal?,
         pageable: Pageable,
-    ): ApiResponse<FindDosirakByQueryResponseDto> {
+    ): ApiResponse<DosirakByQueryResponseDto> {
         val data = dosirakService.findDosirakByQuery(
             filterLiked,
             keyword,

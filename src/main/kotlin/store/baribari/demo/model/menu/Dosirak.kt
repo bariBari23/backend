@@ -51,7 +51,7 @@ class Dosirak(
     var stock: Int = 0,
 ) : BaseEntity() {
 
-    private val gram: Int
+    val gram: Int
         get() = dosirakBanchanList.sumOf { it.banchan.gram }
 
     private val soldOut: Boolean

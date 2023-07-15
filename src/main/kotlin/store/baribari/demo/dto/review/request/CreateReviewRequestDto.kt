@@ -10,6 +10,7 @@ data class CreateReviewRequestDto(
         val content: String,
         @field: Positive
         val rating: Int,
+        val mainImageUrl: String,
         val photoList: List<String>,
         val tags: List<ReviewCategory>,
 )

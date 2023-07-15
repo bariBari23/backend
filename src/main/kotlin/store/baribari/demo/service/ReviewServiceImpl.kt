@@ -46,6 +46,7 @@ class ReviewServiceImpl(
         val review = Review(
             content = createReviewRequestDto.content,
             rating = createReviewRequestDto.rating,
+            mainImageUrl = createReviewRequestDto.mainImageUrl,
             photoList = createReviewRequestDto.photoList.toMutableList(),
             tags = createReviewRequestDto.tags.toMutableList(),
             writer = user,
@@ -65,7 +66,6 @@ class ReviewServiceImpl(
                 ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
         }
 
-        // TODO: photoList와 tags를 동시에 가져올 수 있는 방법에 대해서 강구해야한다. 
         val review = reviewRepository.findByIdFetchOrderItemAndWriter(reviewId)
             ?: throw EntityNotFoundException("$reviewId 에 해당하는 리뷰가 없습니다.")
 
@@ -84,7 +84,6 @@ class ReviewServiceImpl(
         val user = userEmail?.let {
             userRepository.findByEmail(userEmail)
                 ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
-
         }
 
         val reviewList = reviewRepository.findByStoreFetchOrderItemAndDosirak(store)

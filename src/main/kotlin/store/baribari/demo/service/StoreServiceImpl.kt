@@ -9,6 +9,7 @@ import store.baribari.demo.dto.ShowLikeResponseDto
 import store.baribari.demo.dto.StoreInfoResponseDto
 import store.baribari.demo.model.LikeStore
 import store.baribari.demo.repository.LikeStoreRepository
+import store.baribari.demo.repository.ReviewRepository
 import store.baribari.demo.repository.StoreRepository
 import store.baribari.demo.repository.UserRepository
 
@@ -16,7 +17,8 @@ import store.baribari.demo.repository.UserRepository
 class StoreServiceImpl(
     private val userRepository: UserRepository,
     private val storeRepository: StoreRepository,
-    private val likeStoreRepository: LikeStoreRepository
+    private val likeStoreRepository: LikeStoreRepository,
+    private val reviewRepository: ReviewRepository,
 ) : StoreService {
     override fun storeInfo(
         userEmail: String?,
@@ -30,12 +32,19 @@ class StoreServiceImpl(
                 ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저는 존재하지 않습니다.")
         }
 
+        val reviews = reviewRepository.findAllByStore(store)
+
         val liked: Boolean = user?.let {
             likeStoreRepository.findByUserAndStore(it, store) != null
         } ?: false
 
 
-        return StoreInfoResponseDto.fromStore(store, liked)
+        return StoreInfoResponseDto.fromStore(
+            user,
+            store,
+            liked,
+            reviews,
+        )
     }
 
     override fun storeLike(

@@ -1,16 +1,7 @@
 package store.baribari.demo.model
 
 import store.baribari.demo.model.embed.Position
-import javax.persistence.Column
-import javax.persistence.ElementCollection
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
+import javax.persistence.*
 
 @Entity
 class Store(
@@ -48,6 +39,9 @@ class Store(
     // 가게 소개
     var description: String = "",
 
+    //가게 원산지 정보
+    var fromWhere: String = "",
+
     // 가게 위생 정보
     var clean: String = "",
 
@@ -61,6 +55,7 @@ class Store(
 
     @OneToMany(mappedBy = "store")
     val likeUserList: MutableList<LikeStore> = mutableListOf(),
+
 ) : BaseEntity() {
     fun likeStore(likeStore: LikeStore) {
         this.likeUserList.add(likeStore)

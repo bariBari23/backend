@@ -19,7 +19,7 @@ data class DistanceResponseDto(
                 storeId = store.id!!,
                 storeName = store.name,
                 storeAddress = store.address,
-                storeDistance = calculateDistanceInMeter(user.position, store.position),
+                storeDistance = calculateDistanceInMeter(user.position, store.position)!!,
             )
         }
     }

@@ -1,23 +1,22 @@
 package store.baribari.demo.common.util
 
 import store.baribari.demo.model.embed.Position
-import kotlin.math.PI
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 
 const val EARTH_RADIUS: Double = 6371.0
 
 fun calculateDistanceInMeter(
-    userPosition: Position,
+    userPosition: Position?,
     storePosition: Position
-): Double {
+): Double? {
     /**
      * 6371.0 is the radius of the Earth in kilometers.
      */
+    if (userPosition == null) {
+        return null
+    }
+
 
     val lat1 = userPosition.latitude;
     val lon1 = userPosition.longitude

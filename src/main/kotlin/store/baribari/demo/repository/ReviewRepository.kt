@@ -8,15 +8,27 @@ import store.baribari.demo.model.Store
 interface ReviewRepository : JpaRepository<Review, Long> {
     @Query(
         """
-        SELECT r 
-        FROM Review r 
-        JOIN FETCH r.orderItem oi
-        JOIN FETCH r.writer 
-        WHERE r.id = :reviewId
-        """
+            SELECT r 
+            FROM Review r 
+            JOIN FETCH r.orderItem oi
+            JOIN FETCH r.writer 
+            WHERE r.id = :reviewId
+            """
     )
     fun findByIdFetchOrderItemAndWriter(reviewId: Long): Review?
 
     @Query(value = "SELECT r FROM Review r JOIN FETCH r.orderItem oi JOIN FETCH oi.order o ORDER BY r.id DESC")
-    fun findByStoreFetchOrderItemAndDosirak(store: Store): List<Review>?
+    fun findByStoreFetchOrderItemAndDosirak(store: Store): List<Review>
+
+    @Query(
+        value = """
+            SELECT r 
+            FROM Review r 
+            LEFT JOIN FETCH r.orderItem oi 
+            LEFT JOIN FETCH oi.dosirak d
+            LEFT JOIN FETCH d.store s
+            WHERE d.store = :store
+            """
+    )
+    fun findAllByStore(store: Store): List<Review>
 }

@@ -13,6 +13,7 @@ data class MyOrderItemElementDto(
     val count: Int,
     val total: Int,
     val status: OrderStatus,
+    val isReviewed: Boolean,
     val estimatedPickUpTime: String,
     val pickupTime: LocalDateTime?,
     // 추후 상점 id도 넣어줘야하나?
@@ -28,6 +29,7 @@ data class MyOrderItemElementDto(
                 count = orderItem.count,
                 total = orderItem.count * orderItem.dosirak.price,
                 status = orderItem.status,
+                isReviewed = orderItem.isReviewed,
                 pickupTime =  orderItem.pickupTime,
                 estimatedPickUpTime = orderItem.estimatedPickUpTime,
             )

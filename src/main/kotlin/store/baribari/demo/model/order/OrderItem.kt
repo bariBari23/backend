@@ -81,7 +81,7 @@ class OrderItem(
     val price: Int
         get() = dosirak.price * count
 
-    private var isReviewed: Boolean = false
+    var isReviewed: Boolean = false
 
     companion object {
         fun createOrderItem(

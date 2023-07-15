@@ -7,7 +7,7 @@ import store.baribari.demo.model.order.Order
 data class FindOneOrderResponseDto(
     val orderId: Long,
     val price: Int,
-    val pickUpTime: String,
+    val estimatedPickUpTime: String,
     val orderDemand: String,
     val orderPhoneNumber: String,
     val status: OrderStatus,
@@ -19,7 +19,7 @@ data class FindOneOrderResponseDto(
             return FindOneOrderResponseDto(
                 orderId = order.id!!,
                 price = order.price,
-                pickUpTime = order.pickUpTime,
+                estimatedPickUpTime = order.estimatedPickUpTime,
                 orderDemand = order.orderDemand,
                 orderPhoneNumber = order.orderPhoneNumber,
                 status = order.status,

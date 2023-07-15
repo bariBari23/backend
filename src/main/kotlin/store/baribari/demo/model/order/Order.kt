@@ -6,16 +6,7 @@ import store.baribari.demo.common.enums.PayMethod
 import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.User
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "orders")
@@ -34,7 +25,7 @@ class Order(
     //@Pattern(regexp="(^$|[0-9]{10})")
     var orderPhoneNumber: String = "", // 주문자 전화번호
 
-    var pickUpTime: String = "", // 픽업 시간
+    var estimatedPickUpTime: String = "", // 픽업 시간
 
     var payMethod: PayMethod,
 

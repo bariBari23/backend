@@ -1,13 +1,14 @@
-package store.baribari.demo.dto.order.response
+package store.baribari.demo.dto
 
 import store.baribari.demo.common.enums.OrderStatus
 import store.baribari.demo.model.order.OrderItem
 import java.time.LocalDateTime
 
-data class OrderItemDto(
+data class MyOrderItemElementDto(
     val orderItemId: Long,
     val dosirkaName: String,
     val storeName: String,
+    val dosirakImage: String,
     val price: Int,
     val count: Int,
     val total: Int,
@@ -17,10 +18,11 @@ data class OrderItemDto(
     // 추후 상점 id도 넣어줘야하나?
 ) {
     companion object {
-        fun fromOrderItem(orderItem: OrderItem): OrderItemDto {
-            return OrderItemDto(
+        fun fromOrderItem(orderItem: OrderItem): MyOrderItemElementDto {
+            return MyOrderItemElementDto(
                 orderItemId = orderItem.id!!,
                 dosirkaName = orderItem.dosirak.name,
+                dosirakImage = orderItem.dosirak.mainImage,
                 storeName = orderItem.dosirak.store.name,
                 price = orderItem.dosirak.price,
                 count = orderItem.count,
@@ -32,4 +34,5 @@ data class OrderItemDto(
         }
     }
 }
+
 

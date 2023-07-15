@@ -24,6 +24,9 @@ class OrderItem(
         @JoinColumn(name = "order_id")
         var order: Order,
 
+        //픽업 예정시간
+        val estimatedPickUpTime: String,
+
         var pickupTime: LocalDateTime? = null,
 
         // TODO: 여기도 pickup 시간 넣어야 할 듯 ?
@@ -92,6 +95,7 @@ class OrderItem(
                     dosirak = dosirak,
                     order = order,
                     count = count,
+                    estimatedPickUpTime = order.estimatedPickUpTime,
                     status = if (payMethod == PayMethod.CASH) OrderStatus.READY else OrderStatus.ORDERED
             )
         }

@@ -39,7 +39,7 @@ data class StoreInfoResponseDto(
                 phoneNumber = store.phoneNumber,
                 businessName = store.businessName,
                 businessNumber = store.businessNumber,
-                mainImage = store.mainImage,
+                mainImage = store.mainImageUrl,
                 storeImageList = store.storeImageList,
                 description = store.description,
                 fromWhere = store.fromWhere,

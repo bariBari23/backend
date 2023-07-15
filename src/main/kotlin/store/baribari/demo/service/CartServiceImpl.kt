@@ -7,12 +7,7 @@ import store.baribari.demo.common.enums.ErrorCode
 import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.common.exception.EntityNotFoundException
 import store.baribari.demo.dto.cart.request.AddItemRequestDto
-import store.baribari.demo.dto.cart.response.AddCartItemResponseDto
-import store.baribari.demo.dto.cart.response.CartInfoResponseDto
-import store.baribari.demo.dto.cart.response.CartItemResponseDto
-import store.baribari.demo.dto.cart.response.ClearCartResponseDto
-import store.baribari.demo.dto.cart.response.DeleteCartItemResponseDto
-import store.baribari.demo.dto.cart.response.UpdateItemQuantityResponseDto
+import store.baribari.demo.dto.cart.response.*
 import store.baribari.demo.model.cart.Cart
 import store.baribari.demo.model.cart.CartItem
 import store.baribari.demo.repository.UserRepository
@@ -33,9 +28,8 @@ class CartServiceImpl(
 
     @Transactional(readOnly = true)
     override fun getCart(username: String): CartInfoResponseDto {
-        // TODO: 쿼리 이상하게 나감 entity graph로 해결해야함
-        // ban
-        val user = userRepository.findByEmail(username)
+        // fetch cart
+        val user = userRepository.findByEmailFetchCart(username)
             ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
         // itemlist를 조회할 때 fetch join으로 내부에 있는 dosiraklist의 정보를 가져온다.
         // querydsl의 시간인가?

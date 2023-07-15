@@ -30,7 +30,7 @@ class Store(
     var address: String,
 
     // 메인 이미지
-    var mainImage: String = "",
+    var mainImageUrl: String = "",
 
     // 이미지 리스트
     @ElementCollection
@@ -56,7 +56,7 @@ class Store(
     @OneToMany(mappedBy = "store")
     val likeUserList: MutableList<LikeStore> = mutableListOf(),
 
-) : BaseEntity() {
+    ) : BaseEntity() {
     fun likeStore(likeStore: LikeStore) {
         this.likeUserList.add(likeStore)
     }

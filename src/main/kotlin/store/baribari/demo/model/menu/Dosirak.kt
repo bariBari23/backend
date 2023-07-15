@@ -34,7 +34,7 @@ class Dosirak(
     var dosirakBanchanList: MutableList<BanchanDosirak> = mutableListOf(),
 
     // 메인 이미지
-    var mainImage: String = "",
+    var mainImageUrl: String = "",
 
     // 이미지 리스트
     @ElementCollection

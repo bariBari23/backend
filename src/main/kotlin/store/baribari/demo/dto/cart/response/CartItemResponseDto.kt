@@ -8,6 +8,9 @@ data class CartItemResponseDto(
     val price: Int,
     val quantity: Int,
     val total: Int,
+    val dosirakMainImageUrl: String,
+    val storeName: String,
+    val storeMainImageUrl: String,
 ) {
     companion object {
         fun fromCartItem(cartItem: CartItem): CartItemResponseDto {
@@ -17,6 +20,9 @@ data class CartItemResponseDto(
                 price = cartItem.dosirak.price,
                 quantity = cartItem.count,
                 total = cartItem.dosirak.price * cartItem.count,
+                dosirakMainImageUrl = cartItem.dosirak.mainImageUrl,
+                storeName = cartItem.dosirak.store.name,
+                storeMainImageUrl = cartItem.dosirak.store.mainImageUrl,
             )
         }
     }

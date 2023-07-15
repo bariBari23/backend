@@ -11,7 +11,7 @@ data class CreateOrderRequestDto(
     @field: Pattern(regexp = "^(|^[0-9]{3}-[0-9]{3,4}-[0-9]{4})\$")
     val orderPhoneNumber: String,
     @field: NotBlank
-    val pickUpTime: String,
+    val estimatedPickUpTime: String,
     @field: NotNull
     val payMethod: PayMethod,
 )

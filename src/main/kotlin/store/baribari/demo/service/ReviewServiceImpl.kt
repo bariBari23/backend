@@ -33,15 +33,14 @@ class ReviewServiceImpl(
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
 
-        val orderItem = orderItemRepository.findByIdFetchOrderAndUser(createReviewRequestDto.orderItemId)
+        val orderItem = orderItemRepository.findByOrderItemIdFetchOrderAndUser(createReviewRequestDto.orderItemId)
             ?: throw EntityNotFoundException("${createReviewRequestDto.orderItemId} 에 해당하는 주문이 없습니다.")
 
         // orderItem과 user가 일치하는지 확인한다.
 
         require(orderItem.order.user!!.id == user.id) { "해당 주문의 유저와 리뷰를 생성하는 유저가 일치하지 않습니다." }
 
-        // orderItem에 review가 있는지 확인한다.
-        // TODO: 테스트 용도로만 작동시킨다 실제 서비스에서는 주석해제해야함.
+        // orderItem에 review가 있는지 확인한다
         orderItem.review()
 
         val review = Review(

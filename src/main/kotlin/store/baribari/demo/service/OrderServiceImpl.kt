@@ -64,7 +64,7 @@ class OrderServiceImpl(
             price = order.price,
             orderDemand = order.orderDemand,
             orderPhoneNumber = order.orderPhoneNumber,
-            pickUpTime = order.pickUpTime,
+            estimatedPickUpTime = order.estimatedPickUpTime,
             payMethod = order.payMethod,
             status = order.status,
         )
@@ -85,7 +85,7 @@ class OrderServiceImpl(
             orderItemList = mutableListOf(),
             orderDemand = createOrderRequestDto.orderDemand,
             orderPhoneNumber = createOrderRequestDto.orderPhoneNumber,
-            pickUpTime = createOrderRequestDto.pickUpTime,
+            estimatedPickUpTime = createOrderRequestDto.estimatedPickUpTime,
             payMethod = createOrderRequestDto.payMethod,
         )
 

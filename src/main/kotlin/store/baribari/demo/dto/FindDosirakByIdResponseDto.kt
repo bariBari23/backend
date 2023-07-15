@@ -26,7 +26,7 @@ data class FindDosirakByIdResponseDto(
                 price = dosirak.price,
                 gram = dosirak.gram,
                 stock = dosirak.stock,
-                mainImageUrl = dosirak.mainImage,
+                mainImageUrl = dosirak.mainImageUrl,
                 photoList = dosirak.dosirakImageList,
                 banchanList = dosirak.dosirakBanchanList.map { BanchanNameAndGramDto.fromBanchanToDto(it.banchan) },
                 storeId = dosirak.store.id!!,

@@ -18,7 +18,7 @@ data class DosirakByQueryResponseElementDto(
                 name = dosirak.name,
                 price = dosirak.price,
                 stock = dosirak.stock,
-                mainImageUrl = dosirak.mainImage,
+                mainImageUrl = dosirak.mainImageUrl,
                 banchanList = dosirak.dosirakBanchanList.map { it.banchan.name },
                 storeName = dosirak.store.name,
             )

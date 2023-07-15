@@ -22,7 +22,7 @@ data class MyOrderItemElementDto(
             return MyOrderItemElementDto(
                 orderItemId = orderItem.id!!,
                 dosirkaName = orderItem.dosirak.name,
-                dosirakImage = orderItem.dosirak.mainImage,
+                dosirakImage = orderItem.dosirak.mainImageUrl,
                 storeName = orderItem.dosirak.store.name,
                 price = orderItem.dosirak.price,
                 count = orderItem.count,

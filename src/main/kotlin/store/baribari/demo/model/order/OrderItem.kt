@@ -96,7 +96,7 @@ class OrderItem(
                     order = order,
                     count = count,
                     estimatedPickUpTime = order.estimatedPickUpTime,
-                    status = if (payMethod == PayMethod.CASH) OrderStatus.READY else OrderStatus.ORDERED
+                    status = if (payMethod == PayMethod.CASH || payMethod == PayMethod.BANK_TRANSFER) OrderStatus.READY else OrderStatus.ORDERED
             )
         }
     }

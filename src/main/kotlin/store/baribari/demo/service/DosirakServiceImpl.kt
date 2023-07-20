@@ -3,8 +3,8 @@ package store.baribari.demo.service
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import store.baribari.demo.dto.FindDosirakByIdResponseDto
 import store.baribari.demo.dto.DosirakByQueryResponseDto
+import store.baribari.demo.dto.FindDosirakByIdResponseDto
 import store.baribari.demo.repository.UserRepository
 import store.baribari.demo.repository.menu.DosirakRepository
 
@@ -23,7 +23,7 @@ class DosirakServiceImpl(
     ): DosirakByQueryResponseDto {
         // 1. banchanlist와 store를 fetch join하면 된다.
         // 2.
-        val user = userEmail?.let { userRepository.findByEmail(it) }
+        val user = userEmail?.let { userRepository.findByEmailFetchStoreLikeList(it) }
 
         //log.info("keyword is: $keyword")
 
@@ -34,7 +34,7 @@ class DosirakServiceImpl(
             pageable
         )
 
-        return DosirakByQueryResponseDto.fromDosirakPageToDto(dosirakPage)
+        return DosirakByQueryResponseDto.fromDosirakPageToDto(dosirakPage, user)
     }
 
     override fun findDosirakById(

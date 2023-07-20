@@ -6,4 +6,5 @@ enum class PayMethod(
     CASH("현금"),
     CARD("카드"),
     KAKAOPAY("카카오페이"),
+    BANK_TRANSFER("계좌이체"),
 }

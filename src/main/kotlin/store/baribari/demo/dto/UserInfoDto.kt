@@ -2,6 +2,7 @@ package store.baribari.demo.dto
 
 import store.baribari.demo.common.enums.Role
 import store.baribari.demo.model.User
+import store.baribari.demo.model.embed.Position
 import java.util.*
 
 data class UserInfoDto(
@@ -10,6 +11,7 @@ data class UserInfoDto(
     val role: Role,
     val phoneNumber: String?,
     val nickname: String,
+    val position: Position?,
     val accessToken: String?,
     val refreshToken: String?,
 ) {
@@ -19,6 +21,7 @@ data class UserInfoDto(
         user.role,
         user.phoneNumber,
         user.nickname,
+        user.position,
         accessToken,
         refreshToken,
     )

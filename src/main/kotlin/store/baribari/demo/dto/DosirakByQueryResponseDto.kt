@@ -1,6 +1,7 @@
 package store.baribari.demo.dto
 
 import org.springframework.data.domain.Page
+import store.baribari.demo.model.User
 import store.baribari.demo.model.menu.Dosirak
 
 data class DosirakByQueryResponseDto(
@@ -13,9 +14,10 @@ data class DosirakByQueryResponseDto(
     companion object {
         fun fromDosirakPageToDto(
             pageData: Page<Dosirak>,
+            user: User?,
         ): DosirakByQueryResponseDto {
             val content = pageData.content.map {
-                DosirakByQueryResponseElementDto.createDtoFromEntity(it)
+                DosirakByQueryResponseElementDto.createDtoFromEntity(it, user)
             }
             return DosirakByQueryResponseDto(
                 dosirakList = content,

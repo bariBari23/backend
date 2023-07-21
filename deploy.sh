@@ -5,7 +5,7 @@ cd /home/ubuntu/backend
 
 ./gradlew --stop
 
-./gradlew clean build
+./gradlew clean build -x test
 
 ## 이미 실행중인 서버 종료
 a=$(ps -ef | grep 'java -jar -Dspring.profiles.active' | grep -v grep | awk '{print $2}')

@@ -35,7 +35,7 @@ class FileServiceImpl(
     }
 
     private fun generateFileName(): String =
-        "sogang/${UUID.randomUUID()}-${UUID.randomUUID()}"
+        "review/${UUID.randomUUID()}-${UUID.randomUUID()}"
 
     private fun getGeneratePreSignedUrlRequest(
         bucket: String,

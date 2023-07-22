@@ -16,6 +16,7 @@ data class MyOrderItemElementDto(
     val isReviewed: Boolean,
     val estimatedPickUpTime: String,
     val pickupTime: LocalDateTime?,
+    val orderCreatedAt: LocalDateTime?,
     // 추후 상점 id도 넣어줘야하나?
 ) {
     companion object {
@@ -32,6 +33,7 @@ data class MyOrderItemElementDto(
                 isReviewed = orderItem.isReviewed,
                 pickupTime =  orderItem.pickupTime,
                 estimatedPickUpTime = orderItem.estimatedPickUpTime,
+                orderCreatedAt = orderItem.order.createdAt,
             )
         }
     }

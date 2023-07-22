@@ -4,12 +4,8 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import store.baribari.demo.auth.LoginUser
-import store.baribari.demo.dto.cart.response.ClearCartResponseDto
-import store.baribari.demo.dto.cart.response.DeleteCartItemResponseDto
-import store.baribari.demo.dto.cart.response.AddCartItemResponseDto
 import store.baribari.demo.dto.cart.request.AddItemRequestDto
-import store.baribari.demo.dto.cart.response.CartInfoResponseDto
-import store.baribari.demo.dto.cart.response.UpdateItemQuantityResponseDto
+import store.baribari.demo.dto.cart.response.*
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.service.CartService
 import javax.validation.Valid
@@ -56,7 +52,6 @@ class CartController(
     ): ApiResponse<AddCartItemResponseDto> {
         // 여러개가 들어오는 경우도 가정을 하자...
         val data = cartService.addItem(loginUser.username, addItemRequestDto)
-
         return ApiResponse.success(data)
     }
 

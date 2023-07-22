@@ -10,15 +10,16 @@ interface ReviewRepository : JpaRepository<Review, Long> {
         """
             SELECT r 
             FROM Review r 
-            JOIN FETCH r.orderItem oi
-            JOIN FETCH r.writer 
+            LEFT JOIN FETCH r.orderItem oi
+            LEFT JOIN FETCH r.writer 
+            LEFT JOIN FETCH oi.order o
             WHERE r.id = :reviewId
             """
     )
-    fun findByIdFetchOrderItemAndWriter(reviewId: Long): Review?
+    fun findByIdFetchOrderItemAndWriterAndOrder(reviewId: Long): Review?
 
-    @Query(value = "SELECT r FROM Review r JOIN FETCH r.orderItem oi JOIN FETCH oi.order o ORDER BY r.id DESC")
-    fun findByStoreFetchOrderItemAndDosirak(store: Store): List<Review>
+    @Query(value = "SELECT r FROM Review r LEFT JOIN FETCH r.orderItem oi LEFT JOIN FETCH oi.order o ORDER BY r.id DESC")
+    fun findByStoreFetchOrderItemAndDosirakAndOrder(store: Store): List<Review>
 
     @Query(
         value = """

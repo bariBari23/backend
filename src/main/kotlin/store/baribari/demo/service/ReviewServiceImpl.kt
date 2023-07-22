@@ -66,7 +66,7 @@ class ReviewServiceImpl(
                 ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
         }
 
-        val review = reviewRepository.findByIdFetchOrderItemAndWriter(reviewId)
+        val review = reviewRepository.findByIdFetchOrderItemAndWriterAndOrder(reviewId)
             ?: throw EntityNotFoundException("$reviewId 에 해당하는 리뷰가 없습니다.")
 
         return ReadOneReviewResponseDto.fromReview(
@@ -86,7 +86,7 @@ class ReviewServiceImpl(
                 ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저가 없습니다.")
         }
 
-        val reviewList = reviewRepository.findByStoreFetchOrderItemAndDosirak(store)
+        val reviewList = reviewRepository.findByStoreFetchOrderItemAndDosirakAndOrder(store)
 
         return ReadReviewByStoreResponseDto.fromReviewList(
             reviewList = reviewList,

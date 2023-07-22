@@ -3,6 +3,7 @@ package store.baribari.demo.dto.review.response
 import store.baribari.demo.dto.order.response.OrderItemDto
 import store.baribari.demo.model.Review
 import store.baribari.demo.model.User
+import java.time.LocalDateTime
 
 data class ReadOneReviewResponseDto(
     // TODO: 도시락도 여기 정보에 넣는 것이 좋아보임
@@ -13,7 +14,8 @@ data class ReadOneReviewResponseDto(
     val mainImageUrl: String,
     val photoList: List<String> = listOf(),
     val tags: List<String> = listOf(),
-    val createdAt: String,
+    val reviewCreatedAt: LocalDateTime?,
+    val orderCreatedAt: LocalDateTime?,
     val isWriter: Boolean = false,
     val reviewWriterName: String,
     val reviewWriterProfileImageUrl: String?,
@@ -28,7 +30,8 @@ data class ReadOneReviewResponseDto(
                 mainImageUrl = review.mainImageUrl,
                 photoList = review.photoList,
                 tags = review.tags.map { it.name },
-                createdAt = review.createdAt.toString(),
+                reviewCreatedAt = review.createdAt,
+                orderCreatedAt = review.orderItem.order.createdAt,
                 isWriter = (user == review.writer),
                 reviewWriterName = review.writer.nickname,
                 reviewWriterProfileImageUrl = review.writer.profileImageUrl,

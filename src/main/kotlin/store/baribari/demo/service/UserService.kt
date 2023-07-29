@@ -9,4 +9,8 @@ interface UserService {
         latitude: Double,
         longitude: Double,
     ) : Position
+
+    fun getLocation(
+        userEmail: String,
+    ): Position
 }

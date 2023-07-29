@@ -13,9 +13,10 @@ interface LikeStoreRepository : JpaRepository<LikeStore, Long> {
         """
         SELECT ls 
         FROM LikeStore ls
-        LEFT JOIN FETCH ls.store
+        LEFT JOIN FETCH ls.store s
+        LEFT JOIN FETCH s.storeImageList
         WHERE ls.user = :user
         """
     )
-    fun findByUserFetchStore(user: User): List<LikeStore>
+    fun findByUserFetchStoreAndImageList(user: User): List<LikeStore>
 }

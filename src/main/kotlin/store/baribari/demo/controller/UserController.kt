@@ -1,9 +1,12 @@
 package store.baribari.demo.controller
 
+import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import store.baribari.demo.auth.LoginUser
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.model.embed.Position
 import store.baribari.demo.service.UserService
@@ -27,5 +30,13 @@ class UserController(
         return ApiResponse.success(data)
     }
 
+    @GetMapping("/location")
+    fun getLocation(
+        @LoginUser user: User,
+    ): ApiResponse<Position> {
+        val data = userService.getLocation(user.username)
+
+        return ApiResponse.success(data)
+    }
 
 }

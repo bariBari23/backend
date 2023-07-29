@@ -92,7 +92,7 @@ class StoreServiceImpl(
         val user = userRepository.findByEmail(userEmail)
             ?: throw EntityNotFoundException("$userEmail 에 해당하는 유저는 존재하지 않습니다.")
 
-        val likeStores = likeStoreRepository.findByUserFetchStore(user)
+        val likeStores = likeStoreRepository.findByUserFetchStoreAndImageList(user)
 
         return ShowLikeResponseDto.fromLikeStores(likeStores)
     }

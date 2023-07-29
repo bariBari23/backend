@@ -13,16 +13,15 @@ class UserServiceImpl(
     @Transactional
     override fun setLocation(
         userEmail: String,
-        latitude: Double,
-        longitude: Double,
+        position: Position,
     ): Position {
         val user = userRepository.findByEmailFetchPosition(userEmail)
             ?: throw EntityNotFoundException("$userEmail 이라는 유저는 존재하지 않습니다.")
 
-        user.position.latitude = latitude
-        user.position.longitude = longitude
+        user.position.latitude = position.latitude
+        user.position.longitude = position.longitude
 
-        return Position(latitude, longitude)
+        return Position(position.latitude, position.longitude)
     }
 
     override fun getLocation(

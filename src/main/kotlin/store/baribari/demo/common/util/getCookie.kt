@@ -25,7 +25,7 @@ fun addCookie(response: HttpServletResponse, name: String?, value: String?, maxA
     val cookie = ResponseCookie.from(name!!, value!!)
             .path("/")
             .sameSite("None")
-            .httpOnly(false)
+            .httpOnly(true)
             .secure(true)
             .maxAge(maxAge.toLong())
             .build()

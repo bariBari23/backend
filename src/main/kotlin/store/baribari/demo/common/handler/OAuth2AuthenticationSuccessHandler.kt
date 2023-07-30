@@ -100,8 +100,9 @@ class OAuth2AuthenticationSuccessHandler(
         refreshToken: AuthToken,
     ) {
         val cookieMaxAge = appProperties.auth.refreshTokenExpiry / 1000
+        val LongCookieMaxAge = cookieMaxAge.toLong() // type변환...되나?
         deleteCookie(request, response, REFRESH_TOKEN)
-        addCookie(response, REFRESH_TOKEN, refreshToken.token, cookieMaxAge)
+        addCookie(response, REFRESH_TOKEN, refreshToken.token, LongCookieMaxAge)
     }
 
     private fun createTokens(findUser: User): Pair<AuthToken, AuthToken> {

@@ -29,7 +29,7 @@ fun addCookie(response: HttpServletResponse, name: String?, value: String?, maxA
             .secure(true)
             .maxAge(maxAge.toLong())
             .build()
-    response.addHeader("Set-Cookie", cookie.toString())
+    response.setHeader("Set-Cookie", cookie.toString())
 }
 
 fun deleteCookie(request: HttpServletRequest, response: HttpServletResponse, name: String) {

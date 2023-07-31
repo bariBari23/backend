@@ -7,7 +7,9 @@ import java.time.LocalDateTime
 data class OrderItemDto(
     val orderItemId: Long,
     val dosirakName: String,
+    val dosirakMainImageUrl: String,
     val storeName: String,
+    val storeMainImageUrl: String,
     val price: Int,
     val count: Int,
     val total: Int,
@@ -21,7 +23,9 @@ data class OrderItemDto(
             return OrderItemDto(
                 orderItemId = orderItem.id!!,
                 dosirakName = orderItem.dosirak.name,
+                dosirakMainImageUrl = orderItem.dosirak.mainImageUrl,
                 storeName = orderItem.dosirak.store.name,
+                storeMainImageUrl = orderItem.dosirak.store.mainImageUrl,
                 price = orderItem.dosirak.price,
                 count = orderItem.count,
                 total = orderItem.count * orderItem.dosirak.price,

@@ -4,7 +4,7 @@ import store.baribari.demo.dto.TokenDto
 import store.baribari.demo.dto.UserInfoDto
 import store.baribari.demo.dto.UserLoginRequestDto
 import store.baribari.demo.dto.UserSignUpDto
-import java.util.*
+import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 
 interface AuthService {

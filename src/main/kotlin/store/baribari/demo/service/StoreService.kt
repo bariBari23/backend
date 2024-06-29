@@ -7,7 +7,7 @@ interface StoreService {
     fun storeInfo(
         userEmail: String?,
         storeId: Long,
-    ) : StoreInfoResponseDto
+    ): StoreInfoResponseDto
 
     fun storeLike(
         userEmail: String,

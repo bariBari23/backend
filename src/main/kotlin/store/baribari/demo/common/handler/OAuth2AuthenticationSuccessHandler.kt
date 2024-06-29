@@ -24,7 +24,8 @@ import store.baribari.demo.repository.common.REDIRECT_URI_PARAM_COOKIE_NAME
 import store.baribari.demo.repository.common.REFRESH_TOKEN
 import store.baribari.demo.repository.common.RedisRepository
 import java.net.URI
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -100,9 +101,9 @@ class OAuth2AuthenticationSuccessHandler(
         refreshToken: AuthToken,
     ) {
         val cookieMaxAge = appProperties.auth.refreshTokenExpiry / 1000
-        val LongCookieMaxAge = cookieMaxAge.toLong() // type변환...되나?
+        val longCookieMaxAge = cookieMaxAge.toLong() // type변환...되나?
         deleteCookie(request, response, REFRESH_TOKEN)
-        addCookie(response, REFRESH_TOKEN, refreshToken.token, LongCookieMaxAge)
+        addCookie(response, REFRESH_TOKEN, refreshToken.token, longCookieMaxAge)
     }
 
     private fun createTokens(findUser: User): Pair<AuthToken, AuthToken> {
@@ -110,22 +111,27 @@ class OAuth2AuthenticationSuccessHandler(
         val tokenExpiry = appProperties.auth.tokenExpiry
         val refreshTokenExpiry = appProperties.auth.refreshTokenExpiry
 
-        val accessToken = tokenProvider.createAuthToken(
-            findUser.email,
-            Date(now.time + tokenExpiry),
-            findUser.role.code,
-        )
+        val accessToken =
+            tokenProvider.createAuthToken(
+                findUser.email,
+                Date(now.time + tokenExpiry),
+                findUser.role.code,
+            )
 
-        val refreshToken = tokenProvider.createAuthToken(
-            findUser.email,
-            Date(now.time + refreshTokenExpiry),
-        )
+        val refreshToken =
+            tokenProvider.createAuthToken(
+                findUser.email,
+                Date(now.time + refreshTokenExpiry),
+            )
         redisRepository.setRefreshTokenByEmail(findUser.email, refreshToken.token)
 
         return accessToken to refreshToken
     }
 
-    fun clearAuthenticationAttributes(request: HttpServletRequest, response: HttpServletResponse) {
+    fun clearAuthenticationAttributes(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+    ) {
         super.clearAuthenticationAttributes(request)
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response)
     }
@@ -136,7 +142,7 @@ class OAuth2AuthenticationSuccessHandler(
             .any {
                 val authorizedURI = URI.create(it)
                 authorizedURI.host.equals(clientRedirectUri.host, ignoreCase = true) &&
-                        authorizedURI.port == clientRedirectUri.port
+                    authorizedURI.port == clientRedirectUri.port
             }
     }
 }

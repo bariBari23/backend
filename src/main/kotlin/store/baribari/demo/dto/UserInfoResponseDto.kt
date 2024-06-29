@@ -2,7 +2,7 @@ package store.baribari.demo.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import store.baribari.demo.model.embed.Position
-import java.util.*
+import java.util.UUID
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class UserInfoResponseDto(

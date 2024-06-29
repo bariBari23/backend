@@ -45,26 +45,20 @@ interface OrderService {
         orderItemId: Long
     ): OrderItemDto
 
-
     // TODO: 실제 서비스에서는 쓰이지 않는다.
     fun completeOrder(
         orderId: Long
     ): FindOneOrderResponseDto
 
-
     fun completeOrderItem(
         orderItem: Long
     ): OrderItemDto
-
 
     fun forcePickupOrder(
         orderId: Long
     ): Long
 
-
     fun forcePickUpOrderItem(
         orderItemId: Long
     ): Long
-
-
 }

@@ -1,11 +1,11 @@
 package store.baribari.demo.service
 
 import org.springframework.stereotype.Service
+import store.baribari.demo.dto.cart.request.AddItemRequestDto
+import store.baribari.demo.dto.cart.response.AddCartItemResponseDto
+import store.baribari.demo.dto.cart.response.CartInfoResponseDto
 import store.baribari.demo.dto.cart.response.ClearCartResponseDto
 import store.baribari.demo.dto.cart.response.DeleteCartItemResponseDto
-import store.baribari.demo.dto.cart.response.AddCartItemResponseDto
-import store.baribari.demo.dto.cart.request.AddItemRequestDto
-import store.baribari.demo.dto.cart.response.CartInfoResponseDto
 import store.baribari.demo.dto.cart.response.UpdateItemQuantityResponseDto
 
 @Service
@@ -34,5 +34,4 @@ interface CartService {
     fun clearCart(
         username: String
     ): ClearCartResponseDto
-
 }

@@ -25,7 +25,7 @@ class DosirakServiceImpl(
         // 2.
         val user = userEmail?.let { userRepository.findByEmailFetchStoreLikeList(it) }
 
-        //log.info("keyword is: $keyword")
+        // log.info("keyword is: $keyword")
 
         val dosirakPage = dosirakRepository.customFindDosirakByQuery(
             filterLiked,
@@ -47,7 +47,6 @@ class DosirakServiceImpl(
         // 2. dosirak을 photoList를 가져온다.
 
         val dosirak = dosirakRepository.findByIdFetchStoreAndBanchanList(dosirakId)
-
 
         return FindDosirakByIdResponseDto.fromDosirakToDto(dosirak, user)
     }

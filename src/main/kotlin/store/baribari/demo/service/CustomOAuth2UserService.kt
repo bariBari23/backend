@@ -1,6 +1,5 @@
 package store.baribari.demo.service
 
-
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -15,7 +14,7 @@ import store.baribari.demo.common.exception.OAuthProviderMissMatchException
 import store.baribari.demo.model.User
 import store.baribari.demo.model.cart.Cart
 import store.baribari.demo.repository.UserRepository
-import java.util.*
+import java.util.Locale
 
 @Service
 class CustomOAuth2UserService(
@@ -35,7 +34,10 @@ class CustomOAuth2UserService(
         }.getOrThrow()
     }
 
-    private fun process(userRequest: OAuth2UserRequest, user: OAuth2User): OAuth2User {
+    private fun process(
+        userRequest: OAuth2UserRequest,
+        user: OAuth2User,
+    ): OAuth2User {
         val providerType =
             ProviderType.valueOf(userRequest.clientRegistration.registrationId.uppercase(Locale.getDefault()))
 
@@ -52,22 +54,27 @@ class CustomOAuth2UserService(
     ): User {
         val userInfo = OAuth2UserInfoFactory.getOauth2UserInfo(providerType, attributes)
 
-        val savedUser = userRepository.findByEmail(userInfo.email)
-            ?: userRepository.findUserByProviderId(userInfo.id)
+        val savedUser =
+            userRepository.findByEmail(userInfo.email)
+                ?: userRepository.findUserByProviderId(userInfo.id)
 
         return savedUser ?: createUser(userInfo, providerType)
     }
 
-    private fun createUser(userInfo: OAuth2UserInfo, providerType: ProviderType): User {
-        val user = User(
-            email = userInfo.email,
-            providerId = userInfo.id,
-            providerType = providerType,
-            profileImageUrl = userInfo.imageUrl,
-            userCart = Cart(),
-            phoneNumber = userInfo.phoneNumber ?: "",
-            nickname = userInfo.name,
-        )
+    private fun createUser(
+        userInfo: OAuth2UserInfo,
+        providerType: ProviderType,
+    ): User {
+        val user =
+            User(
+                email = userInfo.email,
+                providerId = userInfo.id,
+                providerType = providerType,
+                profileImageUrl = userInfo.imageUrl,
+                userCart = Cart(),
+                phoneNumber = userInfo.phoneNumber ?: "",
+                nickname = userInfo.name,
+            )
 
         return userRepository.saveAndFlush(user)
     }

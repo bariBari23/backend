@@ -3,7 +3,7 @@ package store.baribari.demo.dto
 import store.baribari.demo.common.enums.Role
 import store.baribari.demo.model.User
 import store.baribari.demo.model.embed.Position
-import java.util.*
+import java.util.UUID
 
 data class UserInfoDto(
     val id: UUID,

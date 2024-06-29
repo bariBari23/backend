@@ -7,5 +7,5 @@ import store.baribari.demo.model.Store
 interface StoreRepository : JpaRepository<Store, Long> {
 
     @EntityGraph(attributePaths = ["position"])
-    override fun findAll() : List<Store>
+    override fun findAll(): List<Store>
 }

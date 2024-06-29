@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.security.oauth2.core.user.OAuth2User
 import store.baribari.demo.common.enums.Role
 import store.baribari.demo.model.User
-import java.util.*
+import java.util.Collections
 
 class UserPrincipal(
     private val userId: String,
@@ -18,7 +18,6 @@ class UserPrincipal(
     private val roleType: Role,
     private val authorities: MutableCollection<GrantedAuthority>,
 ) : OAuth2User, UserDetails, OidcUser {
-
     private lateinit var attributes: MutableMap<String, Any>
 
     override fun getName(): String {
@@ -80,7 +79,10 @@ class UserPrincipal(
             )
         }
 
-        fun create(user: User, attributes: MutableMap<String, Any>): UserPrincipal {
+        fun create(
+            user: User,
+            attributes: MutableMap<String, Any>,
+        ): UserPrincipal {
             val userPrincipal = create(user)
             userPrincipal.attributes = attributes
 

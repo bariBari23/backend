@@ -1,7 +1,5 @@
 package store.baribari.demo.auth
 
-import store.baribari.demo.common.enums.ErrorCode
-import store.baribari.demo.common.exception.UnAuthorizedException
 import org.springframework.core.MethodParameter
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
@@ -10,6 +8,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
+import store.baribari.demo.common.enums.ErrorCode
+import store.baribari.demo.common.exception.UnAuthorizedException
 
 @Component
 class LoginUserArgumentResolver : HandlerMethodArgumentResolver {

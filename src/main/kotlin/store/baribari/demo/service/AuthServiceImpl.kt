@@ -21,7 +21,8 @@ import store.baribari.demo.model.User
 import store.baribari.demo.repository.UserRepository
 import store.baribari.demo.repository.common.REFRESH_TOKEN
 import store.baribari.demo.repository.common.RedisRepository
-import java.util.*
+import java.util.Date
+import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 
 private const val THREE_DAYS_MSEC = 259200000
@@ -46,8 +47,9 @@ class AuthServiceImpl(
         val email = userLoginRequestDto.email
         val rawPassword = userLoginRequestDto.password
 
-        val findUser = userRepository.findByEmail(email)
-            ?: throw EntityNotFoundException("$email 을 가진 유저는 존재하지 않습니다.")
+        val findUser =
+            userRepository.findByEmail(email)
+                ?: throw EntityNotFoundException("$email 을 가진 유저는 존재하지 않습니다.")
 
         if (!passwordEncoder.matches(rawPassword, findUser.password)) {
             throw UnAuthorizedException(ErrorCode.PASSWORD_MISS_MATCH, "비밀번호가 일치하지 않습니다!")
@@ -58,19 +60,22 @@ class AuthServiceImpl(
     }
 
     override fun refreshUserToken(request: HttpServletRequest): TokenDto {
-        val accessToken = getAccessToken(request)
-            ?: throw UnAuthorizedException(ErrorCode.ACCESS_TOKEN_NOT_EXIST, "Access Token이 존재하지 않습니다.")
+        val accessToken =
+            getAccessToken(request)
+                ?: throw UnAuthorizedException(ErrorCode.ACCESS_TOKEN_NOT_EXIST, "Access Token이 존재하지 않습니다.")
 
         val convertAccessToken = authTokenProvider.convertAuthToken(accessToken)
 
-        val claims = convertAccessToken.expiredTokenClaims
-            ?: throw UnAuthorizedException(ErrorCode.TOKEN_NOT_EXPIRED, "Access Token이 만료되지 않았거나 올바르지 않습니다.")
+        val claims =
+            convertAccessToken.expiredTokenClaims
+                ?: throw UnAuthorizedException(ErrorCode.TOKEN_NOT_EXPIRED, "Access Token이 만료되지 않았거나 올바르지 않습니다.")
 
         val email = claims.subject
         val role = Role.of(claims.get(AUTHORITIES_KEY, String::class.java))
 
-        val refreshToken = getCookie(request, REFRESH_TOKEN)?.value
-            ?: throw UnAuthorizedException(ErrorCode.REFRESH_TOKEN_NOT_EXIST, "Refresh Token이 존재하지 않습니다.")
+        val refreshToken =
+            getCookie(request, REFRESH_TOKEN)?.value
+                ?: throw UnAuthorizedException(ErrorCode.REFRESH_TOKEN_NOT_EXIST, "Refresh Token이 존재하지 않습니다.")
 
         val convertRefreshToken = authTokenProvider.convertAuthToken(refreshToken)
 
@@ -87,20 +92,22 @@ class AuthServiceImpl(
         val now = Date()
         val tokenExpiry = appProperties.auth.tokenExpiry
 
-        val newAccessToken = authTokenProvider.createAuthToken(
-            email,
-            Date(now.time + tokenExpiry),
-            role.code,
-        ).token
+        val newAccessToken =
+            authTokenProvider.createAuthToken(
+                email,
+                Date(now.time + tokenExpiry),
+                role.code,
+            ).token
 
         val validTime = convertRefreshToken.tokenClaims!!.expiration.time - now.time
 
         if (validTime <= THREE_DAYS_MSEC) {
             val refreshTokenExpiry = appProperties.auth.refreshTokenExpiry
-            val newRefreshToken = authTokenProvider.createAuthToken(
-                email,
-                Date(now.time + refreshTokenExpiry),
-            ).token
+            val newRefreshToken =
+                authTokenProvider.createAuthToken(
+                    email,
+                    Date(now.time + refreshTokenExpiry),
+                ).token
 
             return TokenDto(newAccessToken, newRefreshToken)
         }
@@ -109,8 +116,9 @@ class AuthServiceImpl(
     }
 
     override fun getUserInfo(email: String): UserInfoDto {
-        val findUser = userRepository.findByEmail(email)
-            ?: throw EntityNotFoundException("$email 을 가진 유저는 존재하지 않습니다.")
+        val findUser =
+            userRepository.findByEmail(email)
+                ?: throw EntityNotFoundException("$email 을 가진 유저는 존재하지 않습니다.")
 
         return UserInfoDto(findUser)
     }
@@ -125,16 +133,18 @@ class AuthServiceImpl(
         val tokenExpiry = appProperties.auth.tokenExpiry
         val refreshTokenExpiry = appProperties.auth.refreshTokenExpiry
 
-        val accessToken = authTokenProvider.createAuthToken(
-            email,
-            Date(now.time + tokenExpiry),
-            role.code,
-        ).token
+        val accessToken =
+            authTokenProvider.createAuthToken(
+                email,
+                Date(now.time + tokenExpiry),
+                role.code,
+            ).token
 
-        val refreshToken = authTokenProvider.createAuthToken(
-            email,
-            Date(now.time + refreshTokenExpiry),
-        ).token
+        val refreshToken =
+            authTokenProvider.createAuthToken(
+                email,
+                Date(now.time + refreshTokenExpiry),
+            ).token
 
         redisRepository.setRefreshTokenByEmail(email, refreshToken)
 
@@ -144,7 +154,10 @@ class AuthServiceImpl(
         return accessToken to refreshToken
     }
 
-    private fun checkEmailAndUserName(email: String, username: String) {
+    private fun checkEmailAndUserName(
+        email: String,
+        username: String,
+    ) {
         userRepository.findByEmail(email)?.let {
             if (it.email == email) {
                 throw ConditionConflictException(ErrorCode.EMAIL_DUPLICATED, "$email 은 중복 이메일입니다.")

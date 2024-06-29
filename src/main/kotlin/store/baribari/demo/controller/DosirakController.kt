@@ -1,6 +1,5 @@
 package store.baribari.demo.controller
 
-
 import org.springframework.data.domain.Pageable
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PathVariable
@@ -45,8 +44,6 @@ class DosirakController(
     ): ApiResponse<FindDosirakByIdResponseDto> {
         val data = dosirakService.findDosirakById(principal?.name, dosirakId)
 
-
         return ApiResponse.success(data)
     }
-
 }

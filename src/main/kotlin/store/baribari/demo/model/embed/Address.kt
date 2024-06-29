@@ -3,7 +3,6 @@ package store.baribari.demo.model.embed
 import javax.persistence.Column
 import javax.persistence.Embeddable
 
-
 @Embeddable
 class Address {
     // 주소 정보

@@ -7,7 +7,7 @@ interface UserService {
     fun setLocation(
         userEmail: String,
         position: Position,
-    ) : Position
+    ): Position
 
     fun getLocation(
         userEmail: String,

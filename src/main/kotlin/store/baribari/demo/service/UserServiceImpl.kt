@@ -26,11 +26,10 @@ class UserServiceImpl(
 
     override fun getLocation(
         userEmail: String
-    ): Position{
+    ): Position {
         val user = userRepository.findByEmailFetchPosition(userEmail)
             ?: throw EntityNotFoundException("$userEmail 이라는 유저는 존재하지 않습니다.")
 
         return user.position
     }
-
 }

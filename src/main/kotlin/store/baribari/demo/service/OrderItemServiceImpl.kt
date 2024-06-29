@@ -9,10 +9,10 @@ import store.baribari.demo.repository.UserRepository
 import store.baribari.demo.repository.order.OrderItemRepository
 
 @Service
-class OrderItemServiceImpl (
+class OrderItemServiceImpl(
     private val orderItemRepository: OrderItemRepository,
     private val userRepository: UserRepository,
-) : OrderItemService{
+) : OrderItemService {
 
     override fun findMyOrderItem(
         userEmail: String,

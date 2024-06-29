@@ -1,6 +1,5 @@
 package store.baribari.demo.common.config
 
-
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -76,7 +75,7 @@ class SpringSecurityConfig(
             .antMatchers("/api/v2/**").permitAll()
             .antMatchers("/actuator/**").permitAll()
             // TODO: 이거 나중에 켜 놔야함
-            //.antMatchers("/api/store/**").hasAnyAuthority(Role.ROLE_STORE.code, Role.ROLE_ADMIN.code)
+            // .antMatchers("/api/store/**").hasAnyAuthority(Role.ROLE_STORE.code, Role.ROLE_ADMIN.code)
             .antMatchers("/api/admin/**").hasAuthority(Role.ROLE_ADMIN.code)
             .anyRequest().authenticated()
             .and()

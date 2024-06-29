@@ -12,5 +12,4 @@ interface DosirakRepositoryCustom {
         user: User?,
         pageable: Pageable,
     ): Page<Dosirak>
-
 }

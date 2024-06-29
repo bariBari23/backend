@@ -31,12 +31,10 @@ data class MyOrderItemElementDto(
                 total = orderItem.count * orderItem.dosirak.price,
                 status = orderItem.status,
                 isReviewed = orderItem.isReviewed,
-                pickupTime =  orderItem.pickupTime,
+                pickupTime = orderItem.pickupTime,
                 estimatedPickUpTime = orderItem.estimatedPickUpTime,
                 orderCreatedAt = orderItem.order.createdAt,
             )
         }
     }
 }
-
-

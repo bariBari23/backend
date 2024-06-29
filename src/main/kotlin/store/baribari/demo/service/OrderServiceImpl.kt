@@ -101,7 +101,7 @@ class OrderServiceImpl(
             )
         }
 
-        //user의 order목록에 추가
+        // user의 order목록에 추가
         order.setCustomer(user)
         // order에 item 전부 추가와 stock 줄이기
         order.setOrderItemAndStock(orderItems)
@@ -132,9 +132,7 @@ class OrderServiceImpl(
         if (user.id != order.user!!.id)
             throw EntityNotFoundException("해당 주문의 주인이 아닙니다.")
 
-
         orderItem.cancel() // 취소 처리
-
 
         return CancelOrderItemResponseDto(
             orderItemId = orderItem.id!!,

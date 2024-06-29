@@ -9,7 +9,6 @@ import store.baribari.demo.dto.DistanceResponseDto
 import store.baribari.demo.repository.StoreRepository
 import store.baribari.demo.repository.UserRepository
 
-
 @Service
 class LocationServiceImpl(
     private val storeRepository: StoreRepository,

@@ -38,7 +38,6 @@ class StoreServiceImpl(
             likeStoreRepository.findByUserAndStore(it, store) != null
         } ?: false
 
-
         return StoreInfoResponseDto.fromStore(
             user,
             store,

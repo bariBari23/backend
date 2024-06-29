@@ -1,9 +1,15 @@
 package store.baribari.demo.auth
 
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.MalformedJwtException
+import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.SignatureException
+import io.jsonwebtoken.UnsupportedJwtException
 import store.baribari.demo.common.util.log
-import io.jsonwebtoken.*
 import java.security.Key
-import java.util.*
+import java.util.Date
 
 const val AUTHORITIES_KEY: String = "ROLE"
 
@@ -71,7 +77,10 @@ class AuthToken(
     val isValid: Boolean
         get() = tokenClaims != null
 
-    private fun createAuthToken(email: String, expiry: Date): String {
+    private fun createAuthToken(
+        email: String,
+        expiry: Date,
+    ): String {
         return Jwts.builder()
             .setSubject(email)
             .signWith(key, SignatureAlgorithm.HS256)
@@ -79,7 +88,11 @@ class AuthToken(
             .compact()
     }
 
-    private fun createAuthToken(email: String, expiry: Date, role: String): String {
+    private fun createAuthToken(
+        email: String,
+        expiry: Date,
+        role: String,
+    ): String {
         return Jwts.builder()
             .setSubject(email)
             .claim(AUTHORITIES_KEY, role)

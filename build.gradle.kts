@@ -1,10 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
     val kotlinVersion = "1.8.21"
     id("org.springframework.boot") version "2.7.1"
     id("io.spring.dependency-management") version "1.1.0"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
@@ -57,6 +59,15 @@ dependencies {
     kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    // ktlint
+}
+
+ktlint {
+    version.set("0.41.0")
+    reporters {
+        reporter(ReporterType.JSON)
+    }
 }
 
 tasks.register("copyYml", Copy::class) {
@@ -72,7 +83,6 @@ tasks.register("copyYmlTest", Copy::class) {
     include("*.yml")
     into("src/test/resources")
 }
-
 
 tasks {
     withType<Test> {
@@ -90,7 +100,6 @@ tasks {
         dependsOn(getByName("copyYml"))
         dependsOn(getByName("copyYmlTest"))
     }
-
 }
 
 allOpen {
@@ -100,5 +109,4 @@ allOpen {
 }
 
 val jar: Jar by tasks
-
 jar.enabled = false

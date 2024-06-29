@@ -1,0 +1,46 @@
+name: Deploy to prod env
+on:
+  workflow_run:
+    workflows:
+      - Ktlint
+    types:
+      - completed
+
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PRIVATE_TOKEN }}
+          submodules: true
+      - name: Print Hello World
+        run: echo "HELLO, WORLD!"
+
+#      - name: create remote directory
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+#          username: ubuntu
+#          key: ${{ secrets.SSH_PEM_KEY }}
+#          script: mkdir -p /home/ubuntu/backend
+#
+#      - name: copy source via ssh key
+#        uses: burnett01/rsync-deployments@4.1
+#        with:
+#          switches: -avzr --delete
+#          remote_path: /home/ubuntu/backend
+#          remote_host: ${{ secrets.SSH_KNOWN_HOSTS }}
+#          remote_user: ubuntu
+#          remote_key: ${{ secrets.SSH_PEM_KEY }}
+#
+#      - name: trigger script
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+#          username: ubuntu
+#          key: ${{ secrets.SSH_PEM_KEY }}
+#          script: sh /home/ubuntu/backend/deploy.sh

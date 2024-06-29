@@ -2,10 +2,21 @@ package store.baribari.demo.controller
 
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import store.baribari.demo.auth.LoginUser
 import store.baribari.demo.dto.cart.request.AddItemRequestDto
-import store.baribari.demo.dto.cart.response.*
+import store.baribari.demo.dto.cart.response.AddCartItemResponseDto
+import store.baribari.demo.dto.cart.response.CartInfoResponseDto
+import store.baribari.demo.dto.cart.response.ClearCartResponseDto
+import store.baribari.demo.dto.cart.response.DeleteCartItemResponseDto
+import store.baribari.demo.dto.cart.response.UpdateItemQuantityResponseDto
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.service.CartService
 import javax.validation.Valid
@@ -18,19 +29,17 @@ import javax.validation.constraints.Positive
 class CartController(
     private val cartService: CartService,
 ) {
-
     // 수량은 무조건 body에 넣는거로 상정한다.
 
     // read
     // 카트의 정보를 읽어온다.
     @GetMapping()
     fun getCart(
-        @LoginUser loginUser: User
+        @LoginUser loginUser: User,
     ): ApiResponse<CartInfoResponseDto> {
         val data = cartService.getCart(loginUser.username)
         return ApiResponse.success(data)
     }
-
 
     // update
     // 1. 카트에 상품을 담기
@@ -48,7 +57,7 @@ class CartController(
     @PostMapping("")
     fun addItem(
         @LoginUser loginUser: User,
-        @RequestBody @Valid addItemRequestDto: AddItemRequestDto
+        @RequestBody @Valid addItemRequestDto: AddItemRequestDto,
     ): ApiResponse<AddCartItemResponseDto> {
         // 여러개가 들어오는 경우도 가정을 하자...
         val data = cartService.addItem(loginUser.username, addItemRequestDto)
@@ -60,7 +69,7 @@ class CartController(
     fun updateItemQuantity(
         @LoginUser loginUser: User,
         @PathVariable @Positive itemId: Long,
-        @PathVariable @Positive @Max(3) quantity: Int
+        @PathVariable @Positive @Max(3) quantity: Int,
     ): ApiResponse<UpdateItemQuantityResponseDto> {
         val data = cartService.updateItemQuantity(loginUser.username, itemId, quantity)
         // validated 어노테이션 붙여야 작동한다.
@@ -70,7 +79,7 @@ class CartController(
     @DeleteMapping("/{itemId}")
     fun deleteItem(
         @LoginUser loginUser: User,
-        @PathVariable @Positive itemId: Long
+        @PathVariable @Positive itemId: Long,
     ): ApiResponse<DeleteCartItemResponseDto> {
         // 단일 아이템으로 가정
         val data = cartService.deleteItem(loginUser.username, itemId)
@@ -82,13 +91,11 @@ class CartController(
     // 주문으로 넘길 때 수행한다. 만약에 상품의 개수가 0개라면 넘길 때 0개인거는 제외한다.
     @DeleteMapping("")
     fun emptyCart(
-        @LoginUser loginUser: User
+        @LoginUser loginUser: User,
     ): ApiResponse<ClearCartResponseDto> {
         // 카트를 비운다.
         val data = cartService.clearCart(loginUser.username)
 
         return ApiResponse.success(data)
     }
-
-
 }

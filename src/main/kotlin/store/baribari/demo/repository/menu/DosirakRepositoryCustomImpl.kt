@@ -44,7 +44,6 @@ class DosirakRepositoryCustomImpl(
             )
             .fetch()
 
-
         // 도시락에서 필요한 정보를 fetch join을 한다.
         val dosiraks = queryFactory
             .selectFrom(dosirak)
@@ -63,7 +62,6 @@ class DosirakRepositoryCustomImpl(
             dosirakIds.size.toLong()
         )
     }
-
 
     private fun returnLikStoreIds(filterLiked: Boolean, user: User?): List<Long> =
         if (filterLiked) {
@@ -108,5 +106,4 @@ class DosirakRepositoryCustomImpl(
 
             if (order.isAscending) path.asc() else path.desc()
         }.toList()
-
 }

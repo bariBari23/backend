@@ -1,10 +1,10 @@
 package store.baribari.demo.common.handler
 
-import store.baribari.demo.common.enums.ErrorCode
 import com.nimbusds.jose.shaded.json.JSONObject
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.stereotype.Component
+import store.baribari.demo.common.enums.ErrorCode
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 

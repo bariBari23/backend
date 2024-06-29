@@ -14,7 +14,7 @@ data class MyOrderItemResponseDto(
         fun fromOrderItemPageable(
             orderItems: Page<OrderItem>
         ): MyOrderItemResponseDto {
-            //orderitem 개별로 하나씩 만들어야
+            // orderitem 개별로 하나씩 만들어야
 
             return MyOrderItemResponseDto(
                 orderItems = orderItems.content.map { MyOrderItemElementDto.fromOrderItem(it) },

@@ -5,9 +5,9 @@ import store.baribari.demo.model.menu.Banchan
 data class BanchanNameAndGramDto(
     val banchanName: String,
     val gram: Int,
-){
-    companion object{
-        fun fromBanchanToDto(banchan: Banchan): BanchanNameAndGramDto{
+) {
+    companion object {
+        fun fromBanchanToDto(banchan: Banchan): BanchanNameAndGramDto {
             return BanchanNameAndGramDto(
                 banchanName = banchan.name,
                 gram = banchan.gram,

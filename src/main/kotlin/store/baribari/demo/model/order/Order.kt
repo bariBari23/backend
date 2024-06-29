@@ -6,7 +6,16 @@ import store.baribari.demo.common.enums.PayMethod
 import store.baribari.demo.common.exception.ConditionConflictException
 import store.baribari.demo.model.BaseEntity
 import store.baribari.demo.model.User
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "orders")
@@ -15,27 +24,19 @@ class Order(
     @GeneratedValue
     @Column(name = "order_id")
     var id: Long? = null,
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    var user: User? = null, //주문 회원
-
-    var orderDemand: String = "", //주문 요청사항
-
-    //@Pattern(regexp="(^$|[0-9]{10})")
+    var user: User? = null, // 주문 회원
+    var orderDemand: String = "", // 주문 요청사항
+    // @Pattern(regexp="(^$|[0-9]{10})")
     var orderPhoneNumber: String = "", // 주문자 전화번호
-
     var estimatedPickUpTime: String = "", // 픽업 시간
-
     var payMethod: PayMethod,
-
     @OneToMany(mappedBy = "order", cascade = [CascadeType.PERSIST])
     val orderItemList: MutableList<OrderItem> = mutableListOf(),
-
-    ) : BaseEntity() {
-
-    val status: OrderStatus //주문 상태 [ORDER, CANCEL]
-        get() : OrderStatus {
+) : BaseEntity() {
+    val status: OrderStatus // 주문 상태 [ORDER, CANCEL]
+        get(): OrderStatus {
             return when {
                 orderItemList.isEmpty() -> OrderStatus.CANCELED
 
@@ -46,22 +47,21 @@ class Order(
                 // 모두 pickup이면 pickup으로
                 orderItemList.filterNot { it.status == OrderStatus.CANCELED }
                     .all { it.status == OrderStatus.PICKED_UP } -> OrderStatus.PICKED_UP
-                //pickup 상태 completed 섞여있다면 completed로
+                // pickup 상태 completed 섞여있다면 completed로
                 orderItemList.filterNot { it.status == OrderStatus.CANCELED }
                     .all { it.status == OrderStatus.PICKED_UP || it.status == OrderStatus.COMPLETED } -> OrderStatus.COMPLETED
-
 
                 else -> OrderStatus.ORDERED
             }
         }
 
     val price: Int
-        get() = orderItemList
-            .filterNot { it.status == OrderStatus.CANCELED }
-            .sumOf { it.price }
+        get() =
+            orderItemList
+                .filterNot { it.status == OrderStatus.CANCELED }
+                .sumOf { it.price }
 
-
-    //==연관관계 메서드==//
+    // ==연관관계 메서드==//
     fun setCustomer(user: User) {
         this.user = user
         user.orderList.add(this)
@@ -72,13 +72,13 @@ class Order(
         orderItemList.forEach { it.dosirak.removeStock(it.count) }
     }
 
-    //==비즈니스 로직==//
+    // ==비즈니스 로직==//
     fun cancel() {
         when (this.status) {
             OrderStatus.COMPLETED, OrderStatus.CANCELED, OrderStatus.PICKED_UP -> {
                 throw ConditionConflictException(
                     ErrorCode.CANCELED_IMPOSSIBLE,
-                    "이미 준비완료, 픽업완료, 취소된 항목은 취소가 불가능합니다."
+                    "이미 준비완료, 픽업완료, 취소된 항목은 취소가 불가능합니다.",
                 )
             }
 
@@ -87,7 +87,6 @@ class Order(
             }
         }
     }
-
 
     // 테스트용 함수
     // TODO: 실제 서비스 구현시에는 사용하지 않는다.
@@ -105,5 +104,4 @@ class Order(
     fun complete() {
         orderItemList.filterNot { it.status == OrderStatus.CANCELED }.forEach { it.complete() }
     }
-
 }

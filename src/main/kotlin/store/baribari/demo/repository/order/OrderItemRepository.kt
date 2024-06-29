@@ -10,7 +10,6 @@ import store.baribari.demo.model.order.OrderItem
 
 interface OrderItemRepository : JpaRepository<OrderItem, Long> {
 
-
     @Query(
         """
         SELECT oi 
@@ -34,7 +33,6 @@ interface OrderItemRepository : JpaRepository<OrderItem, Long> {
         status: OrderStatus,
         pageable: Pageable
     ): Page<OrderItem>
-
 
     @Query(
         """

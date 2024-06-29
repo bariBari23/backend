@@ -30,10 +30,9 @@ data class OrderItemDto(
                 count = orderItem.count,
                 total = orderItem.count * orderItem.dosirak.price,
                 status = orderItem.status,
-                pickupTime =  orderItem.pickupTime,
+                pickupTime = orderItem.pickupTime,
                 estimatedPickUpTime = orderItem.estimatedPickUpTime,
             )
         }
     }
 }
-

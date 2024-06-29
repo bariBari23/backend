@@ -22,7 +22,7 @@ class ReviewServiceImpl(
     private val storeRepository: StoreRepository,
 ) : ReviewService {
 
-    //c
+    // c
     @Transactional
     override fun createReview(
         userEmail: String,
@@ -79,7 +79,7 @@ class ReviewServiceImpl(
     override fun readReviewByStore(userEmail: String?, storeId: Long): ReadReviewByStoreResponseDto {
 
         val store = storeRepository.findByIdOrNull(storeId)
-                ?: throw EntityNotFoundException("$storeId 번 가게는 존재하지 않습니다.")
+            ?: throw EntityNotFoundException("$storeId 번 가게는 존재하지 않습니다.")
 
         val user = userEmail?.let {
             userRepository.findByEmail(userEmail)

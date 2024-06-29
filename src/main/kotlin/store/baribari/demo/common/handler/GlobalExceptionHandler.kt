@@ -1,6 +1,5 @@
 package store.baribari.demo.common.handler
 
-import store.baribari.demo.dto.common.ApiResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -10,6 +9,7 @@ import store.baribari.demo.common.enums.ErrorCode
 import store.baribari.demo.common.exception.BizException
 import store.baribari.demo.common.exception.InternalServiceException
 import store.baribari.demo.common.util.log
+import store.baribari.demo.dto.common.ApiResponse
 
 @RestControllerAdvice
 class GlobalExceptionHandler {

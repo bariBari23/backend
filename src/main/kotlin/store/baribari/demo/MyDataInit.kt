@@ -33,9 +33,7 @@ class MyDataInit(
     private val dosirakRepository: DosirakRepository,
     private val banchanDosirakRepository: BanchanDosirakRepository,
     private val passwordEncoder: BCryptPasswordEncoder,
-
-    ) {
-
+) {
     @PostConstruct
     fun init() {
         // TODO: 배포시에는 제거하기
@@ -45,43 +43,45 @@ class MyDataInit(
 
         val dayList = dayList()
 
-        val store = Store(
-            owner = userList[1],
-            name = "test store",
-            phoneNumber = "010-1234-5678",
-            address = "서울시 강남구 테헤란로 427",
-            businessName = "테스트 가게",
-            businessNumber = "123-45-67890",
-            description = "테스트 가게입니다.",
-            position = Position(
-                latitude = 37.4912411,
-                longitude = 127.065716,
-            ),
-            //dayList = dayList,
-        )
-        //37.4912411,127.065716/37.4927015,127.0615472
+        val store =
+            Store(
+                owner = userList[1],
+                name = "test store",
+                phoneNumber = "010-1234-5678",
+                address = "서울시 강남구 테헤란로 427",
+                businessName = "테스트 가게",
+                businessNumber = "123-45-67890",
+                description = "테스트 가게입니다.",
+                position =
+                Position(
+                    latitude = 37.4912411,
+                    longitude = 127.065716,
+                ),
+                // dayList = dayList,
+            )
+        // 37.4912411,127.065716/37.4927015,127.0615472
 
-        val store2 = Store(
-            owner = userList[1],
-            name = "test store2",
-            phoneNumber = "010-1234-5678222",
-            address = "서울시 강남구 테헤란로 427",
-            businessName = "테스트 가게 2",
-            businessNumber = "123-45-67890",
-            description = "테스트 가게입니다.",
-            //dayList = dayList,
-        )
+        val store2 =
+            Store(
+                owner = userList[1],
+                name = "test store2",
+                phoneNumber = "010-1234-5678222",
+                address = "서울시 강남구 테헤란로 427",
+                businessName = "테스트 가게 2",
+                businessNumber = "123-45-67890",
+                description = "테스트 가게입니다.",
+                // dayList = dayList,
+            )
 
         storeRepository.saveAllAndFlush(listOf(store, store2))
         val banchanList = banchanListMaker(store)
         val dosirakList = dosirakListMaker(store)
         banchanDosirakMatchMaker(banchanList, dosirakList)
-
     }
 
     private fun banchanDosirakMatchMaker(
         banchanList: List<Banchan>,
-        dosirakList: List<Dosirak>
+        dosirakList: List<Dosirak>,
     ) {
         val banchanDosirakList = mutableListOf<BanchanDosirak>()
         for (i in dosirakList.indices) {
@@ -89,17 +89,15 @@ class MyDataInit(
                 banchanDosirakList.add(
                     BanchanDosirak(
                         banchan = banchanList[i * 3 + j],
-                        dosirak = dosirakList[i]
-                    )
+                        dosirak = dosirakList[i],
+                    ),
                 )
             }
         }
         banchanDosirakRepository.saveAll(banchanDosirakList)
     }
 
-    private fun banchanListMaker(
-        store: Store
-    ): List<Banchan> {
+    private fun banchanListMaker(store: Store): List<Banchan> {
         val ret = mutableListOf<Banchan>()
 
         for (i in 1..10) {
@@ -109,7 +107,7 @@ class MyDataInit(
                     description = "테스트 반찬입니다. $i",
                     gram = 100,
                     store = store,
-                )
+                ),
             )
         }
 
@@ -120,7 +118,7 @@ class MyDataInit(
                     description = "테스트 반찬입니다. $i",
                     gram = 100,
                     store = store,
-                )
+                ),
             )
         }
 
@@ -131,7 +129,7 @@ class MyDataInit(
                     description = "테스트 반찬입니다. $i",
                     gram = 100,
                     store = store,
-                )
+                ),
             )
         }
 
@@ -167,48 +165,65 @@ class MyDataInit(
     }
 
     private fun dayList(): MutableList<Day> {
-        val monday = Day(
-            day = DayOfWeek.MONDAY,
-            openTime = LocalTime.of(9, 0),
-            closeTime = LocalTime.of(18, 0),
-        )
+        val monday =
+            Day(
+                day = DayOfWeek.MONDAY,
+                openTime = LocalTime.of(9, 0),
+                closeTime = LocalTime.of(18, 0),
+            )
 
-        val tuesday = Day(
-            day = DayOfWeek.TUESDAY,
-            openTime = LocalTime.of(9, 0),
-            closeTime = LocalTime.of(20, 0),
-        )
+        val tuesday =
+            Day(
+                day = DayOfWeek.TUESDAY,
+                openTime = LocalTime.of(9, 0),
+                closeTime = LocalTime.of(20, 0),
+            )
 
-        val wednesday = Day(
-            day = DayOfWeek.WEDNESDAY,
-            openTime = LocalTime.of(2, 0),
-            closeTime = LocalTime.of(10, 0),
-        )
+        val wednesday =
+            Day(
+                day = DayOfWeek.WEDNESDAY,
+                openTime = LocalTime.of(2, 0),
+                closeTime = LocalTime.of(10, 0),
+            )
 
-        val thursday = Day(
-            day = DayOfWeek.THURSDAY,
-            openTime = LocalTime.of(2, 0),
-            closeTime = LocalTime.of(10, 0),
-        )
+        val thursday =
+            Day(
+                day = DayOfWeek.THURSDAY,
+                openTime = LocalTime.of(2, 0),
+                closeTime = LocalTime.of(10, 0),
+            )
 
         return mutableListOf(monday, tuesday, wednesday, thursday)
     }
 
     private fun userCreate(): List<User> {
-        //37.4927015,127.0615472 400미터 예상
-        val customer = User(
-            email = "customer@test.com", password = "customer", role = Role.ROLE_CUSTOMER, userCart = Cart(), phoneNumber = "010-1234-5678",nickname = "testuser",
-            position = Position(
-                latitude = 37.4927015,
-                longitude = 127.0615472,
+        // 37.4927015,127.0615472 400미터 예상
+        val customer =
+            User(
+                email = "customer@test.com",
+                password = "customer",
+                role = Role.ROLE_CUSTOMER,
+                userCart = Cart(),
+                phoneNumber = "010-1234-5678",
+                nickname = "testuser",
+                position =
+                Position(
+                    latitude = 37.4927015,
+                    longitude = 127.0615472,
+                ),
             )
-        )
         val encodedPassword1 = passwordEncoder.encode(customer.password)
         customer.encodePassword(encodedPassword1)
 
-        val storeOwner = User(
-            email = "store@test.com", password = "store", role = Role.ROLE_STORE, userCart = Cart(), phoneNumber = "010-9876-5432", nickname = "testuser2",
-        )
+        val storeOwner =
+            User(
+                email = "store@test.com",
+                password = "store",
+                role = Role.ROLE_STORE,
+                userCart = Cart(),
+                phoneNumber = "010-9876-5432",
+                nickname = "testuser2",
+            )
         val encodedPassword2 = passwordEncoder.encode(storeOwner.password)
         storeOwner.encodePassword(encodedPassword2)
 
@@ -222,13 +237,14 @@ class MyDataInit(
         val tempList = mutableListOf<Dosirak>()
 
         for (i in 1..10) {
-            val temp = Dosirak(
-                name = "테스트 도시락 $i",
-                description = "테스트 도시락입니다. $i",
-                store = store,
-                price = (1..10).random() * 100,
-                mealTimes = (1..3).random(),
-            )
+            val temp =
+                Dosirak(
+                    name = "테스트 도시락 $i",
+                    description = "테스트 도시락입니다. $i",
+                    store = store,
+                    price = (1..10).random() * 100,
+                    mealTimes = (1..3).random(),
+                )
             temp.changeStock(100)
 
             tempList.add(temp)

@@ -1,6 +1,6 @@
 package store.baribari.demo.auth
 
-interface OAuth2UserInfo{
+interface OAuth2UserInfo {
     val id: String
     val name: String
     val email: String

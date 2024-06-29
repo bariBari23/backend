@@ -1,21 +1,25 @@
 package store.baribari.demo.auth
 
-import store.baribari.demo.common.enums.ErrorCode
-import store.baribari.demo.common.exception.UnAuthorizedException
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
+import store.baribari.demo.common.enums.ErrorCode
+import store.baribari.demo.common.exception.UnAuthorizedException
 import java.security.Key
-import java.util.*
+import java.util.Date
 
 class AuthTokenProvider(
     secret: String,
 ) {
     private val key: Key = Keys.hmacShaKeyFor(secret.toByteArray())
 
-    fun createAuthToken(email: String, expiry: Date, role: String? = null): AuthToken {
+    fun createAuthToken(
+        email: String,
+        expiry: Date,
+        role: String? = null,
+    ): AuthToken {
         return AuthToken(email, expiry, key, role)
     }
 
@@ -26,9 +30,10 @@ class AuthTokenProvider(
     fun getAuthentication(authToken: AuthToken): Authentication {
         if (authToken.isValid) {
             val claims = authToken.tokenClaims
-            val authorities = arrayOf(claims!![AUTHORITIES_KEY].toString())
-                .map(::SimpleGrantedAuthority)
-                .toList()
+            val authorities =
+                arrayOf(claims!![AUTHORITIES_KEY].toString())
+                    .map(::SimpleGrantedAuthority)
+                    .toList()
 
             val principal = User(claims.subject, "", authorities)
 

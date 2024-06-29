@@ -2,7 +2,12 @@ package store.baribari.demo.controller
 
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import store.baribari.demo.auth.LoginUser
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.dto.review.request.CreateReviewRequestDto
@@ -18,11 +23,9 @@ import javax.validation.constraints.Positive
 @RestController
 @RequestMapping("/api/v1/review")
 class ReviewController(
-    private val reviewService: ReviewService
+    private val reviewService: ReviewService,
 ) {
-
-    //c
-
+    // c
 
     /**
      * user 와
@@ -33,13 +36,13 @@ class ReviewController(
     @PostMapping("")
     fun createReview(
         @LoginUser loginUser: User,
-        @RequestBody @Valid createReviewResponseDto: CreateReviewRequestDto
+        @RequestBody @Valid createReviewResponseDto: CreateReviewRequestDto,
     ): ApiResponse<CreateReviewResponseDto> {
-
-        val data = reviewService.createReview(
-            userEmail = loginUser.username,
-            createReviewRequestDto = createReviewResponseDto
-        )
+        val data =
+            reviewService.createReview(
+                userEmail = loginUser.username,
+                createReviewRequestDto = createReviewResponseDto,
+            )
 
         return ApiResponse.success(data)
     }
@@ -53,7 +56,7 @@ class ReviewController(
     @GetMapping("/{reviewId}")
     fun readOneReview(
         principal: Principal?,
-        @PathVariable @Positive reviewId: Long
+        @PathVariable @Positive reviewId: Long,
     ): ApiResponse<ReadOneReviewResponseDto> {
         val data = reviewService.readOneReview(principal?.name, reviewId)
 
@@ -64,7 +67,7 @@ class ReviewController(
     @GetMapping("store/{storeId}")
     fun readReviewByStore(
         principal: Principal?,
-        @PathVariable @Positive storeId: Long
+        @PathVariable @Positive storeId: Long,
     ): ApiResponse<ReadReviewByStoreResponseDto> {
         // 상점에 있는 리뷰를 읽는다.
         // 해당 상점의 리뷰를 읽는다.
@@ -76,7 +79,7 @@ class ReviewController(
     @GetMapping("dosirak/{storeId}")
     fun readReviewByDosirak(
         principal: Principal?,
-        @PathVariable @Positive dosirakId: Long
+        @PathVariable @Positive dosirakId: Long,
     ) {
         // 상품에 따라서 리뷰를 읽는 기능
         // 나중에 프론트가 요구하면 넣는거로
@@ -86,7 +89,5 @@ class ReviewController(
     // d
     // 현재 주요 기능은 아닌거 같음
     fun deleteReview() {
-
     }
-
 }

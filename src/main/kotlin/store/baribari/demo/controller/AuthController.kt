@@ -1,9 +1,12 @@
 package store.baribari.demo.controller
 
-
 import org.springframework.security.core.userdetails.User
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import store.baribari.demo.auth.LoginUser
 import store.baribari.demo.common.config.properties.AppProperties
 import store.baribari.demo.common.util.addCookie
@@ -15,7 +18,7 @@ import store.baribari.demo.dto.UserSignUpDto
 import store.baribari.demo.dto.common.ApiResponse
 import store.baribari.demo.repository.common.REFRESH_TOKEN
 import store.baribari.demo.service.AuthService
-import java.util.*
+import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -25,14 +28,17 @@ class AuthController(
     private val authService: AuthService,
     private val appProperties: AppProperties,
 ) {
-
     @PostMapping("/signup")
-    fun signUp(@RequestBody @Validated userSignUpDto: UserSignUpDto): UUID {
+    fun signUp(
+        @RequestBody @Validated userSignUpDto: UserSignUpDto,
+    ): UUID {
         return authService.saveUser(userSignUpDto)
     }
 
     @GetMapping("/info")
-    fun getUserInfo(@LoginUser loginUser: User): ApiResponse<UserInfoResponseDto> {
+    fun getUserInfo(
+        @LoginUser loginUser: User,
+    ): ApiResponse<UserInfoResponseDto> {
         val userInfo = authService.getUserInfo(loginUser.username)
         return ApiResponse.success(UserInfoResponseDto(userInfo))
     }

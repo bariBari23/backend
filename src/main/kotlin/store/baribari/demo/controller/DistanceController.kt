@@ -38,5 +38,4 @@ class DistanceController(
 
         return ApiResponse.success(data)
     }
-
 }

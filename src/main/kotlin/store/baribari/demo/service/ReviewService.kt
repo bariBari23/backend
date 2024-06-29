@@ -20,5 +20,4 @@ interface ReviewService {
         userEmail: String?,
         storeId: Long
     ): ReadReviewByStoreResponseDto
-
 }

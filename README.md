@@ -40,18 +40,8 @@
 ![8](https://github.com/bariBari23/bariBari-FE/assets/110076475/cd4c322c-93b6-45df-af2b-de7d5d38cec9)
 
 
-## 시작가이드 
 
-### (1) 개발 환경
-
-
-<br>
-
-
-<br>
-
-
-## 스택
+## 기술 스택 및 라이브러리
 ![kotlin](https://img.shields.io/badge/Kotlin-0095D5?&style=for-the-badge&logo=kotlin&logoColor=white)
 <br>
 
@@ -79,12 +69,8 @@
 
 ## 프로젝트타임라인
 
-📅2023.09 - 2024.06
+📅2023.05 - 2023.09
 
-|기간|내용|
-|----|---|
-
-<br>
 <br>
 
 ## 팀원소개 - ETT 💛
@@ -126,7 +112,7 @@
 
 
 ## 데모영상 ▶️
-<br>
+[<br>](https://github.com/bariBari23/bariBari-FE/assets/110076475/c8c04a69-26e2-42d1-8d50-ea5aaf2e927e)
 
 [DISLODGED 데모 영상 시청하러 가기](https://www.youtube.com/watch?v=E3e9SRJPGZM)
 

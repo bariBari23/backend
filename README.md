@@ -27,25 +27,17 @@
 - [데모영상(Demo video)](#포스터)
 
 <br>
-<br>
 
----
 
 <br>
 
-## 문제정의 
-1.
-
-<br>
-
-2.
-<br>
-<br>
-
-## 해결책 
-
-<br>
-<br>
+## 문제정의 및 해결책
+![2](https://github.com/bariBari23/bariBari-FE/assets/110076475/516b60c4-4136-4646-9234-3b3ea97d2f2f)
+![3](https://github.com/bariBari23/bariBari-FE/assets/110076475/4d847522-663d-4bcf-a774-db8c9665f41d)
+![5](https://github.com/bariBari23/bariBari-FE/assets/110076475/1cf51818-7e0d-4d80-9dcd-711ae61a381a)
+![6](https://github.com/bariBari23/bariBari-FE/assets/110076475/1f49bb1d-f928-46a0-93a0-4f09a8eb643c)
+![7](https://github.com/bariBari23/bariBari-FE/assets/110076475/4796504d-f87f-41be-bcfc-99bb68ad7e80)
+![8](https://github.com/bariBari23/bariBari-FE/assets/110076475/cd4c322c-93b6-45df-af2b-de7d5d38cec9)
 
 
 ## 시작가이드 

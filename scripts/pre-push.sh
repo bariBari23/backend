@@ -2,7 +2,7 @@
 # implementation: baribari pre-push hook
 # This script is based on a LGPL 3.0 licensed script.
 #
-# Original Script Copyright (C) 2023 Original Author
+# Original Script Copyright (C) 2023 Lablup Inc.
 # Modifications Copyright (C) 2024 mirageoasis
 #
 # This script is modified under the same license, the GNU Lesser General Public License v3.0.

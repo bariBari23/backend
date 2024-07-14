@@ -3,7 +3,7 @@ package store.baribari.demo.common.config
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import store.baribari.demo.auth.AuthTokenProvider
+import store.baribari.demo.domain.auth.AuthTokenProvider
 
 @Configuration
 class JwtConfig(
@@ -12,7 +12,5 @@ class JwtConfig(
     private val secret: String,
 ) {
     @Bean
-    fun jwtTokenProvider(): AuthTokenProvider {
-        return AuthTokenProvider(secret)
-    }
+    fun jwtTokenProvider(): AuthTokenProvider = AuthTokenProvider(secret)
 }

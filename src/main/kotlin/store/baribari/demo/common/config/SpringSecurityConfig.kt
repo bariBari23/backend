@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsUtils
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import store.baribari.demo.auth.AuthTokenProvider
 import store.baribari.demo.common.config.properties.AppProperties
 import store.baribari.demo.common.config.properties.CorsProperties
 import store.baribari.demo.common.enums.Role
@@ -23,10 +22,11 @@ import store.baribari.demo.common.filter.TokenAuthenticationFilter
 import store.baribari.demo.common.handler.OAuth2AuthenticationFailureHandler
 import store.baribari.demo.common.handler.OAuth2AuthenticationSuccessHandler
 import store.baribari.demo.common.handler.TokenAccessDeniedHandler
-import store.baribari.demo.repository.UserRepository
-import store.baribari.demo.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
-import store.baribari.demo.repository.common.RedisRepository
-import store.baribari.demo.service.CustomOAuth2UserService
+import store.baribari.demo.common.repository.OAuth2AuthorizationRequestBasedOnCookieRepository
+import store.baribari.demo.common.repository.RedisRepository
+import store.baribari.demo.common.service.CustomOAuth2UserService
+import store.baribari.demo.domain.auth.AuthTokenProvider
+import store.baribari.demo.domain.user.repository.UserRepository
 
 @Configuration
 @EnableMethodSecurity
@@ -40,7 +40,6 @@ class SpringSecurityConfig(
     private val tokenAccessDeniedHandler: TokenAccessDeniedHandler,
     private val userRepository: UserRepository,
 ) {
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
@@ -49,15 +48,19 @@ class SpringSecurityConfig(
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .csrf().disable()
-            .formLogin().disable()
-            .httpBasic().disable()
+            .csrf()
+            .disable()
+            .formLogin()
+            .disable()
+            .httpBasic()
+            .disable()
             .exceptionHandling()
             .authenticationEntryPoint(RestAuthenticationEntryPoint()) // 인증 실패
             .accessDeniedHandler(tokenAccessDeniedHandler) // 인가 실패
             .and()
             .authorizeRequests()
-            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+            .requestMatchers(CorsUtils::isPreFlightRequest)
+            .permitAll()
             .antMatchers(
                 "/",
                 "/error",
@@ -69,15 +72,19 @@ class SpringSecurityConfig(
                 "/**/*.html",
                 "/**/*.css",
                 "/**/*.js",
-            )
+            ).permitAll()
+            .antMatchers("/api/v1/**")
             .permitAll()
-            .antMatchers("/api/v1/**").permitAll()
-            .antMatchers("/api/v2/**").permitAll()
-            .antMatchers("/actuator/**").permitAll()
+            .antMatchers("/api/v2/**")
+            .permitAll()
+            .antMatchers("/actuator/**")
+            .permitAll()
             // TODO: 이거 나중에 켜 놔야함
             // .antMatchers("/api/store/**").hasAnyAuthority(Role.ROLE_STORE.code, Role.ROLE_ADMIN.code)
-            .antMatchers("/api/admin/**").hasAuthority(Role.ROLE_ADMIN.code)
-            .anyRequest().authenticated()
+            .antMatchers("/api/admin/**")
+            .hasAuthority(Role.ROLE_ADMIN.code)
+            .anyRequest()
+            .authenticated()
             .and()
             .oauth2Login()
             .authorizationEndpoint()
@@ -100,44 +107,36 @@ class SpringSecurityConfig(
     }
 
     @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
-        return authenticationConfiguration.authenticationManager
-    }
+    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager =
+        authenticationConfiguration.authenticationManager
 
     @Bean
-    fun passwordEncoder(): BCryptPasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
+    fun passwordEncoder(): BCryptPasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
-    fun oAuth2AuthorizationRequestBasedOnCookieRepository(): OAuth2AuthorizationRequestBasedOnCookieRepository {
-        return OAuth2AuthorizationRequestBasedOnCookieRepository()
-    }
+    fun oAuth2AuthorizationRequestBasedOnCookieRepository(): OAuth2AuthorizationRequestBasedOnCookieRepository =
+        OAuth2AuthorizationRequestBasedOnCookieRepository()
 
     @Bean
-    fun tokenAuthenticationFilter(): TokenAuthenticationFilter {
-        return TokenAuthenticationFilter(authTokenProvider)
-    }
+    fun tokenAuthenticationFilter(): TokenAuthenticationFilter = TokenAuthenticationFilter(authTokenProvider)
 
     // Oauth 인증 성공 핸들러
     @Bean
-    fun oAuth2AuthenticationSuccessHandler(): OAuth2AuthenticationSuccessHandler {
-        return OAuth2AuthenticationSuccessHandler(
+    fun oAuth2AuthenticationSuccessHandler(): OAuth2AuthenticationSuccessHandler =
+        OAuth2AuthenticationSuccessHandler(
             appProperties,
             oAuth2AuthorizationRequestBasedOnCookieRepository(),
             authTokenProvider,
             redisRepository,
             userRepository,
         )
-    }
 
     // Oauth 인증 실패 핸들러
     @Bean
-    fun oAuth2AuthenticationFailureHandler(): OAuth2AuthenticationFailureHandler {
-        return OAuth2AuthenticationFailureHandler(
+    fun oAuth2AuthenticationFailureHandler(): OAuth2AuthenticationFailureHandler =
+        OAuth2AuthenticationFailureHandler(
             oAuth2AuthorizationRequestBasedOnCookieRepository(),
         )
-    }
 
     @Bean
     fun corsConfigurationSource(): UrlBasedCorsConfigurationSource {

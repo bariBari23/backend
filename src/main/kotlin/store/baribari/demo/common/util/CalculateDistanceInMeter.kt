@@ -1,6 +1,6 @@
 package store.baribari.demo.common.util
 
-import store.baribari.demo.model.embed.Position
+import store.baribari.demo.common.entity.embed.Position
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos

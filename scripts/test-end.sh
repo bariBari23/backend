@@ -7,4 +7,4 @@ cd "$(dirname "$0")"
 cd ../docker
 
 # Docker Compose를 사용하여 서비스 종료
-docker-compose down
+docker-compose -f docker-compose.yml -f docker-compose.test.yml down

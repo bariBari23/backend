@@ -18,16 +18,3 @@ services:
     ports:
       - "6379:6379"
     restart: always
-
-  spring:
-    hostname: spring
-    container_name: spring
-    build:
-      context: ..
-      dockerfile: docker/spring/Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql
-      - redis
-    restart: always

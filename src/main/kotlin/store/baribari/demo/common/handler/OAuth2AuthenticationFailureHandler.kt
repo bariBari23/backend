@@ -5,8 +5,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import org.springframework.web.util.WebUtils.getCookie
-import store.baribari.demo.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
-import store.baribari.demo.repository.common.REDIRECT_URI_PARAM_COOKIE_NAME
+import store.baribari.demo.common.repository.OAuth2AuthorizationRequestBasedOnCookieRepository
+import store.baribari.demo.common.repository.REDIRECT_URI_PARAM_COOKIE_NAME
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -23,9 +23,12 @@ class OAuth2AuthenticationFailureHandler(
 
         exception.printStackTrace()
 
-        targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-            .queryParam("error", exception.localizedMessage)
-            .build().toUriString()
+        targetUrl =
+            UriComponentsBuilder
+                .fromUriString(targetUrl)
+                .queryParam("error", exception.localizedMessage)
+                .build()
+                .toUriString()
 
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response)
 

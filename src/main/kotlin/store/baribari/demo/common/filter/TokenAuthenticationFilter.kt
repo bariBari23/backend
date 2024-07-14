@@ -2,9 +2,9 @@ package store.baribari.demo.common.filter
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
-import store.baribari.demo.auth.AuthTokenProvider
 import store.baribari.demo.common.util.getAccessToken
 import store.baribari.demo.common.util.log
+import store.baribari.demo.domain.auth.AuthTokenProvider
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse
 class TokenAuthenticationFilter(
     private val tokenProvider: AuthTokenProvider,
 ) : OncePerRequestFilter() {
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

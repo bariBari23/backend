@@ -3,7 +3,7 @@ package store.baribari.demo.common.config
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import store.baribari.demo.auth.LoginUserArgumentResolver
+import store.baribari.demo.domain.auth.LoginUserArgumentResolver
 
 @Configuration
 class WebMcvConfig(

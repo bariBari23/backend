@@ -7,22 +7,22 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import org.springframework.web.util.WebUtils.getCookie
-import store.baribari.demo.auth.AuthToken
-import store.baribari.demo.auth.AuthTokenProvider
-import store.baribari.demo.auth.OAuth2UserInfoFactory
-import store.baribari.demo.auth.ProviderType
 import store.baribari.demo.common.config.properties.AppProperties
 import store.baribari.demo.common.enums.ErrorCode
 import store.baribari.demo.common.exception.UnAuthorizedException
+import store.baribari.demo.common.repository.OAuth2AuthorizationRequestBasedOnCookieRepository
+import store.baribari.demo.common.repository.REDIRECT_URI_PARAM_COOKIE_NAME
+import store.baribari.demo.common.repository.REFRESH_TOKEN
+import store.baribari.demo.common.repository.RedisRepository
 import store.baribari.demo.common.util.addCookie
 import store.baribari.demo.common.util.deleteCookie
 import store.baribari.demo.common.util.log
-import store.baribari.demo.model.User
-import store.baribari.demo.repository.UserRepository
-import store.baribari.demo.repository.common.OAuth2AuthorizationRequestBasedOnCookieRepository
-import store.baribari.demo.repository.common.REDIRECT_URI_PARAM_COOKIE_NAME
-import store.baribari.demo.repository.common.REFRESH_TOKEN
-import store.baribari.demo.repository.common.RedisRepository
+import store.baribari.demo.domain.auth.AuthToken
+import store.baribari.demo.domain.auth.AuthTokenProvider
+import store.baribari.demo.domain.auth.OAuth2UserInfoFactory
+import store.baribari.demo.domain.auth.ProviderType
+import store.baribari.demo.domain.user.entity.User
+import store.baribari.demo.domain.user.repository.UserRepository
 import java.net.URI
 import java.util.Date
 import java.util.Locale
@@ -66,9 +66,11 @@ class OAuth2AuthenticationSuccessHandler(
         val (accessToken, refreshToken) = createTokens(findUser)
         setRefreshTokenCookie(request, response, refreshToken)
         log.info(refreshToken.toString())
-        return UriComponentsBuilder.fromUriString(targetUrl)
+        return UriComponentsBuilder
+            .fromUriString(targetUrl)
             .queryParam("token", accessToken.token)
-            .build().toUriString()
+            .build()
+            .toUriString()
     }
 
     private fun validateRedirectTargetUrl(targetUrl: String) {

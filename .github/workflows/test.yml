@@ -44,14 +44,14 @@ jobs:
 
       - name: Wait for MySQL to be ready
         run: |
-          until mysqladmin ping -h 127.0.0.1 -u root -proot --silent; do
+          until mysqladmin ping -h mysql -u root -proot --silent; do
             echo 'waiting for mysql...'
             sleep 5
           done
 
       - name: Wait for Redis to be ready
         run: |
-          until nc -zv 127.0.0.1 6379; do
+          until nc -zv redis 6379; do
             echo 'waiting for redis...'
             sleep 5
           done

@@ -1,0 +1,63 @@
+name: unit test on push
+on: [ pull_request ]
+
+jobs:
+  deploy:
+    name: unit test
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0.32
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+        options: >-
+          --health-cmd "mysqladmin ping -u root -proot"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 
+
+      redis:
+        image: redis:7.0.11
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PRIVATE_TOKEN }}
+          submodules: true
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysqladmin ping -h 127.0.0.1 -u root -proot --silent; do
+            echo 'waiting for mysql...'
+            sleep 5
+          done
+
+      - name: Wait for Redis to be ready
+        run: |
+          until nc -zv 127.0.0.1 6379; do
+            echo 'waiting for redis...'
+            sleep 5
+          done
+      
+
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew test

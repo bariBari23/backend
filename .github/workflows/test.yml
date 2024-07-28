@@ -42,6 +42,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Set /etc/hosts for MySQL and Redis
+        run: |
+          echo "127.0.0.1 mysql" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 redis" | sudo tee -a /etc/hosts
+
       - name: Wait for MySQL to be ready
         run: |
           until mysqladmin ping -h mysql -u root -proot --silent; do

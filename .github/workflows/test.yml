@@ -1,9 +1,9 @@
-name: unit test on push
+name: test on push
 on: [ pull_request ]
 
 jobs:
   deploy:
-    name: unit test
+    name: test
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -17,7 +17,7 @@ jobs:
           --health-cmd "mysqladmin ping -u root -proot"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 
+          --health-retries 5 
 
       redis:
         image: redis:7.0.11

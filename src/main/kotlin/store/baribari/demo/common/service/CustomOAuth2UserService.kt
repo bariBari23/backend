@@ -12,6 +12,7 @@ import store.baribari.demo.domain.auth.OAuth2UserInfoFactory
 import store.baribari.demo.domain.auth.ProviderType
 import store.baribari.demo.domain.auth.UserPrincipal
 import store.baribari.demo.domain.cart.domain.Cart
+import store.baribari.demo.domain.cart.repository.CartRepository
 import store.baribari.demo.domain.user.entity.User
 import store.baribari.demo.domain.user.repository.UserRepository
 import java.util.Locale
@@ -19,6 +20,7 @@ import java.util.Locale
 @Service
 class CustomOAuth2UserService(
     private val userRepository: UserRepository,
+    private val cartRepository: CartRepository,
 ) : DefaultOAuth2UserService() {
     // 받아온 token을 분석해서 필요한 정보를 넘겨주는 역할
     override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
@@ -65,17 +67,25 @@ class CustomOAuth2UserService(
         userInfo: OAuth2UserInfo,
         providerType: ProviderType,
     ): User {
+        // TODO: 추후 삭제하기
+        val cart = Cart()
+        cartRepository.saveAndFlush(cart)
+
         val user =
             User(
                 email = userInfo.email,
                 providerId = userInfo.id,
                 providerType = providerType,
                 profileImageUrl = userInfo.imageUrl,
-                userCart = Cart(),
+                userCart = cart,
                 phoneNumber = userInfo.phoneNumber ?: "",
                 nickname = userInfo.name,
             )
 
-        return userRepository.saveAndFlush(user)
+        val uuidUser = userRepository.saveAndFlush(user)
+        cart.userId = uuidUser.id
+        cartRepository.saveAndFlush(cart)
+
+        return uuidUser
     }
 }

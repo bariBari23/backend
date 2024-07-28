@@ -11,12 +11,12 @@ data class UserSignUpDto(
     val password: String,
     val phoneNumber: String?,
 ) {
-    fun toUser(): User =
+    fun toUser(cart: Cart): User =
         User(
             email = email,
             nickname = nickname,
             password = password,
-            userCart = Cart(),
+            userCart = cart,
             phoneNumber = phoneNumber,
         )
 }

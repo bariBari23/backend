@@ -19,6 +19,8 @@ import store.baribari.demo.domain.auth.dto.TokenDto
 import store.baribari.demo.domain.auth.dto.UserInfoDto
 import store.baribari.demo.domain.auth.dto.UserLoginRequestDto
 import store.baribari.demo.domain.auth.dto.UserSignUpDto
+import store.baribari.demo.domain.cart.domain.Cart
+import store.baribari.demo.domain.cart.repository.CartRepository
 import store.baribari.demo.domain.user.entity.User
 import store.baribari.demo.domain.user.repository.UserRepository
 import java.util.Date
@@ -34,13 +36,21 @@ class AuthServiceImpl(
     private val authTokenProvider: AuthTokenProvider,
     private val passwordEncoder: BCryptPasswordEncoder,
     private val redisRepository: RedisRepository,
+    private val cartRepository: CartRepository,
 ) : AuthService {
     override fun saveUser(signUpDto: UserSignUpDto): UUID {
         checkEmailAndUserName(signUpDto.email, signUpDto.nickname)
-        val user = signUpDto.toUser()
+        // TODO: cart 추후에 수정
+        val cart = Cart()
+        cartRepository.saveAndFlush(cart)
+        val user = signUpDto.toUser(cart)
         val encodedPassword = passwordEncoder.encode(user.password)
         user.encodePassword(encodedPassword)
-        return userRepository.save(user).id!!
+        val newUser = userRepository.save(user)
+        cart.userId = newUser.id
+        cartRepository.saveAndFlush(cart)
+
+        return newUser.id!!
     }
 
     override fun loginUser(userLoginRequestDto: UserLoginRequestDto): UserInfoDto {

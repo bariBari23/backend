@@ -198,12 +198,17 @@ class MyDataInit(
 
     private fun userCreate(): List<User> {
         // 37.4927015,127.0615472 400미터 예상
+        val customerCart = Cart()
+        val storeCart = Cart()
+        // 1차로 flush
+        cartRepository.saveAllAndFlush(listOf(customerCart, storeCart))
+
         val customer =
             User(
                 email = "customer@test.com",
                 password = "customer",
                 role = Role.ROLE_CUSTOMER,
-                userCart = Cart(),
+                userCart = customerCart,
                 phoneNumber = "010-1234-5678",
                 nickname = "testuser",
                 position =
@@ -220,15 +225,20 @@ class MyDataInit(
                 email = "store@test.com",
                 password = "store",
                 role = Role.ROLE_STORE,
-                userCart = Cart(),
+                userCart = storeCart,
                 phoneNumber = "010-9876-5432",
                 nickname = "testuser2",
             )
         val encodedPassword2 = passwordEncoder.encode(storeOwner.password)
         storeOwner.encodePassword(encodedPassword2)
 
-        userRepository.saveAll(listOf(customer, storeOwner))
-        userRepository.flush()
+        val newCustomer = userRepository.saveAndFlush(customer)
+        val newStoreOwner = userRepository.saveAndFlush(storeOwner)
+
+        // 2차로 save
+        customerCart.userId = newCustomer.id
+        storeCart.userId = newStoreOwner.id
+        cartRepository.saveAll(listOf(customerCart, storeCart))
 
         return listOf(customer, storeOwner)
     }

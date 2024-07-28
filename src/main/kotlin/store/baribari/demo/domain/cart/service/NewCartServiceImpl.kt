@@ -1,6 +1,5 @@
 package store.baribari.demo.domain.cart.service
 
-import org.springframework.context.annotation.Primary
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -21,26 +20,28 @@ import store.baribari.demo.domain.cart.repository.CartRepository
 import store.baribari.demo.domain.menu.repository.DosirakRepository
 import store.baribari.demo.domain.user.repository.UserRepository
 
-const val MAX_CART_ITEM_AMOUNT = 3
-
+// userCart를 사용하지 않고 cart를 사용하는 방식의 service
 @Service
-@Primary
-class CartServiceImpl(
+class NewCartServiceImpl(
+    private val userRepository: UserRepository,
     private val cartRepository: CartRepository,
     private val cartItemRepository: CartItemRepository,
-    private val userRepository: UserRepository,
     private val dosirakRepository: DosirakRepository,
 ) : CartService {
     @Transactional(readOnly = true)
     override fun getCart(username: String): CartInfoResponseDto {
-        // fetch cart
+        // 유저만 가져오기
         val user =
-            userRepository.findByEmailFetchCart(username)
+            userRepository.findByEmail(username)
                 ?: throw EntityNotFoundException("$username 이라는 유저는 존재하지 않습니다.")
         // itemlist를 조회할 때 fetch join으로 내부에 있는 dosiraklist의 정보를 가져온다.
         // querydsl의 시간인가?
         // 아니면 entity graph를 사용해야하나? -> 이게 답인거 같다.
         // 일단 itemlist를 가져오면서
+        val cart =
+            cartRepository.findByUserId(user.id!!)
+                ?: throw EntityNotFoundException("해당하는 장바구니가 존재하지 않습니다.")
+
         val itemList = user.userCart.cartItemList
 
         return CartInfoResponseDto(

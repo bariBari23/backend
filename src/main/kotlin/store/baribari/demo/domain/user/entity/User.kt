@@ -10,7 +10,6 @@ import store.baribari.demo.domain.order.entity.Order
 import store.baribari.demo.domain.store.entity.LikeStore
 import store.baribari.demo.domain.store.entity.Store
 import java.util.UUID
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -49,7 +48,7 @@ class User(
     @Embedded
     var position: Position = Position(0.0, 0.0),
     // 장바구니
-    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     var userCart: Cart,
     // 프로필 이미지
     var profileImageUrl: String? = null,

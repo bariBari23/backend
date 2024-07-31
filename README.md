@@ -73,6 +73,7 @@
 |팀원|역할|이메일|💛|
 |----|---|----|---|
 |최유미|Backend|jain53791226@gmail.com| ![유미](https://github.com/ETT-DISLODGED/.github/assets/110734087/fbdc2a81-3220-4fcc-a208-a07fa6bf5e97) |
+|김현우|Backend|kimhw0820@naver.com|![현우](https://avatars.githubusercontent.com/u/37329424?v=4)|
 
 <br>
 
